@@ -3,7 +3,7 @@
 from enum import auto, StrEnum
 from functools import reduce
 from pathlib import Path
-from typing import Callable, Sequence, Set, Tuple, TypeVar
+from typing import Callable, List, Sequence, Set, Tuple, TypeVar
 from warnings import warn
 
 from .struct import Compound, Direction, Network, Reaction
@@ -40,15 +40,41 @@ REQ_REACT_COL: Set[ReactionCol] = set((
 ))
 
 
+def assure_compound(
+    cn: str
+    , cs: Sequence[Compound]
+) -> Compound:
+    """This function serves a wrapper to raise an error in case that the
+    compound is not on the list.
+
+    Args:
+        cn (`Compound`): Candidate compound name.
+        cs (sequence of `Compound`): Available candidates.
+
+    Returns:
+        In case that the compound is in the sequence, return the `Compound`
+        with the given name.
+
+    Raises:
+        ValueError containing some information about the failure.
+    """
+    try:
+        return next(filter(lambda c: c.name == cn, cs))
+    except StopIteration:
+        raise ValueError(
+            f"Compound with name {cn} present in reactions not found in the compounds file."
+        )
+
+
 def parse_compounds(
     s: str
     , req: Set[CompoundCol] = REQ_COMP_COL
-) -> Tuple[Compound]:
+) -> Tuple[Compound, ...]:
     """Parse compounds in a given string.
 
     Args:
 
-    s (str): String containing the header and the compounds separated by
+ .   s (str): String containing the header and the compounds separated by
         new lines.
     req (set of `CompoundCol`, optional): Required header values.
         Defaults to `REQ_COMP_COL`
@@ -66,7 +92,7 @@ def parse_compounds(
 
 def parse_compounds_from_file(
     f: str | Path
-) -> Tuple[Compound]:
+) -> Tuple[Compound, ...]:
     """Wrapper of `parse_compounds` but using a file as input.
 
     Args:
@@ -113,10 +139,10 @@ def parse_compound_line(
 
 def parse_lines(
     s: str
-    , h: S
+    , h: type[S]
     , r: Set[S]
-    , fn: Callable[[int, str, S], T]
-) -> Tuple[T]:
+    , fn: Callable[[int, str, List[S]], T]
+) -> Tuple[T, ...]:
     """Parse a string containing compounds or intermediates in multiple lines.
 
     Args:
@@ -129,18 +155,14 @@ def parse_lines(
         A tuple containing the parsed values.
     """
     rh, *ls = s.splitlines()
-    ph: [S] = list(map(h, rh.split(',')))
+    ph: List[S] = list(map(h, rh.split(',')))
 
     if not r.issubset(h):
         raise ValueError(
             f"Missing column value. Required: {', '.join(r)}"
         )
     return tuple(map(
-        lambda xs: fn(
-            idx=xs[0]
-            , l=xs[1]
-            , h=ph
-        )
+        lambda xs: fn(xs[0], xs[1], ph)
         , enumerate(ls)
     ))
 
@@ -194,7 +216,7 @@ def parse_reactions(
     s: str
     , cs: Sequence[Compound]
     , req: Set[ReactionCol] = REQ_REACT_COL
-) -> Tuple[Reaction]:
+) -> Tuple[Reaction, ...]:
     """Parse reactions in a given string.
 
     Args:
@@ -217,7 +239,8 @@ def parse_reactions(
 
 def parse_reactions_from_file(
     f: str | Path
-) -> Tuple[Reaction]:
+    , cs: Sequence[Compound]
+) -> Tuple[Reaction, ...]:
     """Wrapper of `parse_reactions` but using a file as input.
 
     Args:
@@ -227,7 +250,7 @@ def parse_reactions_from_file(
         A tuple containing the parsed `Reaction`
     """
     with open(f, 'r') as infile:
-        return parse_compounds(infile.read(), REQ_COMP_COL)
+        return parse_reactions(infile.read(), cs, REQ_REACT_COL)
 
 
 def parse_reaction_line(
@@ -252,47 +275,36 @@ def parse_reaction_line(
         Check `Reaction` for possible values and `REQ_REACT_COL` for required
         values.
     """
+    def reduce_fn(
+        xs: Tuple[Tuple[List[Compound], List[Compound]], List[Tuple[str, str]]]
+        , x: Tuple[str, str]
+    ) -> Tuple[Tuple[List[Compound], List[Compound]], List[Tuple[str, str]]]:
+        match x:
+            case (_, ""):
+                pass
+            case (ReactionCol.CLeft, _):
+                xs[0][0].append(assure_compound(x[1], cs))
+            case (ReactionCol.CRight, _):
+                xs[0][1].append(assure_compound(x[1], cs))
+            case _:
+                xs[1].append(x)
+        return xs
 
-    def gen_react_dict(
-        d: dict[ReactionCol, str | Sequence[Compound]]
-        , s: [ReactionCol, str]
-    ) -> dict[ReactionCol, str | Sequence[Compound]]:
-        if not s[1]:
-            return d
-        if s[0] in (ReactionCol.CLeft, ReactionCol.CRight):
-            if s[0] not in d:
-                d[s[0]] = []
-            try:
-                d[s[0]].append(next(filter(
-                    lambda c: c.name == s[1]
-                    , cs
-                )))
-            except StopIteration:
-                raise ValueError(
-                    f"Compound {s[1]} present in reactions not found in the compounds file."
-                )
-        elif s[0] in d.keys():
-            warn(
-                f"{s[0]} many instances of s[0] on list. Keeping the first one found"
-             )
-        else:
-            d[s[0]] = s[1]
-        return d
-
-    d: dict[ReactionCol, str | Sequence[Compound]] = reduce(
-        gen_react_dict
+    (cl, cr), arg = reduce(
+        reduce_fn
         , zip(h, l.split(','))
-        , {}
+        , (([], []), [])
     )
+    darg: dict[str, str] = dict(arg)
 
     return Reaction(
-        name = str(d[ReactionCol.Name])
+        name = str(darg[ReactionCol.Name])
         , idx=int(idx)
-        , compounds=(
-            d[ReactionCol.CLeft]
-            , d[ReactionCol.CRight]
-        )
-        , direction=Direction(d[ReactionCol.Direction])
-        , energy=float(d[ReactionCol.Energy])
-        , visible=bool(d.get(ReactionCol.Visible) or True)
+        , compounds=(cl, cr)
+        , direction=Direction(darg[ReactionCol.Direction])
+        , energy=float(darg[ReactionCol.Energy])
+        , visible=bool(darg.get(ReactionCol.Visible) or True)
     )
+
+if __name__ == "__main__":
+    network = parse_network_from_file("inter.csv", "react.csv")
