@@ -305,6 +305,3 @@ def parse_reaction_line(
         , energy=float(darg[ReactionCol.Energy])
         , visible=bool(darg.get(ReactionCol.Visible) or True)
     )
-
-if __name__ == "__main__":
-    network = parse_network_from_file("inter.csv", "react.csv")
