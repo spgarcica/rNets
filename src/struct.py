@@ -87,7 +87,7 @@ class Reaction(NamedTuple):
 class Network(NamedTuple):
     """Representation of a reaction network.
 
-    Args:
+    Attributes:
         compounds (sequence of `Compound`): Compounds of the network.
         reactions (sequence of `Reaction`): Reactions in the network.
     """
