@@ -218,7 +218,6 @@ def opts_glob_to_str(
     Returns:
         str of the dot format.
     """
-    os = opts_to_str(o)
     return k + ' ' \
         + ident(
             opts_to_str(o)
