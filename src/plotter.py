@@ -164,25 +164,25 @@ def network_energy_minmax(
     return (s + offset[0], e + offset[1])
 
 
-def build_node_box(
-    s: str
-    ,
-)
+# def build_node_box(
+#     s: str
+#     ,
+# )
 
 
-def compound_to_dotnode(
-    c: Compound
-) -> Node:
-    """Creates a `Node` from a `Compound`.
+# def compound_to_dotnode(
+#     c: Compound
+# ) -> Node:
+#     """Creates a `Node` from a `Compound`.
 
-    Args:
-        c (`Compound`): Compound to convert.
+#     Args:
+#         c (`Compound`): Compound to convert.
 
-    Returns:
-        Dot `Node`.
-    """
-    Node(
-        name=c.name
-        , options={
-            "label":
-        }
+#     Returns:
+#         Dot `Node`.
+#     """
+#     Node(
+#         name=c.name
+#         , options={
+#             "label":
+#         }
