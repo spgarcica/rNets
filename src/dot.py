@@ -160,7 +160,7 @@ def opts_to_str(
     Returns:
         str of the dot format
     """
-    out = ',\n'.join(('='.join(o) for o in o.options.items()))
+    out = ',\n'.join(('='.join(o) for o in o.items()))
     return f"[{out}]"
 
 
