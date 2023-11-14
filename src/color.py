@@ -1,6 +1,8 @@
+"Color parsing, writing and interpolation."
+
 from colorsys import rgb_to_hls, hls_to_rgb
 from itertools import repeat, starmap
-from typing import Callable, NamedTuple, Sequence, Tuple
+from typing import Callable, Sequence, Tuple
 
 Color = Tuple[float, float, float]
 
@@ -72,10 +74,12 @@ def hexstr_to_rgb(
         return None
 
     try:
-        return tuple(map(
+        # Force only three values in the tuple
+        a, b, c =map(
             lambda x: float(int("".join(x), 16)) / 255.
             , zip(s[1::2], s[2::2])
-        ))
+        )
+        return (a, b, c)
     except ValueError:
         return None
 
@@ -114,10 +118,13 @@ def interp(
     idx: int = int(val)
     p: float = val - idx
 
-    return tuple(map(
+    # Force 3 values in the tuple
+    a, b, c =map(
         lambda c: (c[0] * (1. - p)) + (c[1] * p)
         , zip(cs[idx], cs[idx + 1])
-    ))
+    )
+
+    return (a, b, c)
 
 
 def interp_fn(
