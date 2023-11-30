@@ -6,7 +6,7 @@ from itertools import chain
 from pathlib import Path
 from typing import Callable, Dict, List, NamedTuple, Sequence, Set, Tuple, TypeVar
 
-from .struct import Compound, Reaction
+from .struct import Compound, FFlags, Network, Reaction
 
 S = TypeVar('S', bound=StrEnum)
 T = TypeVar('T')
@@ -28,12 +28,6 @@ class Direction(StrEnum):
     Biderectional = "<->"
 
 
-class FFlags(StrEnum):
-    I = auto()
-    B = auto()
-    U = auto()
-
-
 class ReactionCol(StrEnum):
     """Possible values for the reaction columns."""
     CLeft = auto()
@@ -43,60 +37,6 @@ class ReactionCol(StrEnum):
     Visible = auto()
     Name = auto()
     Opts = auto()
-
-
-class PCompound(NamedTuple):
-    """Parsed compound.
-
-    Attributes:
-        compound (`Compound`): Parsed compound object.
-        idx (int): Compound index, in reading order.
-        opts (dict of str as keys and str as values or None, optional):
-            Additional options for the compound. Will be later used by the
-            writer to decide additional options. Defaults to None.
-        visible (bool, optional): Wether the compound will be visible or not.
-            Defaults to True.
-        fflags (set of `FFlags` or None, optional): Format labels that will be
-            used to represent the compound label.
-    """
-    compound: Compound
-    idx: int
-    opts: Dict[str, str] | None = None
-    visible: bool = True
-    fflags: Set[FFlags] | None = None
-
-
-class PReaction(NamedTuple):
-    """Parsed reaction.
-
-    Attributes:
-        reaction (`Reaction`): Parsed `Reaction`.
-        idx (int): Reaction index, in reading order.
-        opts (dict of str as keys and str as values or None, optional):
-            Additional options for the compound. Will be later used by the
-            writer to decide additional options. Defaults to None.
-        visible (bool, optional): Wether the compound will be visible or not.
-            Defaults to True.
-
-    Note:
-        If a bidirectional reaction is specified, more than one reaction can be
-        stored reaction.
-    """
-    reaction: Reaction
-    idx: int
-    opts: Dict[str, str] | None = None
-    visible: bool = True
-
-
-class PNetwork(NamedTuple):
-    """Parsed reaction network containing the parsed compounds and reactions
-
-    Attributes:
-        compounds (Sequence of `PCompound`): `PCompounds` of the network.
-        reactions (Sequence of `PReaction`): `CReaction` of the network.
-    """
-    compounds: Sequence[PCompound]
-    reactions: Sequence[PReaction]
 
 
 REQ_COMP_COL: Set[CompoundCol] = set((
@@ -161,7 +101,7 @@ def parse_bool(
 def parse_compounds(
     s: str
     , req: Set[CompoundCol] = REQ_COMP_COL
-) -> Tuple[PCompound, ...]:
+) -> Tuple[Compound, ...]:
     """Parse compounds in a given string.
 
     Args:
@@ -172,7 +112,7 @@ def parse_compounds(
         Defaults to `REQ_COMP_COL`
 
     Returns:
-        A tuple containing the parsed `PCompound`
+        A tuple containing the parsed `Compound`
     """
     return parse_lines(
         s
@@ -184,14 +124,14 @@ def parse_compounds(
 
 def parse_compounds_from_file(
     f: str | Path
-) -> Tuple[PCompound, ...]:
+) -> Tuple[Compound, ...]:
     """Wrapper of `parse_compounds` but using a file as input.
 
     Args:
         f (str or Path): Name of the file.
 
     Returns:
-        A tuple containing the parsed `PCompound`
+        A tuple containing the parsed `Compound`
     """
     with open(f, 'r') as infile:
         return parse_compounds(infile.read(), REQ_COMP_COL)
@@ -201,7 +141,7 @@ def parse_compound_line(
     idx: int
     , l: str
     , h: Sequence[CompoundCol] = tuple(CompoundCol)
-) -> PCompound:
+) -> Compound:
     """
     Parse a compound line.
 
@@ -224,11 +164,9 @@ def parse_compound_line(
     vis: str | None = kw.get(CompoundCol.Visible)
     ffs: str | None = kw.get(CompoundCol.Fflags)
     ops: str | None = kw.get(CompoundCol.Opts)
-    return PCompound(
-        compound=Compound(
-            name=kw[CompoundCol.Name]
-            , energy=float(kw[CompoundCol.Energy])
-        )
+    return Compound(
+        name=kw[CompoundCol.Name]
+        , energy=float(kw[CompoundCol.Energy])
         , idx=idx
         , visible=(parse_bool(vis) if vis else None) or True
         , fflags=parse_fflags(ffs) if ffs else None
@@ -289,7 +227,7 @@ def parse_lines(
 def parse_network(
     sc: str
     , sr: str
-) -> PNetwork:
+) -> Network:
     """Parse two strings, one containing the compounds of the network and a
     second one containing the reactions of the network. To check how they will
     be parsed, the reader is redicted to the `parse_compounds` and 
@@ -304,21 +242,17 @@ def parse_network(
     Returns:
         Network with the parsed compounds and reactions.
     """
-    cs: Tuple[PCompound, ...] = parse_compounds(sc, REQ_COMP_COL)
-    return PNetwork(
+    cs: Tuple[Compound, ...] = parse_compounds(sc, REQ_COMP_COL)
+    return Network(
         compounds=cs
-        , reactions=parse_reactions(
-            sr
-            , tuple(map(lambda c: c.compound, cs))
-            , REQ_REACT_COL
-        )
+        , reactions=parse_reactions(sr, cs, REQ_REACT_COL)
     )
 
 
 def parse_network_from_file(
     cf: str | Path
     , rf: str | Path
-) -> PNetwork:
+) -> Network:
     """Wrapper of `parse_network` but using files as input.
 
     Args:
@@ -326,7 +260,7 @@ def parse_network_from_file(
         rf (str or Path): Name of the file containing the reactions.
 
     Returns:
-        A tuple containing the parsed `PNetwork`.
+        A tuple containing the parsed `Network`.
     """
     with open(cf, 'r') as infile:
         sc = infile.read()
@@ -360,7 +294,7 @@ def parse_reactions(
     s: str
     , cs: Sequence[Compound]
     , req: Set[ReactionCol] = REQ_REACT_COL
-) -> Tuple[PReaction, ...]:
+) -> Tuple[Reaction, ...]:
     """Parse reactions in a given string.
 
     Args:
@@ -384,7 +318,7 @@ def parse_reactions(
 def parse_reactions_from_file(
     f: str | Path
     , cs: Sequence[Compound]
-) -> Tuple[PReaction, ...]:
+) -> Tuple[Reaction, ...]:
     """Wrapper of `parse_reactions` but using a file as input.
 
     Args:
@@ -402,7 +336,7 @@ def parse_reaction_line(
     , l: str
     , cs: Sequence[Compound]
     , h: Sequence[ReactionCol] = tuple(ReactionCol)
-) -> Tuple[PReaction, ...]:
+) -> Tuple[Reaction, ...]:
     """
     Parse a reaction line.
 
@@ -463,12 +397,10 @@ def parse_reaction_line(
             ncs = [(cl, cr)]
 
     return tuple(map(
-        lambda xs: PReaction(
-            reaction=Reaction(
-                name=str(kw[ReactionCol.Name])
-                , compounds=xs
-                , energy=float(kw[ReactionCol.Energy])
-            )
+        lambda xs: Reaction(
+            name=str(kw[ReactionCol.Name])
+            , compounds=xs
+            , energy=float(kw[ReactionCol.Energy])
             , idx=int(idx)
             , visible=(parse_bool(vis) if vis else None) or True
             , opts=parse_opts(ops) if ops else None
