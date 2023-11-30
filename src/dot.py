@@ -60,6 +60,7 @@ class Graph(NamedTuple):
     """Structure representing a dot graph.
 
     Attributes:
+        kind (str): Graph type.
         nodes (sequence of `Node`): Nodes in the graph.
         edges (sequence of `Edge`): Edges in the graph.
         global_options(dict of `OptKind` as keys and `Opt` as values):
@@ -160,7 +161,7 @@ def opts_to_str(
     Returns:
         str of the dot format
     """
-    out = ',\n'.join(('='.join(o) for o in o.items()))
+    out = ',\n '.join(('='.join(o) for o in o.items()))
     return f"[{out}]"
 
 
@@ -189,7 +190,7 @@ def edge_to_str(
 def node_to_str(
     n: Node
 ) -> str:
-    """Converts a `Edge` into a string
+    """Converts a `Node` into a string
 
     Args:
         n (`Node`): Node that will be converted.
@@ -201,7 +202,7 @@ def node_to_str(
         + (' ' * IDENT) \
         + ident_if(
             opts_to_str(n.options)
-            , len(n.name) + IDENT + 1
+            , len(n.name) + IDENT
             , False) + ';'
 
 
