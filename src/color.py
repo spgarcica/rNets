@@ -149,11 +149,32 @@ def interp_fn(
     return fn
 
 
+def calc_relative_luminance(
+    c: Color
+) -> float:
+    """Calculate the relative luminance of a `Color` in the RGB space.
+
+    Args:
+        c (`Color`): Color in the RGB colorspace to compute its luminance.
+
+    Returns:
+        float representing the computed luminance.
+
+    References:
+        https://www.w3.org/WAI/GL/wiki/Relative_luminance
+    """
+    return (
+        0.2126 * c[0]
+        + 0.7152 * c[1]
+        + 0.0722 * c[2]
+    )
+
+
 def interp_fn_rgb_hls(
     cs: Sequence[Color]
 ) -> Callable[[float], Color]:
     """Given a sequence of `Color` representing the RGB colorspace, convert
-    them to the HSL space and create and interpolation function. The value
+    them to the HSL space and create an interpolation function. The value
     returned by the interpolation function will be converted again to rgb.
 
     Args:
