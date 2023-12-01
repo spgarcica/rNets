@@ -30,6 +30,7 @@ def ensure_color(
 
 def rgb_to_hexstr(
     c: Color
+    , inc_hash: bool = True
 ) -> str:
     """Returns the given color as an hexadecimal string of the form #RRGGBB
     where R, G and B are represented from a number from 0 to 9 and a letter
@@ -37,15 +38,17 @@ def rgb_to_hexstr(
 
     Args:
         c (`Color`): `Color` to transform into string.
+        inc_hash (bool, optional): If True, include the hash character at the
+            beggining of the color string. Defaults to True.
 
     Return:
-        str of the form #RRGGBB.
+        str of the form RRGGBB.
 
     Notes:
         Note that `Color` follows the colorsys representation, meaning that it
         consists of 3 float values ranging from [0, 1].
     """
-    return ('#'
+    return ('#' * inc_hash
         + ''.join(starmap(
             format
             , zip(
@@ -168,6 +171,28 @@ def calc_relative_luminance(
         + 0.7152 * c[1]
         + 0.0722 * c[2]
     )
+
+
+def color_sel_lum(
+    c1: Color
+    , c2: Color
+    , dc: Color
+    , threshold: float = 0.5
+) -> Color:
+    """Given a pair of colors, select a color from it based on the relative
+    luminance of a third one.
+
+    Args:
+        c1 (`Color`): Color to select if the luminance is below the threshold.
+        c2 (`Color`): Color to select if the luminance is above the threshold.
+        dc (`Color`): Color to use to compute the relative luminance.
+        threshold (float, optional): Threshold to make the decision. Ideally, a
+            value between 0. and 1. Defaults to 0.5.
+
+    Returns:
+       `Color`, c1 or c2.
+    """
+    return (c1, c2)(calc_relative_luminance(dc) > threshold)
 
 
 def interp_fn_rgb_hls(

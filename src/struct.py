@@ -42,7 +42,7 @@ class Compound(NamedTuple):
     def __str__(self): return self.name
 
     def __repr__(self):
-        return f"[{self.name}]"
+        return f"<{self.name}>"
 
 
 class Reaction(NamedTuple):
@@ -65,7 +65,7 @@ class Reaction(NamedTuple):
         stored reaction.
     """
     name: str
-    compounds: Tuple[Sequence[Compound], Sequence[Compound]]
+    compounds: Tuple[Tuple[Compound, ...], Tuple[Compound, ...]]
     energy: float
     idx: int
     opts: Dict[str, str] | None = None
@@ -80,7 +80,7 @@ class Reaction(NamedTuple):
         ))
 
     def __repr__(self):
-        return f"[{self.name}:{str(self)}]"
+        return f"<{self.name}:{str(self)}>"
 
 
 class Network(NamedTuple):

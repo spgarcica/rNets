@@ -385,16 +385,14 @@ def parse_reaction_line(
     vis: str | None = kw.get(CompoundCol.Visible)
     ops: str | None = kw.get(CompoundCol.Opts)
 
-    ncs: List[Tuple[List[Compound], List[Compound]]]
+    ncs: Tuple[Tuple[List[Compound], List[Compound]], ...]
     match kw.get(ReactionCol.Direction):
         case Direction.Left:
-            ncs = [(cr, cl)]
-        case Direction.Right :
-            ncs = [(cl, cr)]
+            ncs = ((tuple(cl), tuple(cr)),)
         case Direction.Biderectional:
-            ncs = [(cr, cl), (cl, cr)]
+            ncs = ((tuple(cr), tuple(cl)), (tuple(cl), tuple(cr)))
         case _:
-            ncs = [(cl, cr)]
+            ncs = ((tuple(cl), tuple(cr)),)
 
     return tuple(map(
         lambda xs: Reaction(

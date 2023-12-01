@@ -56,6 +56,7 @@ class Edge(NamedTuple):
 
     def __str__(self): return edge_to_str(self)
 
+
 class Graph(NamedTuple):
     """Structure representing a dot graph.
 
@@ -63,13 +64,13 @@ class Graph(NamedTuple):
         kind (str): Graph type.
         nodes (sequence of `Node`): Nodes in the graph.
         edges (sequence of `Edge`): Edges in the graph.
-        global_options(dict of `OptKind` as keys and `Opt` as values):
+        options(dict of `OptKind` as keys and `Opt` as values):
             Dictionary containing multiple global options.
     """
     kind: str
     nodes: Sequence[Node]
     edges: Sequence[Edge]
-    global_options: Dict[OptKind, Opts] | None
+    options: Dict[OptKind, Opts] | None
 
     HEADER = "strict {}"
 
@@ -133,11 +134,11 @@ def graph_to_str(
     Returns:
         str of the dot format.
     """
-    if not g.global_options: return ""
+    if not g.options: return ""
     os = '\n'.join(
         map(
             lambda xs: opts_glob_to_str(*xs) + ';'
-            , g.global_options.items()
+            , g.options.items()
         )
     )
 
@@ -147,7 +148,6 @@ def graph_to_str(
             lambda x: ident_if("\n".join(map(str, x)), IDENT, True)
             , (g.nodes, g.edges))) \
         + "\n}"
-
 
 
 def opts_to_str(
@@ -177,9 +177,9 @@ def edge_to_str(
         str of the dot format
     """
     spc = len(e.origin) + len(e.direction) + len(e.target)
-    return e.origin \
+    return f'"{e.origin}"' \
         + ' ' + e.direction \
-        + ' ' + e.target \
+        + ' ' + f'"{e.target}"' \
         + ident_if(
             (' ' * IDENT) + opts_to_str(e.options)
             , (spc + IDENT + 3)
@@ -198,7 +198,7 @@ def node_to_str(
     Returns:
         str of the dot format
     """
-    return n.name \
+    return f'"{n.name}"' \
         + (' ' * IDENT) \
         + ident_if(
             opts_to_str(n.options)

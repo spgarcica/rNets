@@ -2,28 +2,25 @@
 
 from enum import StrEnum
 from math import exp
-from functools import reduce
-from itertools import chain, repeat, starmap
-from typing import Callable, Dict, Set, Sequence, Tuple
+from functools import partial, reduce
+from itertools import chain, repeat, product, starmap
+from typing import Callable, Dict, Iterator, NamedTuple, Set, Sequence, Tuple
 
 from .dot import Edge, Graph, Node
 from .struct import Compound, FFlags, Network, Reaction
 from .color import calc_relative_luminance, Color, interp_fn_rgb_hls, rgb_to_hexstr
+from .colorscheme import VIRIDIS
 
 
-class HTMLFormat(StrEnum):
-    Bold = "<b>{}</b>"
-    Italic = "<i>{}</i>"
-    Underscore = "<u>{}</u>"
+DEF_T: float = 273.15
+C_WHITE: Color = (1., 1., 1.)
+C_BLACK: Color = (0., 0., 0.)
 
-
-GRAPH_ATTR_DEF = {
+GRAPH_ATTR_DEF: Dict[str, str] = {
     'rankdir': 'TB'
     , 'ranksep': '0.5'
     , 'nodesep': '0.5'
 }
-
-# HTML template for compound boxes
 BOX_TMP: str = """<
 <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="20">
   <TR>
@@ -32,42 +29,105 @@ BOX_TMP: str = """<
 </TABLE>
 >
 """
-
-# HTML template for the compounds text
 LABEL_TMP: str = '<FONT COLOR="{0}">{1}</FONT>'
 
 
+class HTMLFormat(StrEnum):
+    Bold = "<b>{}</b>"
+    Italic = "<i>{}</i>"
+    Underscore = "<u>{}</u>"
+
+
+class NodeCfg(NamedTuple):
+    """Dot node general configuration.
+
+    Attributes:
+        opts (dict of str as keys and str as values or None, optional): Dot
+            additional global node options. Defauts to None.
+        box_tmp (str, optional): Box template. Should have two format
+            modificators, the first consisting on the label and the second
+            consisting on the background color. Defaults to `BOX_TMP`
+        font_color (`Color`, optional): Font color of the node. Defaults to
+            `C_BLACK`
+        font_color_alt (`Color` or None, optional): Alternative font color. If
+            not None, would be used as the font color for dark background
+            colors (see `calc_relative_luminance`)
+        font_lum_threshold (float on None, optional): If font:
+    """
+    opts: dict[str, str] | None = None
+    box_tmp: str = BOX_TMP
+    font_color: Color = C_BLACK
+    font_color_alt: Color | None = C_WHITE
+    font_lum_threshold: float | None = None
+
+
+class EdgeCfg(NamedTuple):
+    """Dot edge general configuration.
+
+    Attributes:
+        opts (dict of str as keys and str as values or None, optional): Dot
+            additional global edge options. Defauts to None.
+        solid_color (`Color` or None, optional): If set, all lines will be draw
+            with that color, else, the color will be decided based on the
+            reaction energy. Defaults to None.
+        width (float, optional): Minimum width of the edges. Defaults to 1..
+        max_width (float or None, optional): If set, the width or the arrows
+            will be decided based on their kinetic constant (k, see
+            `calc_pseudo_k_constant`), using width as the minimum width and
+            this max_width as the maximum width, if None, all the arrows will
+            be draw with constant width.
+    """
+    opts: dict[str, str] | None = None
+    solid_color: Color | None = None
+    width: float = 1
+    max_width: float | None = 2
+
+
+class GraphCfg(NamedTuple):
+    """Dot graph general configuration.
+
+    Attributes:
+        opts (dict of str as keys and str as values or None, optional): Dot
+            additional global graph options. Defauts to None. Defaults to
+            `GRAPH_ATTR_DEF`.
+        kind (str, optional): Kind of the dotgraph. Defaults to digraph.
+        colorscheme (sequence of floats): Sequence of colors that will be
+           interpolate to set the colors of the graph. See `interp_fn_rgb_hls`.
+           defaults to `VIRIDIS`.
+        color_offset (tuple of two floats, optional): When using the energy of
+            a node to decide its color, the offset to apply to norm. Should be
+            a value between 0. and 1. Useful to avoid falling on the extremes
+            of a predefined colorscheme. Defaults to (0., 0.)
+    """
+    opts: dict[str, str] | None = GRAPH_ATTR_DEF
+    kind: str = "digraph"
+    colorscheme: Sequence[float] = VIRIDIS
+    color_offset: Tuple[float, float] = (0., 0.)
+    node_cfg: NodeCfg = NodeCfg()
+    edge_cfg: EdgeCfg = EdgeCfg()
+
+
 def calc_activation_energy(
-    cs: Tuple[Sequence[Compound], Sequence[Compound]]
+    r: Reaction
 ) -> float:
     """Computes the activation energy of a given compounds
 
     Args:
-        cs (`Compounds`): Reaction for which the energy will be computed. Taking
-            the compounds as the first position as the reactants and the
-            products on the second position.
+        r (`Reaction`): Reaction that will be used to calculate the Ea.
 
     Returns:
          Activation energy as a float.
 
     Notes:
-        Note that the units are not checked. The energy of the `Compound`s
-        should be be in the same units.
+        Note that the units are not checked. The energy of the `Reaction` and
+        its attached compounds should be in the same units.
     """
-    es: Tuple[float, float] = tuple(map(
-        lambda xs: sum(map(
-            lambda c: c.energy
-            , xs
-        ))
-        , cs.compounds
-    ))
-
-    return es[1] - es[0]
+    return r.energy - (sum(map(lambda x: x.energy, r.compounds[0])))
 
 
-def calc_pseudo_kconstant(
+def calc_pseudo_k_constant(
     ea: float
-    , T: float = 273.15
+    , T: float = DEF_T
 ) -> float:
     """Computes a pseudo equilibrium constant (k) for the given activation
     energy. This constant serves a proxy to visually compare reaction kinetics.
@@ -75,7 +135,7 @@ def calc_pseudo_kconstant(
     Args:
         ea (float): Reaction energy.
         T (float): Temperature at which the kinetic constant is
-            computed. Defaults to 273.15.
+            computed. Defaults to `DEF_T`.
 
     Returns:
        Computed pseudo-k, as float.
@@ -88,6 +148,26 @@ def calc_pseudo_kconstant(
        energy units match.
     """
     return exp(ea / T)
+
+
+def calc_reactions_k_norms(
+    rs: Sequence[Reaction]
+    , T: float = DEF_T
+) -> Tuple[float, ...]:
+    """From a set of reactions, compute the norm of each reaction using the
+    pseudo kinetic constant (see `calc_pseudo_kconstant`).
+
+    Args:
+        rs (sequence of `Reaction`): Reactions to use to compute the norm.
+        T (float): Temperature at which the kinetic constant is
+            computed. Defaults to `DEF_T`.
+    """
+    ks: Tuple[float, ...] = tuple(map(
+        lambda r: calc_pseudo_k_constant(calc_activation_energy(r), T)
+        , rs
+    ))
+    norm: Callable[[float], float] = normalizer(*minmax(ks))
+    return tuple(map(norm, ks))
 
 
 def normalizer(
@@ -240,8 +320,9 @@ def apply_html_format(
 
 def build_node_box(
     s: str
-    , bc: Color = (0., 0., 0.)
-    , fc: Color = (1., 1., 1.)
+    , bc: Color = C_WHITE
+    , fc: Color = C_BLACK
+    , box_tmp: str = BOX_TMP
 ) -> str:
     """Creates an string describing a colored-background HTML with a text label
     in the middle. This is the typical node representation of this code.
@@ -249,10 +330,12 @@ def build_node_box(
     Args:
         s (str): String that will be used as a label.
         bc (`Color`, optional): Background color for the table. Defaults to
-           white ((0., 0., 0.))
+           white (`C_WHITE`).
         fc (`Color`, optional): Text color for the label. Defaults to black
-             ((1., 1., 1.))
-
+             (`C_BLACK`).
+        box_tmp (str, optional): Box template. Should have two format
+            modificators, the first consisting on the label and the second
+            consisting on the background color. Defaults to `BOX_TMP`
     Returns:
         HTML table with the given label, background color and text color.
 
@@ -260,73 +343,120 @@ def build_node_box(
         Note that `Color` follows the colorsys representation, meaning that it
         consists of 3 float values ranging from [0, 1].
     """
-    return BOX_TMP.format(bc, LABEL_TMP.format(fc, s))
+    return box_tmp.format(bc, LABEL_TMP.format(fc, s))
+
+
+def gen_react_arrows(
+    rt: Sequence[Compound]
+    , pt: Sequence[Compound]
+) -> Iterator[Tuple[Compound, Compound]]:
+    """Given a set of reactants and a set of products, generate an iterator
+    that returns every react->product combination, skipping the ones containing
+    a not visible `Compound`.
+
+    Args:
+        rt (sequence of compounds): `Compound`s acting as reactants.
+        pt (sequence of compounds): `Compound`s acting as products.
+
+    Returns:
+        A consumable iterator with all the (react, product) combinations
+        excluding the ones with non visible compounds.
+    """
+    return product(*map(
+        partial(filter, lambda x: x.visible)
+        , (rt, pt)
+    ))
 
 
 def build_dotnode(
     c: Compound
-    , c_norm: Callable[[float], Color]
-    , fc: Color = (1., 1., 1.)
-    , fc_alt: Color | None = None
+    , bc: Color = C_WHITE
+    , fc: Color = C_BLACK
 ) -> Node:
     """Creates a `Node` from a `Compound`.
 
     Args:
         c (`Compound`): Compound to be coverted.
-        c_norm (function): Function that takes.
+        bc (`Color`, optional): RGB color of the background. Defaults to white.
         fc (`Color`, optional): RGB color of the text. Defaults to black
-            (1., 1., 1.).
-        fc_alt (`Color` or None, optional): If set, this color will be set for
-            relative luminances lesser than 0.5. See `calc_relative_luminance`.
+            (C_BLACK).
 
     Returns:
-        Dot `Node` with the background color adapted for the node.
+        Dot `Node` with the given font and background colors. Inherits applies
+        the format flags and the dot opts in `Compound`.
 
     Note:
         To allow custom labels, this function will check for "label" in
         `Compound.opts`, if found, it will use it instead of the layer.
     """
     l: str = (c.opts and c.opts.get("label")) or c.name
-    if fc_alt and (calc_relative_luminance(fc_alt) < 0.5):
-        fc = fc_alt
     return Node(
         name=l
-        , options=c.opts | {
+        , options=c.opts or {} | {
             "label": build_node_box(
                 s=(c.fflags and apply_html_format(l, c.fflags)) or l
-                , bc=rgb_to_hexstr(c_norm(c.energy))
+                , bc=rgb_to_hexstr(bc)
                 , fc=rgb_to_hexstr(fc)
             )
         }
     )
 
 
-def build_dotedge(
+def build_dotedges(
     r: Reaction
-    , e_norm: float
-    , k_norm: float
-    , max_width: float = 2.
-) -> Edge:
-    """Converts a reaction into one or more dot `Edge`
+    , width: float
+    , color: Color = C_BLACK
+) -> Iterator[Edge]:
+    """Converts a `Reaction` into one or more dot `Edge`.
 
     Args:
         r (`Reaction`): Reaction to convert.
-        e_norm (float): Normalized energy withing the range of [0., 1.].
-        k_norm (function): Normalized kinetic constant within the range of [0.,
-            1.].
-        max_width: (float): Max arrow width. It will correspond to the maximum
-            k value.
+        width (float): Width of the reaction arrow.
+        color (`Color`, optional): Color of the arrow. Defaults to `C_BLACK`
+
+    Returns:
+        Tuple of the generated dot `Edge` corresponding to the `Reaction` with
+        the given width and color.
     """
-    opts: Dict[str, str] = {
-        "color": e_norm
-        , "penwidth": k_norm * max_width
-    }
-    return Edge(
-        start=sl
-        , target=el
-        , direction=direction
-        , options=opts
+    def build_edge(o: str, t: str) -> Edge:
+        return Edge(
+            origin=o
+            , target=t
+            , direction="->"
+            , options=r.opts or {} | {
+                "color": rgb_to_hexstr(color, inc_hash=False)
+                , "penwidth": str(width)
+            }
+        )
+
+    return starmap(build_edge, gen_react_arrows(*r.compounds))
+
+
+def build_dotgraph(
+    nw: Network
+    , opts: GraphCfg | None
+) -> Graph:
+    c_norm: Callable[[float], Color] = network_color_interp(
+        nw, opts.colorscheme
     )
+    fc_fn: Callable[[Color], str]
+    if opts.node_cfg.font_color_alt:
+        fc_fn = lambda c: (
+            opts.node_cfg.font_color
+            , opts.node_cfg.font_color_alt
+        )(calc_relative_luminance < 0.5)
+
+    return Graph(
+        kind = opts.kind
+        nodes = tuple(map(
+            build_dotnode()
+        ))
+    )
+    bc: Color = c_norm(c.energy)
+    if fc_alt and (calc_relative_luminance(bc) < 0.5):
+        fc = fc_alt
+
+
 
 
 # def iter_dotedge(
