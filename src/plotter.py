@@ -31,7 +31,7 @@ NODE_ATTR_DEF: Dict[str, str] = {
     "shape": "plaintext"
 }
 BOX_TMP: str = """<
-<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="20">
   <TR>
     <TD BGCOLOR="{0}">{1}</TD>
   </TR>
@@ -491,6 +491,14 @@ def build_dotgraph(
     nw: Network
     , cfg: GraphCfg = GraphCfg()
 ) -> Graph:
+    """Build a dotgraph from a reaction network.
+
+        nw (Network): `Network` object to be converted into dot `Graph`.
+        cfg (`GraphCfg`, optional): Graphviz configuration.
+
+    Returns:
+        Dot `Graph` with the colors and shapes of the netwkork.
+    """
     c_norm: [Callable[[float], Color]] = network_color_interp(
         n=nw
         , cs=cfg.colorscheme
@@ -535,33 +543,3 @@ def build_dotgraph(
             )
         ))
     )
-
-# def iter_dotedge(
-#     rs: Sequence[Reaction]
-#     , e_norm: Callable[[float], float]
-#     , k_norm: Callable[[float], float]
-# ) -> Edge:
-
-
-
-# def network_to_dotgraph(
-#     net: Network
-#     , offset: Tuple[float, float] | None = None
-# ) -> Graph:
-#     """Given a reaction network, build a dotgraph.
-
-#     Args:
-#         net (`Network`): Network to be transformed.
-#         offset (tuple of two floats, optional): Energy offset to be applied to
-#             the color. Defaults to None.
-
-#     Returns:
-#         `Graph` with the nodes and edges inside the network.
-
-#     Notes:
-#         The offset should be used to change the values of the minimum and the
-#         maximum energy. That will change the colors that are used to represent
-#         the energies.
-#     """
-#     e_norm_fn: Callable[[float], float] = network_energy_minmax(net)
-#     ks: [float] =
