@@ -15,14 +15,12 @@ class OptKind(StrEnum):
     Edge = auto()
 
 
-class Opts(NamedTuple):
+class Opts(dict):
     """Newtype representing the possible options for nodes, edges and graph
 
     Attributes:
         options (dict of str keys and str values): Dictionary containing the options.
     """
-    options: Dict[str, str]
-
     def __str__(self): return opts_to_str(self)
 
 
@@ -181,7 +179,7 @@ def edge_to_str(
         + ' ' + e.direction \
         + ' ' + f'"{e.target}"' \
         + ident_if(
-            (' ' * IDENT) + opts_to_str(e.options)
+            None if e.options is None else (' ' * IDENT + opts_to_str(e.options))
             , (spc + IDENT + 3)
             , False
         ) + ';'
@@ -201,9 +199,10 @@ def node_to_str(
     return f'"{n.name}"' \
         + (' ' * IDENT) \
         + ident_if(
-            opts_to_str(n.options)
+            None if n.options is None else opts_to_str(n.options)
             , len(n.name) + IDENT
-            , False) + ';'
+            , False
+        ) + ';'
 
 
 def opts_glob_to_str(
