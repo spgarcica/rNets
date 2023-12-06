@@ -192,7 +192,7 @@ def color_sel_lum(
     Returns:
        `Color`, c1 or c2.
     """
-    return (c1, c2)(calc_relative_luminance(dc) > threshold)
+    return (c1, c2)[calc_relative_luminance(dc) < threshold]
 
 
 def interp_fn_rgb_hls(

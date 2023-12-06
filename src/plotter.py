@@ -8,8 +8,14 @@ from typing import Callable, Dict, Iterator, NamedTuple, Set, Sequence, Tuple
 
 from .dot import Edge, Graph, Node
 from .struct import Compound, FFlags, Network, Reaction
-from .color import calc_relative_luminance, Color, interp_fn_rgb_hls, rgb_to_hexstr
-from .colorscheme import VIRIDIS
+from .color import (
+    calc_relative_luminance
+    , Color
+    , color_sel_lum
+    , interp_fn_rgb_hls
+    , rgb_to_hexstr
+)
+from .colorschemes import VIRIDIS
 
 
 DEF_T: float = 273.15
@@ -18,11 +24,14 @@ C_BLACK: Color = (0., 0., 0.)
 
 GRAPH_ATTR_DEF: Dict[str, str] = {
     'rankdir': 'TB'
-    , 'ranksep': '0.5'
-    , 'nodesep': '0.5'
+    , 'ranksep': '0.2'
+    , 'nodesep': '0.2'
+}
+NODE_ATTR_DEF: Dict[str, str] = {
+    "shape": "plaintext"
 }
 BOX_TMP: str = """<
-<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="20">
+<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
   <TR>
     <TD BGCOLOR="{0}">{1}</TD>
   </TR>
@@ -54,7 +63,7 @@ class NodeCfg(NamedTuple):
             colors (see `calc_relative_luminance`)
         font_lum_threshold (float on None, optional): If font:
     """
-    opts: dict[str, str] | None = None
+    opts: dict[str, str] | None = NODE_ATTR_DEF
     box_tmp: str = BOX_TMP
     font_color: Color = C_BLACK
     font_color_alt: Color | None = C_WHITE
@@ -76,11 +85,14 @@ class EdgeCfg(NamedTuple):
             `calc_pseudo_k_constant`), using width as the minimum width and
             this max_width as the maximum width, if None, all the arrows will
             be draw with constant width.
+        temperature (float, optional): Temperature to compute the kinetic
+            constants. Defaults to `DEF_T`.
     """
     opts: dict[str, str] | None = None
     solid_color: Color | None = None
     width: float = 1
-    max_width: float | None = 2
+    max_width: float | None = 5
+    temperature: float = DEF_T
 
 
 class GraphCfg(NamedTuple):
@@ -103,8 +115,8 @@ class GraphCfg(NamedTuple):
     kind: str = "digraph"
     colorscheme: Sequence[float] = VIRIDIS
     color_offset: Tuple[float, float] = (0., 0.)
-    node_cfg: NodeCfg = NodeCfg()
-    edge_cfg: EdgeCfg = EdgeCfg()
+    node: NodeCfg = NodeCfg()
+    edge: EdgeCfg = EdgeCfg()
 
 
 def calc_activation_energy(
@@ -153,6 +165,7 @@ def calc_pseudo_k_constant(
 def calc_reactions_k_norms(
     rs: Sequence[Reaction]
     , T: float = DEF_T
+    , norm_range: Tuple[float, float] = [0., 1.]
 ) -> Tuple[float, ...]:
     """From a set of reactions, compute the norm of each reaction using the
     pseudo kinetic constant (see `calc_pseudo_kconstant`).
@@ -167,7 +180,9 @@ def calc_reactions_k_norms(
         , rs
     ))
     norm: Callable[[float], float] = normalizer(*minmax(ks))
-    return tuple(map(norm, ks))
+    n_ran: float = norm_range[1] - norm_range[0]
+
+    return tuple(map(lambda x: (norm(x) * n_ran) + norm_range[0], ks))
 
 
 def normalizer(
@@ -424,7 +439,7 @@ def build_dotedges(
             , target=t
             , direction="->"
             , options=r.opts or {} | {
-                "color": rgb_to_hexstr(color, inc_hash=False)
+                "color": f'"{rgb_to_hexstr(color, inc_hash=True)}"'
                 , "penwidth": str(width)
             }
         )
@@ -432,32 +447,94 @@ def build_dotedges(
     return starmap(build_edge, gen_react_arrows(*r.compounds))
 
 
+def nodecolor_sel(
+    c_norm: Callable[[float], Color]
+    , fg_c: Color = C_BLACK
+    , fg_alt: Color | None = None
+    , lum_threshold: float | None = None
+) -> Callable[[Compound], Tuple[Color, Color]]:
+    """Creates a function that takes an energy as input and returns the
+    assigned color for the background of the node and the foreground.
+
+    Args:
+        c_norm (Function that takes a float as input and returns a `Color`):
+            Color normalizer that will be used to compute the color of the
+            node background. See `network_color_interp`.
+        fg_c (`Color`, optional): Color of the text. Defaults to `C_BLACK`.
+        fg_alt (`Color`, optional): If set, alternative `Color` for the text if
+            the luminance is below the a certain threshold. Defaults to None.
+        lum_threshold (float, optional): If set, threshold of the luminance. If
+            None, the default value in `color_sel_lum` will be used. This
+            argument has no effect if fg_alt is not defined. Ideally, a value
+            between 0. and 1. Defaults to None.
+
+    Returns:
+        A function that given a `Compound` returns a tuple of two `Color`s, the
+        first being the background color and the second one being the color of
+        the font.
+    """
+    fg_fn: Callable[[Color], Color]
+    if fg_alt:
+        def fg_fn(x: Color) -> Color:
+            return color_sel_lum(fg_c, fg_alt, x, lum_threshold or 0.5)
+    else:
+        def fg_fn(x: Color) -> Color: return fg_c
+
+    def out_fn(x: Compound) -> Tuple[Color, Color]:
+        bg_c: Color = c_norm(x.energy)
+        return (bg_c, fg_fn(bg_c))
+
+    return out_fn
+
+
 def build_dotgraph(
     nw: Network
-    , opts: GraphCfg | None
+    , cfg: GraphCfg = GraphCfg()
 ) -> Graph:
-    c_norm: Callable[[float], Color] = network_color_interp(
-        nw, opts.colorscheme
+    c_norm: [Callable[[float], Color]] = network_color_interp(
+        n=nw
+        , cs=cfg.colorscheme
+        , offset=cfg.color_offset
     )
-    fc_fn: Callable[[Color], str]
-    if opts.node_cfg.font_color_alt:
-        fc_fn = lambda c: (
-            opts.node_cfg.font_color
-            , opts.node_cfg.font_color_alt
-        )(calc_relative_luminance < 0.5)
+    n_color_fn: Callable[[Compound], Tuple[Color, Color]] = nodecolor_sel(
+        c_norm=c_norm
+        , fg_c=cfg.node.font_color
+        , fg_alt=cfg.node.font_color_alt
+        , lum_threshold=cfg.node.font_lum_threshold
+    )
+    e_widths: Iterator[float]
+    if cfg.edge.max_width is None:
+        e_widths = repeat(cfg.edge.width)
+    else:
+        e_widths = calc_reactions_k_norms(
+            rs=nw.reactions
+            , T=cfg.edge.temperature
+            , norm_range=(cfg.edge.width, cfg.edge.max_width)
+          )
+    e_colors: Iterator[Color]
+    if cfg.edge.solid_color is None:
+        e_colors = map(lambda r: c_norm(r.energy), nw.reactions)
+    else:
+        e_colors = repeat(cfg.edge.solid_color)
 
     return Graph(
-        kind = opts.kind
-        nodes = tuple(map(
-            build_dotnode()
+        kind=cfg.kind
+        , nodes=tuple(map(
+            lambda c: build_dotnode(c, *n_color_fn(c))
+            , nw.compounds
+        ))
+        , edges=tuple(chain.from_iterable(starmap(
+            build_dotedges
+            , zip(nw.reactions, e_widths, e_colors)
+        )))
+        , options=dict(filter(
+            lambda x: x[1] is not None
+            , zip(
+                ("graph", "node", "edge")
+                , (cfg.opts, cfg.node.opts, cfg.edge.opts)
+            )
         ))
     )
-    bc: Color = c_norm(c.energy)
-    if fc_alt and (calc_relative_luminance(bc) < 0.5):
-        fc = fc_alt
-
-
-
 
 # def iter_dotedge(
 #     rs: Sequence[Reaction]
