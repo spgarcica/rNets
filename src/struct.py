@@ -1,8 +1,9 @@
 """Basic structures to encode the reaction"""
 
+from collections.abc import Sequence
 from enum import auto, StrEnum
 from itertools import repeat, starmap
-from typing import Dict, NamedTuple, Set, Sequence, Tuple
+from typing import NamedTuple
 
 
 class FFlags(StrEnum):
@@ -35,9 +36,9 @@ class Compound(NamedTuple):
     name: str
     energy: float
     idx: int
-    opts: Dict[str, str] | None = None
+    opts: dict[str, str] | None = None
     visible: bool = True
-    fflags: Set[FFlags] | None = None
+    fflags: set[FFlags] | None = None
 
     def __str__(self): return self.name
 
@@ -65,10 +66,10 @@ class Reaction(NamedTuple):
         stored reaction.
     """
     name: str
-    compounds: Tuple[Tuple[Compound, ...], Tuple[Compound, ...]]
+    compounds: tuple[tuple[Compound, ...], tuple[Compound, ...]]
     energy: float
     idx: int
-    opts: Dict[str, str] | None = None
+    opts: dict[str, str] | None = None
     visible: bool = True
 
     def __str__(self):

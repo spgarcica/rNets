@@ -1,10 +1,11 @@
 "Parser function to read the network in cs form"
 
+from collections.abc import Callable, Sequence
 from enum import auto, StrEnum
 from functools import reduce
 from itertools import chain
 from pathlib import Path
-from typing import Callable, Dict, List, NamedTuple, Sequence, Set, Tuple, TypeVar
+from typing import NamedTuple, TypeVar
 
 from .struct import Compound, FFlags, Network, Reaction
 
@@ -39,12 +40,12 @@ class ReactionCol(StrEnum):
     Opts = auto()
 
 
-REQ_COMP_COL: Set[CompoundCol] = set((
+REQ_COMP_COL: set[CompoundCol] = set((
     CompoundCol.Name
     , CompoundCol.Energy
 ))
 
-REQ_REACT_COL: Set[ReactionCol] = set((
+REQ_REACT_COL: set[ReactionCol] = set((
     ReactionCol.CLeft
     , ReactionCol.CRight
     , ReactionCol.Energy
@@ -100,8 +101,8 @@ def parse_bool(
 
 def parse_compounds(
     s: str
-    , req: Set[CompoundCol] = REQ_COMP_COL
-) -> Tuple[Compound, ...]:
+    , req: set[CompoundCol] = REQ_COMP_COL
+) -> tuple[Compound, ...]:
     """Parse compounds in a given string.
 
     Args:
@@ -124,7 +125,7 @@ def parse_compounds(
 
 def parse_compounds_from_file(
     f: str | Path
-) -> Tuple[Compound, ...]:
+) -> tuple[Compound, ...]:
     """Wrapper of `parse_compounds` but using a file as input.
 
     Args:
@@ -176,7 +177,7 @@ def parse_compound_line(
 
 def parse_fflags(
     s: str
-) -> Set[FFlags]:
+) -> set[FFlags]:
     """Parse format flags.
 
     s (str): String to parse. Should contain the format options separated by
@@ -197,9 +198,9 @@ def parse_fflags(
 def parse_lines(
     s: str
     , h: type[S]
-    , r: Set[S]
-    , fn: Callable[[int, str, List[S]], T]
-) -> Tuple[T, ...]:
+    , r: set[S]
+    , fn: Callable[[int, str, list[S]], T]
+) -> tuple[T, ...]:
     """Parse a string containing compounds or intermediates in multiple lines.
 
     Args:
@@ -212,7 +213,7 @@ def parse_lines(
         A tuple containing the parsed values.
     """
     rh, *ls = s.splitlines()
-    ph: List[S] = list(map(h, rh.split(',')))
+    ph: list[S] = list(map(h, rh.split(',')))
 
     if not r.issubset(h):
         raise ValueError(
@@ -242,7 +243,7 @@ def parse_network(
     Returns:
         Network with the parsed compounds and reactions.
     """
-    cs: Tuple[Compound, ...] = parse_compounds(sc, REQ_COMP_COL)
+    cs: tuple[Compound, ...] = parse_compounds(sc, REQ_COMP_COL)
     return Network(
         compounds=cs
         , reactions=parse_reactions(sr, cs, REQ_REACT_COL)
@@ -271,7 +272,7 @@ def parse_network_from_file(
 
 def parse_opts(
     s: str
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """Parses the opts column associated with additional opt options.
 
     Args:
@@ -293,8 +294,8 @@ def parse_opts(
 def parse_reactions(
     s: str
     , cs: Sequence[Compound]
-    , req: Set[ReactionCol] = REQ_REACT_COL
-) -> Tuple[Reaction, ...]:
+    , req: set[ReactionCol] = REQ_REACT_COL
+) -> tuple[Reaction, ...]:
     """Parse reactions in a given string.
 
     Args:
@@ -318,7 +319,7 @@ def parse_reactions(
 def parse_reactions_from_file(
     f: str | Path
     , cs: Sequence[Compound]
-) -> Tuple[Reaction, ...]:
+) -> tuple[Reaction, ...]:
     """Wrapper of `parse_reactions` but using a file as input.
 
     Args:
@@ -336,7 +337,7 @@ def parse_reaction_line(
     , l: str
     , cs: Sequence[Compound]
     , h: Sequence[ReactionCol] = tuple(ReactionCol)
-) -> Tuple[Reaction, ...]:
+) -> tuple[Reaction, ...]:
     """
     Parse a reaction line.
 
@@ -362,9 +363,9 @@ def parse_reaction_line(
         same number.
     """
     def reduce_fn(
-        xs: Tuple[Tuple[List[Compound], List[Compound]], List[Tuple[str, str]]]
-        , x: Tuple[str, str]
-    ) -> Tuple[Tuple[List[Compound], List[Compound]], List[Tuple[str, str]]]:
+        xs: tuple[tuple[list[Compound], list[Compound]], list[tuple[str, str]]]
+        , x: tuple[str, str]
+    ) -> tuple[tuple[list[Compound], list[Compound]], list[tuple[str, str]]]:
         match x:
             case (_, ""):
                 pass
@@ -385,7 +386,7 @@ def parse_reaction_line(
     vis: str | None = kw.get(CompoundCol.Visible)
     ops: str | None = kw.get(CompoundCol.Opts)
 
-    ncs: Tuple[Tuple[List[Compound], List[Compound]], ...]
+    ncs: tuple[tuple[list[Compound], list[Compound]], ...]
     match kw.get(ReactionCol.Direction):
         case Direction.Left:
             ncs = ((tuple(cl), tuple(cr)),)

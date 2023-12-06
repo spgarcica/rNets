@@ -1,7 +1,8 @@
 "Write a reaction network in dot format"
 
 
-from typing import Dict, NamedTuple, Sequence
+from collections.abc import Sequence
+from typing import NamedTuple
 from enum import auto, StrEnum
 
 
@@ -16,10 +17,7 @@ class OptKind(StrEnum):
 
 
 class Opts(dict):
-    """Newtype representing the possible options for nodes, edges and graph
-
-    Attributes:
-        options (dict of str keys and str values): Dictionary containing the options.
+    """Dict representing the possible options for nodes, edges and graph
     """
     def __str__(self): return opts_to_str(self)
 
@@ -68,7 +66,7 @@ class Graph(NamedTuple):
     kind: str
     nodes: Sequence[Node]
     edges: Sequence[Edge]
-    options: Dict[OptKind, Opts] | None
+    options: dict[OptKind, Opts] | None
 
     HEADER = "strict {}"
 

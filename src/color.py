@@ -1,10 +1,11 @@
 "Color parsing, writing and interpolation."
 
+from collections.abc import Callable, Sequence
 from colorsys import rgb_to_hls, hls_to_rgb
 from itertools import repeat, starmap
-from typing import Callable, Sequence, Tuple
 
-Color = Tuple[float, float, float]
+
+Color = tuple[float, float, float]
 
 
 def ensure_color(

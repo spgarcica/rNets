@@ -1,10 +1,11 @@
 "Module containing the plotter for the reaction networks testing"
 
+from collections.abc import Callable, Iterator, Sequence
 from enum import StrEnum
 from math import exp
 from functools import partial, reduce
 from itertools import chain, repeat, product, starmap
-from typing import Callable, Dict, Iterator, NamedTuple, Set, Sequence, Tuple
+from typing import NamedTuple
 
 from .dot import Edge, Graph, Node
 from .struct import Compound, FFlags, Network, Reaction
@@ -22,12 +23,12 @@ DEF_T: float = 273.15
 C_WHITE: Color = (1., 1., 1.)
 C_BLACK: Color = (0., 0., 0.)
 
-GRAPH_ATTR_DEF: Dict[str, str] = {
+GRAPH_ATTR_DEF: dict[str, str] = {
     'rankdir': 'TB'
     , 'ranksep': '0.2'
     , 'nodesep': '0.2'
 }
-NODE_ATTR_DEF: Dict[str, str] = {
+NODE_ATTR_DEF: dict[str, str] = {
     "shape": "plaintext"
 }
 BOX_TMP: str = """<
@@ -114,7 +115,7 @@ class GraphCfg(NamedTuple):
     opts: dict[str, str] | None = GRAPH_ATTR_DEF
     kind: str = "digraph"
     colorscheme: Sequence[float] = VIRIDIS
-    color_offset: Tuple[float, float] = (0., 0.)
+    color_offset: tuple[float, float] = (0., 0.)
     node: NodeCfg = NodeCfg()
     edge: EdgeCfg = EdgeCfg()
 
@@ -165,8 +166,8 @@ def calc_pseudo_k_constant(
 def calc_reactions_k_norms(
     rs: Sequence[Reaction]
     , T: float = DEF_T
-    , norm_range: Tuple[float, float] = [0., 1.]
-) -> Tuple[float, ...]:
+    , norm_range: tuple[float, float] = [0., 1.]
+) -> tuple[float, ...]:
     """From a set of reactions, compute the norm of each reaction using the
     pseudo kinetic constant (see `calc_pseudo_kconstant`).
 
@@ -175,7 +176,7 @@ def calc_reactions_k_norms(
         T (float): Temperature at which the kinetic constant is
             computed. Defaults to `DEF_T`.
     """
-    ks: Tuple[float, ...] = tuple(map(
+    ks: tuple[float, ...] = tuple(map(
         lambda r: calc_pseudo_k_constant(calc_activation_energy(r), T)
         , rs
     ))
@@ -221,7 +222,7 @@ def normalizer(
 
 def minmax(
     xs: Sequence[float]
-) -> Tuple[float, float]:
+) -> tuple[float, float]:
     """Simple function that returns the minimum and the maximum of a sequence
     of floats;
     Args:
@@ -235,7 +236,7 @@ def minmax(
         implementation of min and max are extremely efficient; it is better
         to create two maps and then search for the min and max.
     """
-    ys: Tuple[float, ...] = tuple(xs)
+    ys: tuple[float, ...] = tuple(xs)
     return (min(ys), max(ys))
 
 
@@ -264,7 +265,7 @@ def network_energy_normalizer(
 def network_color_interp(
     n: Network
     , cs: Sequence[Color]
-    , offset: Tuple[float, float] = (0., 0.)
+    , offset: tuple[float, float] = (0., 0.)
 ) -> Callable[[float], Color]:
     """Given a reaction network and a sequence of colors, build a color
     interpolation function that converts the energy of a component inside the
@@ -315,7 +316,7 @@ def fformat_to_html(
 
 def apply_html_format(
     s: str
-    , fs: Set[FFlags]
+    , fs: set[FFlags]
 ) -> str:
     """Given a set of `FFlags` apply it as HTML format labels to a string.
 
@@ -364,7 +365,7 @@ def build_node_box(
 def gen_react_arrows(
     rt: Sequence[Compound]
     , pt: Sequence[Compound]
-) -> Iterator[Tuple[Compound, Compound]]:
+) -> Iterator[tuple[Compound, Compound]]:
     """Given a set of reactants and a set of products, generate an iterator
     that returns every react->product combination, skipping the ones containing
     a not visible `Compound`.
@@ -452,7 +453,7 @@ def nodecolor_sel(
     , fg_c: Color = C_BLACK
     , fg_alt: Color | None = None
     , lum_threshold: float | None = None
-) -> Callable[[Compound], Tuple[Color, Color]]:
+) -> Callable[[Compound], tuple[Color, Color]]:
     """Creates a function that takes an energy as input and returns the
     assigned color for the background of the node and the foreground.
 
@@ -480,7 +481,7 @@ def nodecolor_sel(
     else:
         def fg_fn(x: Color) -> Color: return fg_c
 
-    def out_fn(x: Compound) -> Tuple[Color, Color]:
+    def out_fn(x: Compound) -> tuple[Color, Color]:
         bg_c: Color = c_norm(x.energy)
         return (bg_c, fg_fn(bg_c))
 
@@ -504,7 +505,8 @@ def build_dotgraph(
         , cs=cfg.colorscheme
         , offset=cfg.color_offset
     )
-    n_color_fn: Callable[[Compound], Tuple[Color, Color]] = nodecolor_sel(
+    n_color_fn: Callable[[Compound], tuple
+                         [Color, Color]] = nodecolor_sel(
         c_norm=c_norm
         , fg_c=cfg.node.font_color
         , fg_alt=cfg.node.font_color_alt
