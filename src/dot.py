@@ -140,12 +140,14 @@ def graph_to_str(
         )
     )
 
-    return g.HEADER.format(g.kind) + "{" \
-        + "\n\n" + ident(os, IDENT, True) + "\n\n" \
+    return (
+        g.HEADER.format(g.kind) + "{"
+        + "\n\n" + ident(os, IDENT, True) + "\n\n"
         + "\n\n".join(map(
             lambda x: ident_if("\n".join(map(str, x)), IDENT, True)
-            , (g.nodes, g.edges))) \
+            , (g.nodes, g.edges)))
         + "\n}"
+    )
 
 
 def opts_to_str(
@@ -175,14 +177,16 @@ def edge_to_str(
         str of the dot format
     """
     spc = len(e.origin) + len(e.direction) + len(e.target)
-    return f'"{e.origin}"' \
-        + ' ' + e.direction \
-        + ' ' + f'"{e.target}"' \
+    return (
+        f'"{e.origin}"'
+        + ' ' + e.direction
+        + ' ' + f'"{e.target}"'
         + ident_if(
             None if e.options is None else (' ' * IDENT + opts_to_str(e.options))
             , (spc + IDENT + 3)
             , False
         ) + ';'
+    )
 
 
 def node_to_str(
@@ -196,13 +200,15 @@ def node_to_str(
     Returns:
         str of the dot format
     """
-    return f'"{n.name}"' \
-        + (' ' * IDENT) \
+    return (
+        f'"{n.name}"'
+        + (' ' * IDENT)
         + ident_if(
             None if n.options is None else opts_to_str(n.options)
             , len(n.name) + IDENT
             , False
         ) + ';'
+    )
 
 
 def opts_glob_to_str(
@@ -218,9 +224,11 @@ def opts_glob_to_str(
     Returns:
         str of the dot format.
     """
-    return k + ' ' \
+    return (
+        k + ' ' \
         + ident(
             opts_to_str(o)
             , len(k) + 2
             , False
         )
+    )
