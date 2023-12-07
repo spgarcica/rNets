@@ -78,12 +78,16 @@ def assure_compound(
         )
 
 
-def parse_bool(
+def parse_vis(
     s: str
-) -> bool | None:
+    , default: bool = True
+) -> bool:
     """Parses a string representing a boolean value.
 
-    s (str): String to parse.
+    Args:
+        s (str): String to parse.
+        default (bool or None, optional): Default value to return if parsing
+            fails. Defaults to True
 
     Returns:
         bool value corresponding to the parsed statement. None if the value is
@@ -96,7 +100,7 @@ def parse_bool(
     match s.lower():
         case 't' | 'true': return True
         case 'f' | 'false': return False
-        case _: return None
+        case _: return default
 
 
 def parse_compounds(
@@ -169,7 +173,7 @@ def parse_compound_line(
         name=kw[CompoundCol.Name]
         , energy=float(kw[CompoundCol.Energy])
         , idx=idx
-        , visible=(parse_bool(vis) if vis else None) or True
+        , visible=True if vis is None else parse_vis(vis, default=True)
         , fflags=parse_fflags(ffs) if ffs else None
         , opts=parse_opts(ops) if ops else None
     )
@@ -401,7 +405,7 @@ def parse_reaction_line(
             , compounds=xs
             , energy=float(kw[ReactionCol.Energy])
             , idx=int(idx)
-            , visible=(parse_bool(vis) if vis else None) or True
+            , visible=True if vis is None else parse_vis(vis, default=True)
             , opts=parse_opts(ops) if ops else None
         )
         , ncs

@@ -531,11 +531,14 @@ def build_dotgraph(
         kind=cfg.kind
         , nodes=tuple(map(
             lambda c: build_dotnode(c, *n_color_fn(c))
-            , nw.compounds
+            , filter(lambda c: c.visible, nw.compounds)
         ))
         , edges=tuple(chain.from_iterable(starmap(
             build_dotedges
-            , zip(nw.reactions, e_widths, e_colors)
+            , filter(
+                lambda xs: xs[0].visible
+                , zip(nw.reactions, e_widths, e_colors)
+            )
         )))
         , options=dict(filter(
             lambda x: x[1] is not None
