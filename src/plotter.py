@@ -1,17 +1,16 @@
 "Module containing the plotter for the reaction networks testing"
 
-from collections.abc import Callable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from enum import StrEnum
 from math import exp
 from functools import partial, reduce
 from itertools import chain, repeat, product, starmap
 from typing import NamedTuple
 
-from .dot import Edge, Graph, Node
+from .dot import Edge, Graph, Node, Opts, OptsGlob
 from .struct import Compound, FFlags, Network, Reaction
 from .color import (
-    calc_relative_luminance
-    , Color
+    Color
     , color_sel_lum
     , interp_fn_rgb_hls
     , rgb_to_hexstr
@@ -23,16 +22,16 @@ DEF_T: float = 273.15
 C_WHITE: Color = (1., 1., 1.)
 C_BLACK: Color = (0., 0., 0.)
 
-GRAPH_ATTR_DEF: dict[str, str] = {
+GRAPH_ATTR_DEF: Opts = {
     'rankdir': 'TB'
     , 'ranksep': '0.2'
     , 'nodesep': '0.2'
 }
-NODE_ATTR_DEF: dict[str, str] = {
+NODE_ATTR_DEF: Opts = {
     "shape": "plaintext"
 }
 BOX_TMP: str = """<
-<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="20">
+<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="10">
   <TR>
     <TD BGCOLOR="{0}">{1}</TD>
   </TR>
@@ -64,7 +63,7 @@ class NodeCfg(NamedTuple):
             colors (see `calc_relative_luminance`)
         font_lum_threshold (float on None, optional): If font:
     """
-    opts: dict[str, str] | None = NODE_ATTR_DEF
+    opts: Opts | None = NODE_ATTR_DEF
     box_tmp: str = BOX_TMP
     font_color: Color = C_BLACK
     font_color_alt: Color | None = C_WHITE
@@ -89,7 +88,7 @@ class EdgeCfg(NamedTuple):
         temperature (float, optional): Temperature to compute the kinetic
             constants. Defaults to `DEF_T`.
     """
-    opts: dict[str, str] | None = None
+    opts: Opts | None = None
     solid_color: Color | None = None
     width: float = 1
     max_width: float | None = 5
@@ -112,9 +111,9 @@ class GraphCfg(NamedTuple):
             a value between 0. and 1. Useful to avoid falling on the extremes
             of a predefined colorscheme. Defaults to (0., 0.)
     """
-    opts: dict[str, str] | None = GRAPH_ATTR_DEF
+    opts: Opts | None = GRAPH_ATTR_DEF
     kind: str = "digraph"
-    colorscheme: Sequence[float] = VIRIDIS
+    colorscheme: Sequence[Color] = VIRIDIS
     color_offset: tuple[float, float] = (0., 0.)
     node: NodeCfg = NodeCfg()
     edge: EdgeCfg = EdgeCfg()
@@ -129,7 +128,7 @@ def calc_activation_energy(
         r (`Reaction`): Reaction that will be used to calculate the Ea.
 
     Returns:
-         Activation energy as a float.
+        Activation energy as a float.
 
     Notes:
         Note that the units are not checked. The energy of the `Reaction` and
@@ -166,8 +165,8 @@ def calc_pseudo_k_constant(
 def calc_reactions_k_norms(
     rs: Sequence[Reaction]
     , T: float = DEF_T
-    , norm_range: tuple[float, float] = [0., 1.]
-) -> tuple[float, ...]:
+    , norm_range: tuple[float, float] = (0., 1.)
+) -> Iterator[float]:
     """From a set of reactions, compute the norm of each reaction using the
     pseudo kinetic constant (see `calc_pseudo_kconstant`).
 
@@ -183,7 +182,7 @@ def calc_reactions_k_norms(
     norm: Callable[[float], float] = normalizer(*minmax(ks))
     n_ran: float = norm_range[1] - norm_range[0]
 
-    return tuple(map(lambda x: (norm(x) * n_ran) + norm_range[0], ks))
+    return map(lambda x: (norm(x) * n_ran) + norm_range[0], ks)
 
 
 def normalizer(
@@ -221,7 +220,7 @@ def normalizer(
 
 
 def minmax(
-    xs: Sequence[float]
+    xs: Iterable[float]
 ) -> tuple[float, float]:
     """Simple function that returns the minimum and the maximum of a sequence
     of floats;
@@ -359,7 +358,11 @@ def build_node_box(
         Note that `Color` follows the colorsys representation, meaning that it
         consists of 3 float values ranging from [0, 1].
     """
-    return box_tmp.format(bc, LABEL_TMP.format(fc, s))
+    return box_tmp.format(
+        rgb_to_hexstr(bc)
+        , LABEL_TMP.format(
+            rgb_to_hexstr(fc), s
+        ))
 
 
 def gen_react_arrows(
@@ -378,10 +381,8 @@ def gen_react_arrows(
         A consumable iterator with all the (react, product) combinations
         excluding the ones with non visible compounds.
     """
-    return product(*map(
-        partial(filter, lambda x: x.visible)
-        , (rt, pt)
-    ))
+    filter_vis = partial(filter, lambda x: x.visible)
+    return product(filter_vis(rt), filter_vis(pt))
 
 
 def build_dotnode(
@@ -405,14 +406,14 @@ def build_dotnode(
         To allow custom labels, this function will check for "label" in
         `Compound.opts`, if found, it will use it instead of the layer.
     """
-    l: str = (c.opts and c.opts.get("label")) or c.name
+    l: str = c.opts["label"] if (c.opts and "label" in c.opts) else c.name
     return Node(
         name=l
         , options=c.opts or {} | {
             "label": build_node_box(
-                s=(c.fflags and apply_html_format(l, c.fflags)) or l
-                , bc=rgb_to_hexstr(bc)
-                , fc=rgb_to_hexstr(fc)
+                s=apply_html_format(l, c.fflags) if c.fflags else l
+                , bc=bc
+                , fc=fc
             )
         }
     )
@@ -474,7 +475,6 @@ def nodecolor_sel(
         first being the background color and the second one being the color of
         the font.
     """
-    fg_fn: Callable[[Color], Color]
     if fg_alt:
         def fg_fn(x: Color) -> Color:
             return color_sel_lum(fg_c, fg_alt, x, lum_threshold or 0.5)
@@ -486,6 +486,28 @@ def nodecolor_sel(
         return (bg_c, fg_fn(bg_c))
 
     return out_fn
+
+
+def build_glob_opt(
+    cfg: GraphCfg
+) -> OptsGlob | None:
+    """Given a certain :obj:`GraphCfg`, build a dictionary containing the dot
+    options for the graph, the node and the edges.
+
+    Args:
+        cfg (:obj:`GraphCfg`): Configuration to use to generate the dictionary.
+
+    Returns:
+        :obj:`OptsGlob`: With the given dictionary. Using graph, node and edge
+            as keys and their corresponding :obj:`Opts` as values.
+        None: If no Opts are found.
+    """
+    # After dealing with the type checker, this is the less problematic
+    # solution to convince it that there are no None values in the dictionary.
+    nms: tuple[str, ...] = ("graph", "node", "edge")
+    os: tuple[Opts | None, ...] = (cfg.opts, cfg.node.opts, cfg.edge.opts)
+
+    return {k: v for k, v in zip(nms, os) if v is not None} or None
 
 
 def build_dotgraph(
@@ -500,7 +522,7 @@ def build_dotgraph(
     Returns:
         Dot `Graph` with the colors and shapes of the netwkork.
     """
-    c_norm: [Callable[[float], Color]] = network_color_interp(
+    c_norm: Callable[[float], Color] = network_color_interp(
         n=nw
         , cs=cfg.colorscheme
         , offset=cfg.color_offset
@@ -536,15 +558,9 @@ def build_dotgraph(
         , edges=tuple(chain.from_iterable(starmap(
             build_dotedges
             , filter(
-                lambda xs: xs[0].visible
+                lambda xs: tuple(xs)[0].visible  # Convert to tuple for __getitem__
                 , zip(nw.reactions, e_widths, e_colors)
             )
         )))
-        , options=dict(filter(
-            lambda x: x[1] is not None
-            , zip(
-                ("graph", "node", "edge")
-                , (cfg.opts, cfg.node.opts, cfg.edge.opts)
-            )
-        ))
+        , options=build_glob_opt(cfg)
     )

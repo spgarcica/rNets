@@ -2,10 +2,13 @@
 
 
 from collections.abc import Sequence
-from typing import NamedTuple
+from itertools import starmap
+from typing import NamedTuple, TypedDict, NotRequired
 from enum import auto, StrEnum
 
 
+Opts = dict[str, str]
+OptsGlob = dict[str, Opts]
 IDENT = 4
 
 
@@ -14,12 +17,6 @@ class OptKind(StrEnum):
     Graph = auto()
     Node = auto()
     Edge = auto()
-
-
-class Opts(dict):
-    """Dict representing the possible options for nodes, edges and graph
-    """
-    def __str__(self): return opts_to_str(self)
 
 
 class Node(NamedTuple):
@@ -66,7 +63,7 @@ class Graph(NamedTuple):
     kind: str
     nodes: Sequence[Node]
     edges: Sequence[Edge]
-    options: dict[OptKind, Opts] | None
+    options: OptsGlob | None
 
     HEADER = "strict {}"
 
@@ -131,16 +128,10 @@ def graph_to_str(
         str of the dot format.
     """
     if not g.options: return ""
-    os = '\n'.join(
-        map(
-            lambda xs: opts_glob_to_str(*xs) + ';'
-            , g.options.items()
-        )
-    )
 
     return (
         g.HEADER.format(g.kind) + "{"
-        + "\n\n" + ident(os, IDENT, True) + "\n\n"
+        + "\n\n" + ident(opts_glob_to_str(g.options), IDENT, True) + "\n\n"
         + "\n\n".join(map(
             lambda x: ident_if("\n".join(map(str, x)), IDENT, True)
             , (g.nodes, g.edges)))
@@ -209,14 +200,14 @@ def node_to_str(
     )
 
 
-def opts_glob_to_str(
-    k: OptKind
+def opt_glob_to_str(
+    k: str
     , o: Opts
 ) -> str:
     """Format a name followed by `Opts`. Used to define global variables.
 
     Args:
-        k (`OptKind`): `OptKind` for which the global options will be decided.
+        k (str): `OptKind` for which the global options will be decided.
         o (`Opts`): Global options to define.
 
     Returns:
@@ -229,4 +220,12 @@ def opts_glob_to_str(
             , len(k) + 2
             , False
         )
+    )
+
+
+def opts_glob_to_str(
+    os: OptsGlob
+) -> str:
+    return (
+        "\n".join(starmap(opt_glob_to_str, os.items()))
     )
