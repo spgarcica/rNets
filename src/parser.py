@@ -60,21 +60,21 @@ def assure_compound(
     compound is not on the list.
 
     Args:
-        cn (`Compound`): Candidate compound name.
-        cs (sequence of `Compound`): Available candidates.
+        cn (:obj:`Compound`): Candidate compound name.
+        cs (sequence of :obj:`Compound`): Available candidates.
 
     Returns:
-        In case that the compound is in the sequence, return the `Compound`
-        with the given name.
+        Compound: In case that the compound is in the sequence, return the
+            :obj:`Compound` with the given name.
 
     Raises:
-        ValueError containing some information about the failure.
+        :obj:`ValueError`: If the name is not present in cs.
     """
     try:
         return next(filter(lambda c: c.name == cn, cs))
     except StopIteration:
         raise ValueError(
-            f"Compound with name {cn} present in reactions not found in the compounds file."
+            f"Compound of name {cn} in reactions not found in compounds"
         )
 
 
@@ -87,15 +87,14 @@ def parse_vis(
     Args:
         s (str): String to parse.
         default (bool or None, optional): Default value to return if parsing
-            fails. Defaults to True
+            fails. Defaults to True.
 
     Returns:
-        bool value corresponding to the parsed statement. None if the value is
-        not parsed.
+        bool: Value corresponding to the parsed statement.
 
-    Notes:
+    Note:
         The value is lowercased and compared before parsing. t and true and
-        parsed as True and f and false are parsed as False.
+            parsed as True and f and false are parsed as False.
     """
     match s.lower():
         case 't' | 'true': return True
@@ -110,14 +109,13 @@ def parse_compounds(
     """Parse compounds in a given string.
 
     Args:
-
-    s (str): String containing the header and the compounds separated by
-        new lines.
-    req (set of `CompoundCol`, optional): Required header values.
-        Defaults to `REQ_COMP_COL`
+        s (str): String containing the header and the compounds separated by
+            new lines.
+        req (set of :opt:`CompoundCol`, optional): Required header values.
+            Defaults to :opt:`REQ_COMP_COL`.
 
     Returns:
-        A tuple containing the parsed `Compound`
+        tuple of :obj:`Compound`: A tuple containing the parsed compounds.
     """
     return parse_lines(
         s
@@ -130,13 +128,13 @@ def parse_compounds(
 def parse_compounds_from_file(
     f: str | Path
 ) -> tuple[Compound, ...]:
-    """Wrapper of `parse_compounds` but using a file as input.
+    """Wrapper of :obj:`parse_compounds` but using a file as input.
 
     Args:
-        f (str or Path): Name of the file.
+        f (str or :obj:`Path`): Name of the file.
 
     Returns:
-        A tuple containing the parsed `Compound`
+        A tuple containing the parsed :obj:`Compound`
     """
     with open(f, 'r') as infile:
         return parse_compounds(infile.read(), REQ_COMP_COL)
@@ -153,15 +151,15 @@ def parse_compound_line(
     Args:
         idx (int): Index of the compound.
         l (str): Compound line, with values separated by comma.
-        h (sequence of `CompoundCol`): Order of the columns. Defaults to
-            the order of `CompoundCol`.
+        h (sequence of :obj:`CompoundCol`): Order of the columns. Defaults to
+            the order of :obj:`CompoundCol`.
 
     Returns:
-        `Compound` with the given values.
+        :obj:`Compound`: with the given values.
 
     Note:
-        Check `Compound` for possible values and `REQ_COMP_COL` for required
-        values.
+        Check :obj:`Compound` for possible values and :obj:`REQ_COMP_COL` for
+            required values.
     """
     kw: dict[CompoundCol, str] = dict(
             zip(h, l.split(','))
@@ -188,11 +186,11 @@ def parse_fflags(
         colons.
 
     Returns:
-        set containing the parsed format flags.
+        set of :obj:`FFlags`: Set containing the parsed format flags.
 
-    Notes:
+    Note:
        The format flags are: 'i' for italics, 'b' for bold and 'u' for
-       underscore. E.g. i:b
+           underscore. E.g. i:b.
     """
     return set(filter(
         lambda f: f in s.split(":")
@@ -209,12 +207,13 @@ def parse_lines(
 
     Args:
         s (str): String to parse.
-        h (StrEnum): Possible column values.
-        r (set of strings): Required column values.
-        fn (function [int, str, S] -> T): Function to parse a single line.
+        h (:obj:`StrEnum`): Possible column values.
+        r (set of str): Required column values.
+        fn (:obj:`Callable`[int, str, S] -> T): Function to parse a single line.
 
     Returns:
-        A tuple containing the parsed values.
+        tuple of T: Where T with the parsed values. Where T is the output type
+        of :attr:fn.
     """
     rh, *ls = s.splitlines()
     ph: list[S] = list(map(h, rh.split(',')))
@@ -235,8 +234,8 @@ def parse_network(
 ) -> Network:
     """Parse two strings, one containing the compounds of the network and a
     second one containing the reactions of the network. To check how they will
-    be parsed, the reader is redicted to the `parse_compounds` and 
-    `parse_reactions` functions.
+    be parsed, the reader is redicted to the :obj:`parse_compounds` and
+    :obj:`parse_reactions` functions.
 
     Args:
         sc (str): String containing the header and the compounds separated by
@@ -245,7 +244,7 @@ def parse_network(
             new lines.
 
     Returns:
-        Network with the parsed compounds and reactions.
+        :obj:Network: Network with the parsed compounds and reactions.
     """
     cs: tuple[Compound, ...] = parse_compounds(sc, REQ_COMP_COL)
     return Network(
@@ -258,14 +257,14 @@ def parse_network_from_file(
     cf: str | Path
     , rf: str | Path
 ) -> Network:
-    """Wrapper of `parse_network` but using files as input.
+    """Wrapper of :obj:`parse_network` but using files as input.
 
     Args:
-        cf (str or Path): Name of the file containing the compounds.
-        rf (str or Path): Name of the file containing the reactions.
+        cf (str or :obj:`Path`): Name of the file containing the compounds.
+        rf (str or :obj:`Path`): Name of the file containing the reactions.
 
     Returns:
-        A tuple containing the parsed `Network`.
+        :obj:Network: Network with the parsed compounds and reactions.
     """
     with open(cf, 'r') as infile:
         sc = infile.read()
@@ -283,11 +282,11 @@ def parse_opts(
         s (str): String containing the pydot options sopearated by ;.
 
     Returns:
-        dict with str as keys and values with the opts parsed.
+        dict of [str, str]: keys and values with the opts parsed.
 
-    Notes:
-        Note that each options should have a label and a value separated by a
-        '=', and different options should be separated with a ':'.
+    Note:
+        Each option should have a label and a value separated by a '=', and
+            different options should be separated with a ':'.
     """
     return dict(map(
         lambda x: x.split('=')
@@ -303,14 +302,13 @@ def parse_reactions(
     """Parse reactions in a given string.
 
     Args:
-
-    s (str): String containing the header and the reactions separated by new
-        lines.
-    req (set of `ReactionCol`, optional): Required header values.
-        Defaults to `REQ_COMP_COL`
+        s (str): String containing the header and the reactions separated by new
+            lines.
+        req (set of :obj:`ReactionCol`, optional): Required header values.
+            Defaults to :obj:`REQ_COMP_COL`
 
     Returns:
-        A tuple containing the parsed `Reaction`
+        tuple of :obj:`Reaction`: Containing the parsed reactions.
     """
     return tuple(chain.from_iterable(parse_lines(
         s
@@ -324,13 +322,13 @@ def parse_reactions_from_file(
     f: str | Path
     , cs: Sequence[Compound]
 ) -> tuple[Reaction, ...]:
-    """Wrapper of `parse_reactions` but using a file as input.
+    """Wrapper of :obj:`parse_reactions` but using a file as input.
 
     Args:
         f (str or Path): Name of the file.
 
     Returns:
-        A tuple containing the parsed `PReaction`
+        A tuple containing the parsed :obj:`Reaction`
     """
     with open(f, 'r') as infile:
         return parse_reactions(infile.read(), cs, REQ_REACT_COL)
@@ -348,23 +346,22 @@ def parse_reaction_line(
     Args:
         idx (int): Index of the reaction
         l (str): Reaction line.
-        cs (sequence of `Compound`): Sequence of compounds. It will be used to
-            get the `Compounds` (by matching name) and reference in the reaction
-            instead of using the name.
-        h (sequence of `ReactionCol`): Order of the columns. Defaults to the
-            order of `ReactionCol`.
+        cs (sequence of :obj:`Compound`): Sequence of compounds. It will be
+            used to get the :obj:`Compound` (by matching name) and reference in
+            the reaction instead of using the name.
+        h (sequence of :obj:`ReactionCol`): Order of the columns. Defaults to the
+            order of :obj:`ReactionCol`.
 
     Returns:
-        `Reaction` with the given values.
+        :obj:`Reaction`: With the parsed values.
 
     Note:
-        Check `Reaction` for possible values and `REQ_REACT_COL` for required
-        values.
-
+        Check :obj:`Reaction` for possible values and :obj:`REQ_REACT_COL` for
+            required values.
         Bidirectional reactions will return 2 reactions sharing the same
-        idx. idx is intended to track the order of the reaction in the
-        reactions file, and thus, I decided to label both reactions with the
-        same number.
+            idx. idx is intended to track the order of the reaction in the
+            reactions file, and thus, I decided to label both reactions with the
+            same number.
     """
     def reduce_fn(
         xs: tuple[tuple[list[Compound], list[Compound]], list[tuple[str, str]]]

@@ -30,8 +30,8 @@ class Compound(NamedTuple):
             writer to decide additional options. Defaults to None.
         visible (bool, optional): Wether the compound will be visible or not.
             Defaults to True.
-        fflags (set of `FFlags` or None, optional): Format labels that will be
-            used to represent the compound label.
+        fflags (set of :obj:`FFlags` or None, optional): Format labels that
+            will be used to represent the compound label. Defaults to None.
     """
     name: str
     energy: float
@@ -47,12 +47,12 @@ class Compound(NamedTuple):
 
 
 class Reaction(NamedTuple):
-    """Chemical reaction.
+    """Unidirectional chemical reaction.
 
     Attributes:
         name (str): Reaction name.
-        compounds (tuple of the form ([`Compound`], [`Compound`])):
-           Compounds of the reaction, with Left, Right separation.
+        compounds (tuple of the form ([:obj:`Compound`], [:obj:`Compound`])):
+           :obj:`Compounds` of the reaction, with left->right direction..
         energy (float): Energy of the reaction.
         idx (int): Reaction index, in reading order.
         opts (dict of str as keys and str as values or None, optional):
@@ -61,9 +61,6 @@ class Reaction(NamedTuple):
         visible (bool, optional): Wether the compound will be visible or not.
             Defaults to True.
 
-    Note:
-        If a bidirectional reaction is specified, more than one reaction can be
-        stored reaction.
     """
     name: str
     compounds: tuple[tuple[Compound, ...], tuple[Compound, ...]]
@@ -88,8 +85,8 @@ class Network(NamedTuple):
     """Representation of a reaction network.
 
     Attributes:
-        compounds (sequence of `Compound`): Compounds of the network.
-        reactions (sequence of `Reaction`): Reactions in the network.
+        compounds (sequence of :obj:`Compound`): Compounds of the network.
+        reactions (sequence of :obj:`Reaction`): Reactions in the network.
     """
     compounds: Sequence[Compound]
     reactions: Sequence[Reaction]
