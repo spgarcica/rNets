@@ -3,7 +3,7 @@
 
 from collections.abc import Sequence
 from itertools import starmap
-from typing import NamedTuple, TypedDict, NotRequired
+from typing import NamedTuple
 from enum import auto, StrEnum
 
 
@@ -13,7 +13,7 @@ IDENT = 4
 
 
 class OptKind(StrEnum):
-    "Enum representing the possible kind of global `Opts` values"
+    "Enum representing the possible kind of global :obj:`Opts` values"
     Graph = auto()
     Node = auto()
     Edge = auto()
@@ -24,7 +24,7 @@ class Node(NamedTuple):
 
     Attributes:
         name (str): Name of the node.
-        options (`Opts`): dot options for the node.
+        options (:obj:`Opts`): dot options for the node.
     """
     name: str
     options: Opts | None = None
@@ -40,7 +40,7 @@ class Edge(NamedTuple):
         target (str): Target node name.
         direction (str): Symbol to use to connect both nodes.
             See dot manual for possible values.
-        options (`Opts`): Options of the edge.
+        options (:obj:`Opts`): Options of the edge.
     """
     origin: str
     target: str
@@ -55,9 +55,9 @@ class Graph(NamedTuple):
 
     Attributes:
         kind (str): Graph type.
-        nodes (sequence of `Node`): Nodes in the graph.
-        edges (sequence of `Edge`): Edges in the graph.
-        options(dict of `OptKind` as keys and `Opt` as values):
+        nodes (sequence of :obj:`Node`): Nodes in the graph.
+        edges (sequence of :obj:`Edge`): Edges in the graph.
+        options(dict of str as keys and :obj:`Opts` as values):
             Dictionary containing multiple global options.
     """
     kind: str
@@ -84,12 +84,12 @@ def ident(
             defaults to True
 
     Returns:
-        str idented string.
+        str: Idented string.
 
     Note:
         This is not the optimal way to perform the identation as we should
-        build new string every time that we ident. However, I think that it
-        is more useful than to put the identation during the writing.
+            build new string every time that we ident. However, I think that it
+            is more useful than to put the identation during the writing.
     """
     return (" " * first * i) + s.replace('\n', '\n' + ' ' * i)
 
@@ -109,7 +109,7 @@ def ident_if(
             defaults to True.
 
     Returns:
-        str of the idented string or an empty string.
+        str: Either the idented string or an empty string.
     """
     if not s:
         return ""
@@ -119,13 +119,13 @@ def ident_if(
 def graph_to_str(
     g: Graph
 ) -> str:
-    """Converts a `Graph` into a dot string.
+    """Converts a :obj:`Graph` into a dot string.
 
     Args:
-        g (`Graph`): Graph that will be converted.
+        g (:obj:`Graph`): Graph that will be converted.
 
     Returns:
-        str of the dot format.
+        str: Graph in dot format.
     """
     if not g.options: return ""
 
@@ -142,13 +142,13 @@ def graph_to_str(
 def opts_to_str(
     o: Opts
 ) -> str:
-    """Converts a `Opts` into a string.
+    """Converts a :obj:`Opts` into a string.
 
     Args:
-        n (`Opts`): Opts that will be converted.
+        n (:obj:`Opts`): Options that will be converted.
 
     Returns:
-        str of the dot format
+        str: of the dot format
     """
     out = ',\n '.join(('='.join(o) for o in o.items()))
     return f"[{out}]"
@@ -157,13 +157,13 @@ def opts_to_str(
 def edge_to_str(
     e: Edge
 ) -> str:
-    """Converts a `Edge` into a string.
+    """Converts a :obj:`Edge` into a string.
 
     Args:
-        n (`Edge`): Edge that will be converted.
+        n (:obj:`Edge`): Edge that will be converted.
 
     Returns:
-        str of the dot format
+        str: Edge in dot format.
     """
     spc = len(e.origin) + len(e.direction) + len(e.target)
     return (
@@ -181,13 +181,13 @@ def edge_to_str(
 def node_to_str(
     n: Node
 ) -> str:
-    """Converts a `Node` into a string
+    """Converts a :obj:`Node` into a string
 
     Args:
-        n (`Node`): Node that will be converted.
+        n (:obj:`Node`): Node that will be converted.
 
     Returns:
-        str of the dot format
+        str: Node in the dot format.
     """
     return (
         f'"{n.name}"'
@@ -204,14 +204,14 @@ def opt_glob_to_str(
     k: str
     , o: Opts
 ) -> str:
-    """Format a name followed by `Opts`. Used to define global variables.
+    """Format a name followed by :obj:`Opts`. Used to define global variables.
 
     Args:
-        k (str): `OptKind` for which the global options will be decided.
-        o (`Opts`): Global options to define.
+        k (str): :obj:`OptKind` for which the global options will be decided.
+        o (:obj:`Opts`): Global options to define.
 
     Returns:
-        str of the dot format.
+        str: Options in dot format.
     """
     return (
         k + ' '
@@ -226,6 +226,14 @@ def opt_glob_to_str(
 def opts_glob_to_str(
     os: OptsGlob
 ) -> str:
+    """Format a :obj:`OptsGlob` in dot format.
+
+    Args:
+        os (:obj:`OptsGlob`): To convert to dot format.
+
+    Returns:
+        str: Global options in dot format.
+    """
     return (
         "\n".join(starmap(opt_glob_to_str, os.items()))
     )

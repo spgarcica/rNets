@@ -11,17 +11,17 @@ Color = tuple[float, float, float]
 def ensure_color(
     c: Color
 ) -> bool:
-    """Tests wether a `Color` is valid or not.
+    """Tests wether a :obj:`Color` is valid or not.
 
     Arg:
-        c (`Color`): Color to be tested.
+        c (:obj:`Color`): Color to be tested.
 
     Returns:
-        bool representing wether the color is valid or not.
+        bool: wether the color is valid or not.
 
-    Notes:
-        Note that `Color` follows the colorsys representation, meaning that it
-        consists of 3 float values ranging from [0, 1].
+    Note:
+        :obj:`Color` follows the colorsys representation, meaning that it
+            consists of 3 float values ranging from [0, 1].
     """
     return all(map(
         lambda x: 0. <= x <= 1.
@@ -38,16 +38,16 @@ def rgb_to_hexstr(
     from a (10) to f (15).
 
     Args:
-        c (`Color`): `Color` to transform into string.
+        c (:obj:`Color`): :obj:`Color` to transform into string.
         inc_hash (bool, optional): If True, include the hash character at the
             beggining of the color string. Defaults to True.
 
-    Return:
-        str of the form RRGGBB.
+    Returns:
+        str: Color string with the RRGGBB form.
 
-    Notes:
-        Note that `Color` follows the colorsys representation, meaning that it
-        consists of 3 float values ranging from [0, 1].
+    Note:
+        Note that :obj:`Color` follows the :obj:`colorsys representation,
+            meaning that it consists of 3 float values ranging from [0, 1].
     """
     return ('#' * inc_hash
         + ''.join(starmap(
@@ -61,18 +61,18 @@ def rgb_to_hexstr(
 def hexstr_to_rgb(
     s: str
 ) -> Color | None:
-    """Parses a color string of the form #RRGGBB into a `Color`.
+    """Parses a color string of the form #RRGGBB into a :obj:`Color`.
 
     Args:
         s (str): Color string to be parsed.
 
     Returns:
-        `RGB` with the values of the parsed string or None if the conversion
-        fails.
+        :obj:`Color`: With the values of the parsed string
+        None: If the conversion fails.
 
-    Notes:
-        Note that `Color` follows the colorsys representation, meaning that it
-        consists of 3 float values ranging from [0, 1].
+    Note:
+        Note that :obj:`Color` follows the :obj:`colorsys representation,
+            meaning that it consists of 3 float values ranging from [0, 1].
     """
     if len(s) != 7 or s[0] != '#':
         return None
@@ -99,18 +99,18 @@ def interp(
     Args:
         x (float): Floating point number in the range of [0., 1.] representing
             the position in the color sequence.
-        cs (Sequence of `Color`): Sequence of colors to be interpolated.
+        cs (Sequence of :obj:`Color`): Sequence of colors to be interpolated.
 
     Returns:
-        Interpolated `Color` using the colorsys implementation (3 float values
-        in [0. ,1.])
+        :obj:`Color`: Interpolation using the :obj:colorsys implementation (3
+            float values in [0. ,1.])
 
-    Notes:
+    Note:
         Note that this function will perform the interpolation withing the
-        color space provided. i. e. if RGB is used, the interpolation will be
-        done within the RGB colorspace. If x overflows on the roof, the last
-        color of the sequence is returned while if x overflows on the floor,
-        the first color of the sequence is returned.
+            color space provided. i. e. if RGB is used, the interpolation will
+            be done within the RGB colorspace. If x overflows on the roof, the
+            last color of the sequence is returned while if x overflows on the
+            floor, the first color of the sequence is returned.
     """
     # Ensure x in [0, 1]
     if x >= 1.:
@@ -134,18 +134,19 @@ def interp(
 def interp_fn(
     cs: Sequence
 ) -> Callable[[float], Color]:
-    """Given a sequence of `Colors`, returns an interpolated function based on
-    it.
+    """Given a sequence of :obj:`Color`, returns an interpolated function based
+    on it.
 
     Args:
-        cs (Sequence of `Color`): Sequence of colors to be interpolated.
+        cs (Sequence of :obj:`Color`): Sequence of colors to be interpolated.
 
     Returns:
-        A function that takes a float in the range [0., 1.] as an argument and
-        returns the interpolated color from the given Sequence of `Color`.
+        :obj:Callable[[float], :obj:`Color`]: A function that takes a float in
+            the range [0., 1.] as an argument and returns the interpolated
+            color from the given Sequence of :obj:`Color`.
 
-    Notes:
-        This function acts as a wrapper of `interp`.
+    Note:
+        This function acts as a wrapper of :obj:`interp`.
     """
     def fn(x: float) -> Color:
         return interp(x, cs)
@@ -156,13 +157,13 @@ def interp_fn(
 def calc_relative_luminance(
     c: Color
 ) -> float:
-    """Calculate the relative luminance of a `Color` in the RGB space.
+    """Calculate the relative luminance of a :obj:`Color` in the RGB space.
 
     Args:
-        c (`Color`): Color in the RGB colorspace to compute its luminance.
+        c (:obj:`Color`): Color in the RGB colorspace to compute its luminance.
 
     Returns:
-        float representing the computed luminance.
+        float:  Computed luminance.
 
     References:
         https://www.w3.org/WAI/GL/wiki/Relative_luminance
@@ -184,14 +185,16 @@ def color_sel_lum(
     luminance of a third one.
 
     Args:
-        c1 (`Color`): Color to select if the luminance is below the threshold.
-        c2 (`Color`): Color to select if the luminance is above the threshold.
-        dc (`Color`): Color to use to compute the relative luminance.
+        c1 (:obj:`Color`): Color to select if the luminance is below the
+            threshold.
+        c2 (:obj:`Color`): Color to select if the luminance is above the
+            threshold.
+        dc (:obj:`Color`): Color to use to compute the relative luminance.
         threshold (float, optional): Threshold to make the decision. Ideally, a
             value between 0. and 1. Defaults to 0.5.
 
     Returns:
-       `Color`, c1 or c2.
+       :obj:`Color`: c1 or c2.
     """
     return (c1, c2)[calc_relative_luminance(dc) < threshold]
 
@@ -199,18 +202,19 @@ def color_sel_lum(
 def interp_fn_rgb_hls(
     cs: Sequence[Color]
 ) -> Callable[[float], Color]:
-    """Given a sequence of `Color` representing the RGB colorspace, convert
-    them to the HSL space and create an interpolation function. The value
-    returned by the interpolation function will be converted again to rgb.
+    """Given a sequence of :obj:`Color` representing the RGB colorspace,
+    convert them to the HSL space and create an interpolation function. The
+    value returned by the interpolation function will be converted again to
+    rgb.
 
     Args:
         cs (Sequence of `Color`): Sequence of colors in the RGB to be converted
             HSL and interpolated.
 
     Returns:
-        A function that takes a float in the range [0., 1.] as an argument and
-        returns the HSL interpolated color from the given Sequence of RGB
-        `Color`.
+        :obj:Callable[[float], :obj:Color]: A function that takes a float in
+            the range [0., 1.] as an argument and returns the HSL interpolated
+            color from the given Sequence of RGB :obj:`Color`.
     """
     cs_hls: Sequence[Color] = tuple(starmap(rgb_to_hls, cs))
 
