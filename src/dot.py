@@ -219,7 +219,7 @@ def opt_glob_to_str(
             opts_to_str(o)
             , len(k) + 2
             , False
-        )
+        ) + ';'
     )
 
 
