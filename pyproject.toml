@@ -1,0 +1,24 @@
+[project]
+name = "rnets"
+version = "23.12"
+dependencies = []
+requires-python = ">=3.11"
+authors = [
+    {name = Sergio Pablo-Garcia, email = "spgarcica@gmail.com"},
+    {name = Raul Perez Soto, email = "rperezsoto.research@gmail.com"},
+    {name = wvlab}
+]
+maintainers = [
+    {name = Sergio Pablo-Garcia, email = "spgarcica@gmail.com"}
+]
+description = "Rnets software for the visualization of reaction networks"
+readme = "README.md"
+license  = {file = "LICENSE"}
+keywords = ["dft", "microkinetics", "dot", "graphviz", "reactions", "chemistry"]
+classifiers = [
+    "Programming Language :: Python"
+]
+
+[project.urls]
+homepage = "https://codeberg.org/spgarcica/rNets"
+repository = "https://codeberg.org/spgarcica/rNets"
