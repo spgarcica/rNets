@@ -24,16 +24,17 @@ C_BLACK: Color = (0., 0., 0.)
 
 GRAPH_ATTR_DEF: Opts = {
     'rankdir': 'TB'
-    , 'ranksep': '0.2'
-    , 'nodesep': '0.2'
+    , 'ranksep': '0.5'
+    , 'nodesep': '0.25'
 }
 NODE_ATTR_DEF: Opts = {
     "shape": "plaintext"
+    , "style": "filled"
 }
 BOX_TMP: str = """<
-<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="10">
+<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
   <TR>
-    <TD BGCOLOR="{0}">{1}</TD>
+    <TD>{0}</TD>
   </TR>
 </TABLE>
 >
@@ -345,7 +346,6 @@ def apply_html_format(
 
 def build_node_box(
     s: str
-    , bc: Color = C_WHITE
     , fc: Color = C_BLACK
     , box_tmp: str = BOX_TMP
 ) -> str:
@@ -354,13 +354,10 @@ def build_node_box(
 
     Args:
         s (str): String that will be used as a label.
-        bc (:obj:`Color`, optional): Background color for the table. Defaults to
-           white (:obj:`C_WHITE`).
         fc (:obj:`Color`, optional): Text color for the label. Defaults to black
              (:obj:`C_BLACK`).
-        box_tmp (str, optional): Box template. Should have two format
-            modificators, the first consisting on the label and the second
-            consisting on the background color. Defaults to :obj:`BOX_TMP`
+        box_tmp (str, optional): Box template. Should have a format modificator
+            for the text label. Defaults to :obj:`BOX_TMP`
     Returns:
         str: HTML table with the given label, background color and text color.
 
@@ -369,8 +366,7 @@ def build_node_box(
             that it consists of 3 float values ranging from [0, 1].
     """
     return box_tmp.format(
-        rgb_to_hexstr(bc)
-        , LABEL_TMP.format(
+        LABEL_TMP.format(
             rgb_to_hexstr(fc), s
         ))
 
@@ -426,9 +422,12 @@ def build_dotnode(
         , options=c.opts or {} | {
             "label": build_node_box(
                 s=apply_html_format(l, c.fflags) if c.fflags else l
-                , bc=bc
                 , fc=fc
             )
+            , "fillcolor": '"{}"'.format(rgb_to_hexstr(
+                c=bc
+                , inc_hash=True
+            ))
         }
     )
 
