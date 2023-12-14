@@ -9,7 +9,10 @@ from enum import auto, StrEnum
 
 Opts = dict[str, str]
 OptsGlob = dict[str, Opts]
+
 IDENT = 4
+SEP_S_LV = '\n' * 2
+SEP_D_LV = '\n' * 3
 
 
 class OptKind(StrEnum):
@@ -130,10 +133,11 @@ def graph_to_str(
     if not g.options: return ""
 
     return (
-        g.HEADER.format(g.kind) + "{"
-        + "\n\n" + ident(opts_glob_to_str(g.options), IDENT, True) + "\n\n"
-        + "\n\n".join(map(
-            lambda x: ident_if("\n".join(map(str, x)), IDENT, True)
+        g.HEADER.format(g.kind) + " "
+        + '{'
+        + SEP_S_LV + ident(opts_glob_to_str(g.options), IDENT, True) + SEP_D_LV
+        + SEP_D_LV.join(map(
+            lambda x: ident_if("\n\n".join(map(str, x)), IDENT, True)
             , (g.nodes, g.edges)))
         + "\n}"
     )
@@ -150,8 +154,8 @@ def opts_to_str(
     Returns:
         str: of the dot format
     """
-    out = ',\n '.join(('='.join(o) for o in o.items()))
-    return f"[{out}]"
+    out = ',\n'.join(('='.join(o) for o in o.items()))
+    return f"[\n{ident(out, IDENT, True)}\n]"
 
 
 def edge_to_str(
@@ -165,16 +169,12 @@ def edge_to_str(
     Returns:
         str: Edge in dot format.
     """
-    spc = len(e.origin) + len(e.direction) + len(e.target)
     return (
         f'"{e.origin}"'
         + ' ' + e.direction
         + ' ' + f'"{e.target}"'
-        + ident_if(
-            None if e.options is None else (' ' * IDENT + opts_to_str(e.options))
-            , (spc + IDENT + 3)
-            , False
-        ) + ';'
+        + ("" if e.options is None else opts_to_str(e.options))
+        + ';'
     )
 
 
@@ -191,12 +191,9 @@ def node_to_str(
     """
     return (
         f'"{n.name}"'
-        + (' ' * IDENT)
-        + ident_if(
-            None if n.options is None else opts_to_str(n.options)
-            , len(n.name) + IDENT
-            , False
-        ) + ';'
+        + ' '
+        + ("" if n.options is None else opts_to_str(n.options))
+        + ';'
     )
 
 
@@ -215,11 +212,7 @@ def opt_glob_to_str(
     """
     return (
         k + ' '
-        + ident(
-            opts_to_str(o)
-            , len(k) + 2
-            , False
-        ) + ';'
+        + opts_to_str(o) + ';'
     )
 
 
@@ -235,5 +228,7 @@ def opts_glob_to_str(
         str: Global options in dot format.
     """
     return (
-        "\n".join(starmap(opt_glob_to_str, os.items()))
+        SEP_S_LV.join(
+            starmap(opt_glob_to_str, os.items())
+        )
     )
