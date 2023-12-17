@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Basic structures to encode the reaction"""
 
 from collections.abc import Sequence

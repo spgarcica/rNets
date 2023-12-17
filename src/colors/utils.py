@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 "Color parsing, writing and interpolation."
 
 from collections.abc import Callable, Sequence

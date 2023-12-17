@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 "Parser function to read the network in cs form"
 
 from collections.abc import Callable, Sequence

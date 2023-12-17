@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 "Module containing the plotter for the reaction networks testing"
 
 from collections.abc import Callable, Iterable, Iterator, Sequence

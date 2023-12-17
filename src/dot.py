@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 "Write a reaction network in dot format"
 
 
