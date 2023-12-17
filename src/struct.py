@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Basic structures to encode the reaction"""
+"""Proxy structures to store parsed compounds, reactions and networks.
+"""
 
 from collections.abc import Sequence
 from enum import auto, StrEnum

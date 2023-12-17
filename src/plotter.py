@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
-"Module containing the plotter for the reaction networks testing"
+"""Given a set of compound/reaction/graph objects, write a the dot file
+representing thte objects adjusting the colors and shapes.
+
+Attributes:
+    DEF_T (float): Default temperature of the reaction.
+    C_WHITE (obj:`Color`): Default white color.
+    C_BLACK (obj:`Color`): Default black color.
+    COLORSCH (sequence of obj:`Color`): Default colorscheme.
+    GRAPH_ATTR_DEF (obj:`Opts`): Default graph global attributes.
+    NODE_ATTR_DEF (obj:`Opts`): Default node global attributes.
+    BOX_TMP (str): HTML box template.
+    LABEL_TMP (str): HTML label template.
+ """
 
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from enum import StrEnum

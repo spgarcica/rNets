@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
-"Write a reaction network in dot format"
+"""This module is a minimal implementation of a writer for the dot language. It
+does contain the minimum functionality to allow the writing of the reaction
+networks in dot format.
+
+Attributes:
+    Opts (type): Type synonym to define options.
+    OptsGlob (type): Type synonym defining global options.
+
+    IDENT (int): Identation level when writing the dot file.
+    SEP_S_LV (str): Single level separation, e.g: between two node definition.
+    SEP_D_LV (str): Double level separation, e.g: between node and edge
+       definition.
+"""
 
 
 from collections.abc import Sequence

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-"Color parsing, writing and interpolation."
+"""Utils for Color parsing, writing and interpolation.
 
+Attributes:
+    Color (type): Type synonym to define a color.
+"""
 from collections.abc import Callable, Sequence
 from colorsys import rgb_to_hls, hls_to_rgb
 from itertools import repeat, starmap

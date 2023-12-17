@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-"Parser function to read the network in cs form"
+"""Parse csv files to build compound/reaction/graph objects.
+
+Attributes:
+    S (type): Type constraint for StrEnum.
+    T (type): Type variable.
+"""
 
 from collections.abc import Callable, Sequence
 from enum import auto, StrEnum

@@ -1,4 +1,15 @@
 # -*- coding: utf-8 -*-
+"""Colorschemes defined by different points of it used to interpolate the
+continious colorscheme.
+
+Attributes:
+    Colorscheme (type): Type synonym to define a colorscheme.
+    VIRIDIS (obj:`Colorscheme`): Viridis colorscheme.
+    INFERNO (obj:`Colorscheme`): Inferno colorscheme.
+    MAGMA (obj:`Colorscheme`): Magma colorscheme.
+    PLASMA (obj:`Colorscheme`): Plasma colorscheme.
+    CIVIDIS (obj:`Colorscheme`): Cividis colorscheme.
+"""
 from .utils import Color
 
 Colorscheme = tuple[Color, ...]

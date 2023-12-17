@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""Color palettes. In the form of dict of obj:`Color`
+
+Attributes:
+    css (dict of str as keys and obj:`Color` as values): CSS4 colorscheme. More
+        information in https://drafts.csswg.org/css-color/.
+"""
 from .utils import Color
 
 css: dict[str, Color] = {
