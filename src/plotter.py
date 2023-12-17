@@ -9,18 +9,19 @@ from typing import NamedTuple
 
 from .dot import Edge, Graph, Node, Opts, OptsGlob
 from .struct import Compound, FFlags, Network, Reaction
-from .color import (
+from .colors.utils import (
     Color
     , color_sel_lum
     , interp_fn_rgb_hls
     , rgb_to_hexstr
 )
-from .colorschemes import VIRIDIS
+from .colors.colorschemes import INFERNO, VIRIDIS, PLASMA, MAGMA, CIVIDIS
 
 
 DEF_T: float = 273.15
 C_WHITE: Color = (1., 1., 1.)
 C_BLACK: Color = (0., 0., 0.)
+COLORSCH: Sequence[Color] = VIRIDIS
 
 GRAPH_ATTR_DEF: Opts = {
     'rankdir': 'TB'
@@ -110,7 +111,7 @@ class GraphCfg(NamedTuple):
         kind (str, optional): Kind of the dotgraph. Defaults to digraph.
         colorscheme (sequence of floats): Sequence of colors that will be
            interpolate to set the colors of the graph. See
-           :obj:`interp_fn_rgb_hls`. Defaults to :obj:`VIRIDIS`.
+           :obj:`interp_fn_rgb_hls`. Defaults to :obj:`COLORSCH`.
         color_offset (tuple of two floats, optional): When using the energy of
             a node to decide its color, the offset to apply to norm. Should be
             a value between 0. and 1. Useful to avoid falling on the extremes
@@ -118,7 +119,7 @@ class GraphCfg(NamedTuple):
     """
     opts: Opts | None = GRAPH_ATTR_DEF
     kind: str = "digraph"
-    colorscheme: Sequence[Color] = VIRIDIS
+    colorscheme: Sequence[Color] = COLORSCH
     color_offset: tuple[float, float] = (0., 0.)
     node: NodeCfg = NodeCfg()
     edge: EdgeCfg = EdgeCfg()
