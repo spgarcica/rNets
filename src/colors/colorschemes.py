@@ -1,5 +1,5 @@
+from .utils import Color
 
-Color = tuple[float, float, float]
 Colorscheme = tuple[Color, ...]
 
 VIRIDIS: Colorscheme = (
