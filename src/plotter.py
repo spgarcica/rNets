@@ -29,12 +29,13 @@ from .colors.utils import (
     , interp_fn_rgb_hls
     , rgb_to_hexstr
 )
-from .colors.colorschemes import INFERNO, VIRIDIS, PLASMA, MAGMA, CIVIDIS
+from .colors.colorschemes import VIRIDIS
+from .colors.palettes import css
 
 
 DEF_T: float = 273.15
-C_WHITE: Color = (1., 1., 1.)
-C_BLACK: Color = (0., 0., 0.)
+C_WHITE: Color = css["white"]
+C_BLACK: Color = css["black"]
 COLORSCH: Sequence[Color] = VIRIDIS
 
 GRAPH_ATTR_DEF: Opts = {
