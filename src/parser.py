@@ -13,7 +13,7 @@ from itertools import chain
 from pathlib import Path
 from typing import NamedTuple, TypeVar
 
-from .struct import Compound, FFlags, Network, Reaction
+from .struct import Compound, FFlags, Network, Reaction, Visibility
 
 S = TypeVar('S', bound=StrEnum)
 T = TypeVar('T')
@@ -86,25 +86,30 @@ def assure_compound(
 
 def parse_vis(
     s: str
-    , default: bool = True
-) -> bool:
-    """Parses a string representing a boolean value.
+    , default: Visibility = Visibility.TRUE
+) -> Visibility:
+    """Parses a string representing the visibility of the node. It can be set
+    to true, false or grey.
 
     Args:
         s (str): String to parse.
-        default (bool or None, optional): Default value to return if parsing
-            fails. Defaults to True.
+        default (:obj:`Visibility` or None, optional): Default value to return
+            if parsing fails. Defaults to :obj:`Visibility.TRUE`.
 
     Returns:
-        bool: Value corresponding to the parsed statement.
+        :obj:`Visibility`: Value corresponding to the parsed statement.
 
     Note:
         The value is lowercased and compared before parsing. t and true and
-            parsed as True and f and false are parsed as False.
+            parsed as :obj:`Visibility.TRUE`, f and false are parsed as
+            :obj:`Visibility.FALSE` and g and grey are parsed as
+            :obj:`Visibility.GREY`.
+
     """
     match s.lower():
-        case 't' | 'true': return True
-        case 'f' | 'false': return False
+        case 't' | 'true': return Visibility.TRUE
+        case 'f' | 'false': return Visibility.FALSE
+        case 'g' | 'grey' | 'gray': return Visibility.GREY
         case _: return default
 
 
@@ -177,7 +182,7 @@ def parse_compound_line(
         name=kw[CompoundCol.Name]
         , energy=float(kw[CompoundCol.Energy])
         , idx=idx
-        , visible=True if vis is None else parse_vis(vis, default=True)
+        , visible=Visibility.TRUE if vis is None else parse_vis(vis)
         , fflags=parse_fflags(ffs) if ffs else None
         , opts=parse_opts(ops) if ops else None
     )
@@ -408,7 +413,7 @@ def parse_reaction_line(
             , compounds=xs
             , energy=float(kw[ReactionCol.Energy])
             , idx=int(idx)
-            , visible=True if vis is None else parse_vis(vis, default=True)
+            , visible=Visibility.TRUE if vis is None else parse_vis(vis)
             , opts=parse_opts(ops) if ops else None
         )
         , ncs

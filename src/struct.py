@@ -3,7 +3,7 @@
 """
 
 from collections.abc import Sequence
-from enum import auto, StrEnum
+from enum import auto, Enum, StrEnum
 from itertools import repeat, starmap
 from typing import NamedTuple
 
@@ -20,6 +20,12 @@ class FFlags(StrEnum):
     U = auto()
 
 
+class Visibility(Enum):
+    FALSE = 0
+    TRUE = 1
+    GREY = 2
+
+
 class Compound(NamedTuple):
     """Struct for a chemical compound.
 
@@ -30,8 +36,8 @@ class Compound(NamedTuple):
         opts (dict of str as keys and str as values or None, optional):
             Additional options for the compound. Will be later used by the
             writer to decide additional options. Defaults to None.
-        visible (bool, optional): Wether the compound will be visible or not.
-            Defaults to True.
+        visible (obj:`Visible`, optional): Wether the compound will be visible,
+            grey or not visible. Defaults to :obj:`Visible.TRUE`.
         fflags (set of :obj:`FFlags` or None, optional): Format labels that
             will be used to represent the compound label. Defaults to None.
     """
@@ -39,7 +45,7 @@ class Compound(NamedTuple):
     energy: float
     idx: int
     opts: dict[str, str] | None = None
-    visible: bool = True
+    visible: Visibility = Visibility.TRUE
     fflags: set[FFlags] | None = None
 
     def __str__(self): return self.name
@@ -60,16 +66,15 @@ class Reaction(NamedTuple):
         opts (dict of str as keys and str as values or None, optional):
             Additional options for the compound. Will be later used by the
             writer to decide additional options. Defaults to None.
-        visible (bool, optional): Wether the compound will be visible or not.
-            Defaults to True.
-
+        visible (obj:`Visible`, optional): Wether the compound will be visible,
+            grey or not visible. Defaults to :obj:`Visible.TRUE`.
     """
     name: str
     compounds: tuple[tuple[Compound, ...], tuple[Compound, ...]]
     energy: float
     idx: int
     opts: dict[str, str] | None = None
-    visible: bool = True
+    visible: Visibility = Visibility.TRUE
 
     def __str__(self):
         return "->".join(map(

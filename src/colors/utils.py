@@ -135,6 +135,30 @@ def interp(
     return (a, b, c)
 
 
+def rgb_achromatize(
+    c: Color
+) -> Color:
+    """Achromatize the given RGB color.
+
+    Args:
+        c (:obj:`Color`): Color that will be achromatized.
+
+    Returns:
+        :obj:`Color` Achromatized color.
+
+    Note:
+        Formula taken from the pillow library:
+        https://pillow.readthedocs.io/en/stable/reference/Image.html#PIL.Image.Image.convert
+
+    """
+    Y: float = (
+        c[0] * 0.299
+        + c[1] * 0.587
+        + c[2] * 0.114
+    )
+    return (Y, Y, Y)
+
+
 def interp_fn(
     cs: Sequence
 ) -> Callable[[float], Color]:

@@ -21,9 +21,10 @@ from itertools import chain, repeat, product, starmap
 from typing import NamedTuple
 
 from .dot import Edge, Graph, Node, Opts, OptsGlob
-from .struct import Compound, FFlags, Network, Reaction
+from .struct import Compound, FFlags, Network, Reaction, Visibility
 from .colors.utils import (
     Color
+    , rgb_achromatize
     , color_sel_lum
     , interp_fn_rgb_hls
     , rgb_to_hexstr
@@ -402,7 +403,7 @@ def gen_react_arrows(
             iterator with all the (react, product) combinations excluding
             the ones with non visible compounds.
     """
-    filter_vis = partial(filter, lambda x: x.visible)
+    filter_vis = partial(filter, lambda x: x.visible != Visibility.FALSE)
     return product(filter_vis(rt), filter_vis(pt))
 
 
@@ -464,13 +465,14 @@ def build_dotedges(
             :obj:`Edge` corresponding to the :obj:`Reaction` with the given
             width and color.
     """
+    sel_col = rgb_achromatize(color) if r.visible == Visibility.GREY else color
     def build_edge(o: str, t: str) -> Edge:
         return Edge(
             origin=o
             , target=t
             , direction="->"
             , options=r.opts or {} | {
-                "color": f'"{rgb_to_hexstr(color, inc_hash=True)}"'
+                "color": f'"{rgb_to_hexstr(sel_col, inc_hash=True)}"'
                 , "penwidth": str(width)
             }
         )
@@ -515,6 +517,8 @@ def nodecolor_sel(
 
     def out_fn(x: Compound) -> tuple[Color, Color]:
         bg_c: Color = c_norm(x.energy)
+        if x.visible == Visibility.GREY:
+            bg_c = rgb_achromatize(bg_c)
         return (bg_c, fg_fn(bg_c))
 
     return out_fn
@@ -585,12 +589,13 @@ def build_dotgraph(
         kind=cfg.kind
         , nodes=tuple(map(
             lambda c: build_dotnode(c, *n_color_fn(c))
-            , filter(lambda c: c.visible, nw.compounds)
+            , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
         ))
         , edges=tuple(chain.from_iterable(starmap(
             build_dotedges
             , filter(
-                lambda xs: tuple(xs)[0].visible  # Tuple for __getitem__
+                # Tuple for __getitem__
+                lambda xs: tuple(xs)[0].visible != Visibility.FALSE
                 , zip(nw.reactions, e_widths, e_colors)
             )
         )))
