@@ -21,6 +21,12 @@ class FFlags(StrEnum):
 
 
 class Visibility(Enum):
+    """Visibility of the element.
+
+    FALSE -> Not visible.
+    TRUE -> Visible.
+    GREY -> Greyscale.
+    """
     FALSE = 0
     TRUE = 1
     GREY = 2
