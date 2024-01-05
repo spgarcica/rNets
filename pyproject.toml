@@ -1,3 +1,11 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["rnets"]
+
 [project]
 name = "rnets"
 version = "24.01"
@@ -22,3 +30,4 @@ classifiers = [
 [project.urls]
 homepage = "https://codeberg.org/spgarcica/rNets"
 repository = "https://codeberg.org/spgarcica/rNets"
+
