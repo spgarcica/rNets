@@ -180,7 +180,7 @@ def calc_pseudo_k_constant(
        Units are not taken into account. Make sure that the temperature and
        energy units match.
     """
-    return exp(ea / T)
+    return exp(-ea / T)
 
 
 def calc_reactions_k_norms(
