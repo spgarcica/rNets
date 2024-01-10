@@ -66,6 +66,17 @@ class HTMLFormat(StrEnum):
     Underscore = "<u>{}</u>"
 
 
+class EdgeArgs(NamedTuple):
+    """Situational tuple to store the filter arguments for the filter function.
+
+    Notes:
+        Internal use to avoid type checker complaints.
+    """
+    react: Reaction
+    width: float
+    color: Color
+
+
 class NodeCfg(NamedTuple):
     """Dot node general configuration.
 
@@ -596,7 +607,7 @@ def build_dotgraph(
             build_dotedges
             , filter(
                 # Tuple for __getitem__
-                lambda xs: tuple(xs)[0].visible != Visibility.FALSE
+                lambda xs: EdgeArgs(*xs).react.visible != Visibility.FALSE
                 , zip(nw.reactions, e_widths, e_colors)
             )
         )))
