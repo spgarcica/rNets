@@ -92,9 +92,32 @@ def hexstr_to_rgb(
         return None
 
 
-def interp(
+def cyclic_conditions(
+    x: float
+    , y: float
+) -> tuple[float, float]:
+    """Assuming that the range [0, 1] represent a periodic one-dimensional
+    space, find the representation of the values that minimizes the distance
+    between them.
+
+    Args:
+        x (float): First value.
+        y (float): Second value.
+
+    Returns:
+        A tuple of the form (x, y) containing the new representation of the
+        values.
+    """
+    dist: float = x - y
+    if abs(dist) <= 0.5: return (x, y)
+    if dist < 0: return (x + 1, y)
+    else: return (x, y + 1)
+
+
+def interp_c_seq(
     x: float
     , cs: Sequence[Color]
+    , cyclic: tuple[bool, bool, bool] = (False, False, False)
 ) -> Color:
     """Given a value float x in the range [0., 1.] and a sequence of colors,
     interpolate a color being represented by x, being 0 the first color in the
@@ -104,6 +127,9 @@ def interp(
         x (float): Floating point number in the range of [0., 1.] representing
             the position in the color sequence.
         cs (Sequence of :obj:`Color`): Sequence of colors to be interpolated.
+        cyclic (bool, optional): Index of the components of the color that are
+           cyclic. In a cyclic component, the 0 and 1 values are connected, and
+           thus the algorithm will consider the shortest path.
 
     Returns:
         :obj:`Color`: Interpolation using the :obj:colorsys implementation (3
@@ -126,10 +152,19 @@ def interp(
     idx: int = int(val)
     p: float = val - idx
 
+
     # Force 3 values in the tuple
-    a, b, c =map(
+    comp = map(
         lambda c: (c[0] * (1. - p)) + (c[1] * p)
-        , zip(cs[idx], cs[idx + 1])
+        , map(
+            lambda xs: cyclic_conditions(*xs[:2]) if xs[2] else tuple(xs[:2])
+            , zip(cs[idx], cs[idx+1], cyclic)
+        )
+    )
+
+    a, b, c = map(
+        lambda xs: xs[0] - int(xs[0]) if xs[1] else xs[0]
+        , zip(comp, cyclic)
     )
 
     return (a, b, c)
@@ -177,7 +212,7 @@ def interp_fn(
         This function acts as a wrapper of :obj:`interp`.
     """
     def fn(x: float) -> Color:
-        return interp(x, cs)
+        return interp_c_seq(x, cs)
 
     return fn
 
@@ -247,6 +282,10 @@ def interp_fn_rgb_hls(
     cs_hls: Sequence[Color] = tuple(starmap(rgb_to_hls, cs))
 
     def fn(x: float) -> Color:
-        return hls_to_rgb(*interp(x, cs_hls))
+        return hls_to_rgb(*interp_c_seq(
+            x
+            , cs_hls
+            , cyclic=(True, False, False)
+        ))
 
     return fn
