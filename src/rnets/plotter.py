@@ -122,8 +122,8 @@ class EdgeCfg(NamedTuple):
     """
     opts: Opts | None = None
     solid_color: Color | None = None
-    width: float = 1
-    max_width: float | None = 5
+    width: float = 1.
+    max_width: float | None = 5.
     temperature: float = DEF_T
 
 
