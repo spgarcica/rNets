@@ -10,9 +10,11 @@ Attributes:
     PLASMA (obj:`Colorscheme`): Plasma colorscheme.
     CIVIDIS (obj:`Colorscheme`): Cividis colorscheme.
 """
+from collections.abc import Sequence
 from .utils import Color
 
-Colorscheme = tuple[Color, ...]
+type Colorscheme = Sequence[Color]
+
 VIRIDIS: Colorscheme = (
     (0.267004, 0.004874, 0.329415)
     , (0.268510, 0.009605, 0.335427)
