@@ -10,7 +10,7 @@ Attributes:
     PLASMA (obj:`Colorscheme`): Plasma colorscheme.
     CIVIDIS (obj:`Colorscheme`): Cividis colorscheme.
 """
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from .utils import Color
 
 type Colorscheme = Sequence[Color]
