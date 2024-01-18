@@ -3,11 +3,16 @@
 
 Attributes:
     Color (type): Type synonym to define a color.
+
+Note:
+    This library only works with 3-D colorspaces. Its extension N-D colorspaces
+    should be straightforward, however, it has been decided not to include it
+    in benefit of a strict definition of Color.
 """
 from collections.abc import Callable, Sequence
 from colorsys import rgb_to_hls, hls_to_rgb
 from itertools import repeat, starmap
-
+from typing import Literal
 
 Color = tuple[float, float, float]
 
@@ -262,7 +267,78 @@ def color_sel_lum(
     return (c1, c2)[calc_relative_luminance(dc) < threshold]
 
 
+def interp_fn_cspace(
+    cs: Sequence[Color]
+    , target: Callable[[float, float, float], Color] = lambda a, b, c: (a,b,c)
+    , origin: Callable[[float, float, float], Color] = lambda a, b, c: (a,b,c)
+    , cyclic: tuple[bool, bool, bool] = (False, False, False)
+) -> Callable[[float], Color]:
+    """Given a sequence of :obj:`Color` in an arbitrary colorspace, convert
+    them to another space and create an interpolation function. The value
+    returned by the interpolation function will be converted again to the
+    original colorspace.
+
+    Args:
+        cs (Sequence of `Color`): Sequence of colors in the RGB to be converted
+            HSL and interpolated.
+        target (function of taking three floats as input and returning a
+            :obj:`Color`, optional): Function that projects the given color
+            components to the colorspace in which the interpolation will be
+            performed. Defaults to the identity function.
+        origin (function of taking three floats as input and returning a
+            :obj:`Color`, optional): Function that returns the interpolated
+            color to the original colorspace. Defaults to the identity
+            function.
+        cyclic (tuple of three bools, optional): During the interpolation,
+            treat the dimension marked as True as cyclic. Defaults to (False,
+            False, False)
+
+    Returns:
+        :obj:Callable[[float], :obj:`Color`]: A function that takes a float in
+            the range [0., 1.] as an argument and returns the interpolated
+            color from the given Sequence of :obj:`Color` using the specified
+            colorspaces.
+
+    Note:
+        The :arg:`origin` and :arg:`target` take 3 floats as input for
+        to ease the integration with the colorsys library.
+    """
+    cs_hls: Sequence[Color] = tuple(starmap(target, cs))
+
+    def fn(x: float) -> Color:
+        return origin(*interp_c_seq(
+            x
+            , cs_hls
+            , cyclic=cyclic))
+
+    return fn
+
+
 def interp_fn_rgb_hls(
+    cs: Sequence[Color]
+) -> Callable[[float], Color]:
+    """Given a sequence of :obj:`Color` representing the RGB colorspace,
+    convert them to the CIEL*ab space and create an interpolation function. The
+    value returned by the interpolation function will be converted again to
+    RGB.
+
+    Args:
+        cs (Sequence of `Color`): Sequence of colors in the RGB to be converted
+            CIEL*ab and interpolated.
+
+    Returns:
+        :obj:Callable[[float], :obj:Color]: A function that takes a float in
+            the range [0., 1.] as an argument and returns the CIEL*ab interpolated
+            color from the given Sequence of RGB :obj:`Color`.
+    """
+    return interp_fn_cspace(
+        cs
+        , target=rgb_to_hls
+        , origin=hls_to_rgb
+        , cyclic=(True, False, False))
+
+
+def interp_fn_rgb_lab(
     cs: Sequence[Color]
 ) -> Callable[[float], Color]:
     """Given a sequence of :obj:`Color` representing the RGB colorspace,
@@ -278,14 +354,249 @@ def interp_fn_rgb_hls(
         :obj:Callable[[float], :obj:Color]: A function that takes a float in
             the range [0., 1.] as an argument and returns the HSL interpolated
             color from the given Sequence of RGB :obj:`Color`.
+
+    Note:
+        D65 illuminant. Gamma correction assuming sRGB.
+
+    References:
+        CIE Colorimetry 15 (Third ed.). CIE. 2004. ISBN 3-901-906-33-9.
     """
-    cs_hls: Sequence[Color] = tuple(starmap(rgb_to_hls, cs))
+    def t(
+        r: float
+        , g: float
+        , b: float
+    ) -> Color:
+        l, a, b = xyz_to_lab(*rgb_to_xyz(*map(
+            lambda x: apply_gamma(x, None, 1)
+            , (r,g,b))))
+        return (l, a, b)
 
-    def fn(x: float) -> Color:
-        return hls_to_rgb(*interp_c_seq(
-            x
-            , cs_hls
-            , cyclic=(True, False, False)
-        ))
+    def o(
+        l: float
+        , a: float
+        , b: float
+    ) -> Color:
+        r, g, b = map(
+            lambda x: unapply_gamma(x, None, 1)
+            , xyz_to_rgb(*lab_to_xyz(l, a, b)))
+        return (r, g, b)
 
-    return fn
+    return interp_fn_cspace(
+        cs
+        , target=t
+        , origin=o
+        , cyclic=(False, False, False))
+
+
+def apply_gamma(
+    x: float
+    , g: float | None = None
+    , A: float = 1.
+) -> float:
+    """Apply gamma to color component.
+
+    Args:
+        x (float): Component to which the Gamma will be applied.
+        g (float, optional): Gamma value to apply. If None, assume sRGB
+            gamma. Defaults to None.
+        A (float, optional): A value for the gamma function. In most cases 1. Defaults to 1.
+
+    Returns:
+        Component with the new Gamma value.
+
+    Note:
+        The input and the output value are assumed to be a float within the
+        [0, 1] interval.
+    """
+    if g is None:
+        return x/12.92 if x < 0.04045 else ((x+0.055)/1.055)**2.4
+    else:
+        return x**g
+
+
+def unapply_gamma(
+    x: float
+    , g: float | None = None
+    , A: float = 1.
+) -> float:
+    """Unapply gammag to color component.
+
+    Args:
+        x (float): Component to which the Gamma will be unaapplied.
+        g (float, optional): Gamma value to apply. If None, assume sRGB
+            gamma. Defaults to None.
+        A (float, optional): A value for the gamma function. In most cases 1. Defaults to 1.
+
+    Returns:
+        Ungamma component.
+
+    Note:
+        The input and the output value are assumed to be a float within the
+        [0, 1] interval.
+    """
+    if g is None:
+        return x*12.92 if x <= 0.0031308 else 1.055*(x**((1./2.4))-0.055)
+    else:
+        return x**(1./g)
+
+
+def rgb_to_xyz(
+    r: float
+    , g: float
+    , b: float
+) -> Color:
+    """Projects the given RGB :obj:`Color` value to the L*a*b* colorspace.
+
+    Args:
+        r, g, b (float): Floating point number in the interval [0, 1]
+            representing the red, green and blue components respectively.
+
+    Returns:
+        Projected :obj:`Color`.
+
+    Note:
+        Obeserver. = 2, Illuminant = D65
+
+    References:
+        Smith, Thomas; Guild, John (1931–32). "The C.I.E. colorimetric
+        standards and their use". Transactions of the Optical Society. 33 (3):
+        73–134. DOI 10.1088/1475-4878/33/3/301
+    """
+    return (
+        r * 0.4124 + g * 0.3576 + b * 0.1805    # X
+        , r * 0.2126 + g * 0.7152 + b * 0.0722  # Y
+        , r * 0.0193 + g * 0.1192 + b * 0.9505  # Z
+    )
+
+
+def xyz_to_rgb(
+    x: float
+    , y: float
+    , z: float
+) -> Color:
+    """Projects the given xyz :obj:`Color` value to the rgb colorspace.
+
+    Args:
+        x, y, z (float): Floating point number in the interval [0, 1]
+            representing the X, Y and Z components respectively.
+
+    Returns:
+        Projected :obj:`Color`.
+
+    Note:
+        Obeserver. = 2, Illuminant = D65
+
+    References:
+        Smith, Thomas; Guild, John (1931–32). "The C.I.E. colorimetric
+        standards and their use". Transactions of the Optical Society. 33 (3):
+        73–134. DOI 10.1088/1475-4878/33/3/301
+    """
+    return (
+        x * 3.2406 + y * -1.5372 + z * -0.4968   # R
+        , x * -0.9689 + y * 1.8758 + z * 0.0415  # G
+        , x * 0.0557 + y * -0.2040 + z * 1.0570  # B
+    )
+
+
+def xyz_to_lab(
+    x: float
+    , y: float
+    , z: float
+) -> Color:
+    """Projects the given XYZ :obj:`Color` value to the L*a*b* colorspace.
+
+    Args:
+        x, y, z (float): Floating point number in the interval [0, 1]
+            representing the X, Y, Z components respectively.
+
+    Returns:
+        Projected :obj:`Color`.
+
+    References:
+        Smith, Thomas; Guild, John (1931–32). "The C.I.E. colorimetric
+        standards and their use". Transactions of the Optical Society. 33 (3):
+        73–134. DOI 10.1088/1475-4878/33/3/301
+
+        CIE Colorimetry 15 (Third ed.). CIE. 2004. ISBN 3-901-906-33-9.
+
+    Note:
+        Adapted from OpenCV.
+    """
+    x = x / 0.950456
+    z = z / 1.088754
+    f = lambda t: t**(1./3.) if t > 0.008856 else 7.787*t + 16/116
+
+    return (
+        (116.*(y**(1./3.)))-16. if y > 0.008856 else 903.3*y  # L
+        , 500.*(f(x) - f(y))                                  # a
+        , 200.*(f(y) - f(z))                                  # b
+    )
+
+
+def lab_to_xyz(
+    l: float
+    , a: float
+    , b: float
+) -> Color:
+    """Projects the given L*a*b :obj:`Color` value to the XYZ colorspace.
+
+    Args:
+        l, a, b (float): Floating point number in the interval [0, 1]
+            representing the L, a, b components respectively.
+
+    Returns:
+        Projected :obj:`Color`.
+
+    References:
+        Smith, Thomas; Guild, John (1931–32). "The C.I.E. colorimetric
+        standards and their use". Transactions of the Optical Society. 33 (3):
+        73–134. DOI 10.1088/1475-4878/33/3/301
+
+        CIE Colorimetry 15 (Third ed.). CIE. 2004. ISBN 3-901-906-33-9.
+
+    Note:
+        Adapted from OpenCV.
+    """
+    y = (l+16.)/116.
+    x = (a/500.)+y
+    z = y-(b/200.)
+    f = lambda t: t**3 if t > 0.008856 else (t-16/116)/7.787
+
+    return(
+        f(x) * 0.950456    # X
+        , f(y)             # Y
+        , f(z) * 1.088754  # Z
+    )
+
+
+def interp_cs(
+    cs: Sequence[Color]
+    , interp: Literal["rgb", "lab", "hsl"] = "lab"
+) -> Callable[[float], Color]:
+    """Given a sequence of :obj:`Color` in an arbitrary colorspace, convert
+    them to another space and create an interpolation function. The value
+    returned by the interpolation function will be converted again to the
+    original colorspace.
+
+    Args:
+        cs (Sequence of `Color`): Sequence of colors in the RGB to be converted
+            HSL and interpolated.
+        interp (Literal: rgb, lab or hsl, optional): The colorspace in which
+            the interpolation will be perform.
+
+
+    Returns:
+        :obj:Callable[[float], :obj:`Color`]: A function that takes a float in
+            the range [0., 1.] as an argument and returns the interpolated
+            color from the given Sequence of :obj:`Color` using the specified
+            colorspaces.
+
+    Note:
+        Wrapper for :obj:`interp_fn_cspace`.
+    """
+
+    match interp:
+        case "rgb":
+            return lambda x: interp_c_seq(x, cs, (False, False, False))
+        case "lab": return interp_fn_rgb_lab(cs)
+        case "hsl": return interp_fn_rgb_hls(cs)
