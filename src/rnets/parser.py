@@ -17,6 +17,7 @@ from .struct import Compound, FFlags, Network, Reaction, Visibility
 
 S = TypeVar('S', bound=StrEnum)
 T = TypeVar('T')
+O = TypeVar('O')
 
 
 class CompoundCol(StrEnum):
@@ -82,6 +83,27 @@ def assure_compound(
         raise ValueError(
             f"Compound of name {cn} in reactions not found in compounds"
         )
+
+def apply_maybe(
+    fn: Callable[[T,], O]
+    , s: T | None
+) -> O | None:
+    """Given a function fn that takes as an input a value of type T and returns
+    a value of type an optional value of type T and O, apply fn only s is not
+    None.
+
+    Args:
+        fn (function): Function that takes a value of type T as input and
+            returns a value of Type O.
+        s (any value or None): Value to be used as the input value.
+
+
+    Returns:
+        Either the projected O value or None.
+    """
+    match s:
+        case None: return None
+        case _: return fn(s)
 
 
 def parse_vis(
@@ -176,16 +198,13 @@ def parse_compound_line(
             zip(h, l.split(','))
         )
     vis: str | None = kw.get(CompoundCol.Visible)
-    ffs: str | None = kw.get(CompoundCol.Fflags)
-    ops: str | None = kw.get(CompoundCol.Opts)
     return Compound(
         name=kw[CompoundCol.Name]
         , energy=float(kw[CompoundCol.Energy])
         , idx=idx
         , visible=Visibility.TRUE if vis is None else parse_vis(vis)
-        , fflags=parse_fflags(ffs) if ffs else None
-        , opts=parse_opts(ops) if ops else None
-    )
+        , fflags=apply_maybe(parse_fflags, kw.get(CompoundCol.Fflags))
+        , opts=apply_maybe(parse_opts, kw.get(CompoundCol.Opts))
 
 
 def parse_fflags(
@@ -396,7 +415,6 @@ def parse_reaction_line(
     )
     kw: dict[str, str] = dict(arg)
     vis: str | None = kw.get(CompoundCol.Visible)
-    ops: str | None = kw.get(CompoundCol.Opts)
 
     ncs: tuple[tuple[tuple[Compound, ...], tuple[Compound, ...]], ...]
     match kw.get(ReactionCol.Direction):
@@ -414,6 +432,7 @@ def parse_reaction_line(
             , energy=float(kw[ReactionCol.Energy])
             , idx=int(idx)
             , visible=Visibility.TRUE if vis is None else parse_vis(vis)
+            , opts=apply_maybe(parse_opts, kw.get(CompoundCol.Opts))
             , opts=parse_opts(ops) if ops else None
         )
         , ncs
