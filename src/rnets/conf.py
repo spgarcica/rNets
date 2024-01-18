@@ -11,11 +11,12 @@ from typing import (
 )
 from collections.abc import Sequence, Mapping, Callable, Generator
 from types import NoneType, UnionType
+from functools import reduce
 
 
-# TODO: make it more extensible and maybe extract to some utils?
-def error() -> NoReturn:
-    raise ValueError()
+# TODO: maybe extract to some utils?
+def error(exception: Exception | None = None) -> NoReturn:
+    raise exception or ValueError()
 
 
 @runtime_checkable
@@ -78,11 +79,10 @@ def get_named_tuple_members_mapping(
             yield (k, v, t)
 
     def get_deeply_nested_type(
-        t: type | TypeAliasType,
-    ) -> tuple[type, ...] | type | TypeAliasType:
-        # TODO: it's a dumpster fire
+        t: type, *, ignore_type_modifiers: bool = False
+    ) -> UnionType | type:
         while True:
-            if t in type_modifiers:
+            if not ignore_type_modifiers and t in type_modifiers:
                 return t
 
             if isinstance(t, TypeAliasType):
@@ -91,47 +91,60 @@ def get_named_tuple_members_mapping(
                 break
 
         origin = typing.get_origin(t)
-        if isinstance(origin, ParamSpec):
-            return (object,)
 
         if origin is None:
-            return (t,)
+            return t
+
+        if not ignore_type_modifiers and origin in type_modifiers:
+            return origin
 
         if issubclass(origin, (Mapping, Sequence)):
-            return (origin,)
+            return origin
 
         if origin is UnionType or origin is Union:
-            # TODO: fix case when one of args is of type TypeAliasType
-            return tuple(
-                rest
-                for typo in typing.get_args(t)
-                for rest in get_deeply_nested_type(typo)
-                if rest is not NoneType
+
+            def reduce_fn(x: type | UnionType, y: type | UnionType) -> UnionType:
+                return x | y
+
+            return reduce(
+                reduce_fn,
+                (
+                    get_deeply_nested_type(rest.__value__, ignore_type_modifiers=True)
+                    if isinstance(rest, TypeAliasType)
+                    else rest
+                    for rest in typing.get_args(t)
+                ),
             )
 
-        return (object,)
+        return object
 
-    def create_member(v: Any, t: type) -> NamedTupleMemberInfo:
+    def create_member(k: str, v: Any, t: type) -> NamedTupleMemberInfo:
         dt = get_deeply_nested_type(t)
 
-        r = type_modifiers.get(dt)
-        if r is not None:
-            check, transform = r
+        if dt in type_modifiers:
+            # we cast because somewhy type checkers think about Literals of
+            # type TypeAliasType as of type itself, but when it's a free
+            # variable it's not
+            check, transform = type_modifiers[typing.cast(type, dt)]
             return NamedTupleMemberInfo(v, check, transform)
 
-        if not isinstance(dt, (tuple, type)):
-            raise ValueError("Something gone wrong in deeply nested type search")
+        if not isinstance(dt, (UnionType, type)):
+            raise ValueError(
+                f"Something gone wrong in deeply nested type search\nkey: {k}\ndt is of type {type(dt)}"
+            )
 
         return NamedTupleMemberInfo(v, lambda x: isinstance(x, dt))
 
-    def get_value(v: Any, t: type) -> NamedTupleMemberInfo | NamedTupleInfo:
+    def get_value(k: str, v: Any, t: type) -> NamedTupleMemberInfo | NamedTupleInfo:
         return (
             get_named_tuple_members_mapping(t, type_modifiers=type_modifiers)
             if isinstance(t, NamedTupleProtocol)
-            else create_member(v, t)
+            else create_member(k, v, t)
         )
 
-    return NamedTupleInfo(named_tuple, {k: get_value(v, t) for k, v, t in generator()})
+    return NamedTupleInfo(
+        named_tuple, {k: get_value(k, v, t) for k, v, t in generator()}
+    )
 
 
 def create_named_tuple_from_mapping(
