@@ -4,10 +4,7 @@ from typing import (
     Any,
     NamedTuple,
     NoReturn,
-    ParamSpec,
     Protocol,
-    Self,
-    TypeAlias,
     TypeAliasType,
     Union,
     runtime_checkable,
@@ -36,21 +33,13 @@ class NamedTupleMemberInfo[T](NamedTuple):
 
 
 type NamedTupleMembersMappingValue[T] = NamedTupleMemberInfo[T] | NamedTupleInfo
-type NamedTupleMembersMapping = dict[str, NamedTupleMembersMappingValue]
 
 
 class NamedTupleInfo(NamedTuple):
     """Metadata about named tuple itself"""
 
     origin: type[NamedTupleProtocol]
-    members: NamedTupleMembersMapping
-
-    def get_member(self: Self, key: str) -> NamedTupleMembersMappingValue:
-        member = self.members.get(key)
-        if member is None:
-            raise ValueError
-
-        return member
+    members: dict[str, NamedTupleMembersMappingValue]
 
 
 class NamedTupleMemberModifier[T](NamedTuple):
@@ -62,14 +51,10 @@ class NamedTupleMemberModifier[T](NamedTuple):
     transform: Callable[[Any], T]
 
 
-type NamedTupleMemberModifierKey = type | TypeAliasType | TypeAlias | tuple[type, ...]
-
-
 def get_named_tuple_members_mapping(
     named_tuple: type[NamedTupleProtocol],
     *,
-    type_modifiers: Mapping[NamedTupleMemberModifierKey, NamedTupleMemberModifier]
-    | None = None,
+    type_modifiers: Mapping[type, NamedTupleMemberModifier] | None = None,
 ) -> NamedTupleInfo:
     if type_modifiers is None:
         type_modifiers = {}
