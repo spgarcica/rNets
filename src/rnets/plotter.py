@@ -26,7 +26,7 @@ from .colors.utils import (
     Color
     , rgb_achromatize
     , color_sel_lum
-    , interp_fn_rgb_hls
+    , interp_cs
     , rgb_to_hexstr
 )
 from .colors.colorschemes import VIRIDIS
@@ -137,7 +137,7 @@ class GraphCfg(NamedTuple):
         kind (str, optional): Kind of the dotgraph. Defaults to digraph.
         colorscheme (sequence of floats): Sequence of colors that will be
            interpolate to set the colors of the graph. See
-           :obj:`interp_fn_rgb_hls`. Defaults to :obj:`COLORSCH`.
+           :obj:`interp_cs`. Defaults to :obj:`COLORSCH`.
         color_offset (tuple of two floats, optional): When using the energy of
             a node to decide its color, the offset to apply to norm. Should be
             a value between 0. and 1. Useful to avoid falling on the extremes
@@ -325,7 +325,7 @@ def network_color_interp(
         I found that the offset is extremely useful to avoid very dark and very
             bright zones of certain colorschemes.
     """
-    c_interp: Callable[[float], Color] = interp_fn_rgb_hls(cs)
+    c_interp: Callable[[float], Color] = interp_cs(cs, "lab")
     e_rng: Callable[[float], float] = network_energy_normalizer(n)
 
     def interp_fn(x: float) -> Color:
