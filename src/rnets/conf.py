@@ -148,28 +148,32 @@ def get_named_tuple_members_mapping(
 
 
 def create_named_tuple_from_mapping(
-    info: NamedTupleInfo, d: dict[Any, Any]
+    info: NamedTupleInfo, d: dict[str, Any]
 ) -> NamedTupleProtocol:
-    if not all(k in info.members for k in d):
-        error()
+    for k in d:
+        if k not in info.members:
+            raise ValueError(
+                f"It seems you have supplied key {k}, which can't be found in the context of {info.origin.__name__} section"
+            )
 
-    def check_and_return[T](value: T | None, info: NamedTupleMemberInfo[T]) -> T:
-        if value is not None and not info.check(value):
-            print(value)
-            print(info)
-            error()
+    def check_and_return[
+        T
+    ](key: str, value: T | None, info: NamedTupleMemberInfo[T]) -> T:
+        res = value if value is not None else info.default
 
-        res = value or info.default
+        if not info.check(res):
+            raise ValueError(f"It seems {key} isn't passing check\n{f"Got {res} while parsing" if res is not None else ""}")
+
         if info.transform is not None:
             res = info.transform(res)
 
-        return typing.cast(T, res)
+        return res
 
     return info.origin(
         **{
             k: create_named_tuple_from_mapping(v, d[k])
             if isinstance(v, NamedTupleInfo)
-            else check_and_return(d.get(k, None), v)
+            else check_and_return(k, d.get(k, None), v)
             for k, v in info.members.items()
         }
     )
