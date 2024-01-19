@@ -3,27 +3,32 @@
 representing thte objects adjusting the colors and shapes.
 
 Attributes:
-    DEF_T (float): Default temperature of the reaction.
     C_WHITE (obj:`Color`): Default white color.
     C_BLACK (obj:`Color`): Default black color.
     COLORSCH (sequence of obj:`Color`): Default colorscheme.
     GRAPH_ATTR_DEF (obj:`Opts`): Default graph global attributes.
     NODE_ATTR_DEF (obj:`Opts`): Default node global attributes.
+    EDCE_ATTR_DEF (obj:`Opts`): Default edge global attributes.
     BOX_TMP (str): HTML box template.
     LABEL_TMP (str): HTML label template.
  """
-
-from collections.abc import Callable, Iterable, Iterator, Sequence
+from collections.abc import Callable, Iterator, Sequence
 from enum import StrEnum
-from math import exp
 from functools import partial, reduce
 from itertools import chain, repeat, product, starmap
 from typing import NamedTuple
 
+from .chemistry import (
+    ChemCfg
+    , calc_net_rate
+    , calc_reactions_k_norms
+    , network_energy_normalizer
+)
 from .dot import Edge, Graph, Node, Opts, OptsGlob
 from .struct import Compound, FFlags, Network, Reaction, Visibility
 from .colors.utils import (
     Color
+    , ColorSpace
     , rgb_achromatize
     , color_sel_lum
     , interp_cs
@@ -33,19 +38,21 @@ from .colors.colorschemes import VIRIDIS
 from .colors.palettes import css
 
 
-DEF_T: float = 273.15
 C_WHITE: Color = css["white"]
 C_BLACK: Color = css["black"]
 COLORSCH: Sequence[Color] = VIRIDIS
 
 GRAPH_ATTR_DEF: Opts = {
-    'rankdir': 'TB'
-    , 'ranksep': '0.5'
-    , 'nodesep': '0.25'
+    "rankdir": 'TB'
+    , "ranksep": '0.5'
+    , "nodesep": '0.25'
 }
 NODE_ATTR_DEF: Opts = {
     "shape": "plaintext"
     , "style": "filled"
+}
+EDGE_ATTR_DEF: Opts = {
+    "weight": "2."
 }
 BOX_TMP: str = """<
 <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
@@ -117,14 +124,11 @@ class EdgeCfg(NamedTuple):
             :obj:`calc_pseudo_k_constant`), using width as the minimum width
             and this max_width as the maximum width, if None, all the arrows
             will be draw with constant width.
-        temperature (float, optional): Temperature to compute the kinetic
-            constants. Defaults to :obj:`DEF_T`.
     """
-    opts: Opts | None = None
+    opts: Opts | None = EDGE_ATTR_DEF
     solid_color: Color | None = None
     width: float = 1.
     max_width: float | None = 5.
-    temperature: float = DEF_T
 
 
 class GraphCfg(NamedTuple):
@@ -151,157 +155,11 @@ class GraphCfg(NamedTuple):
     edge: EdgeCfg = EdgeCfg()
 
 
-def calc_activation_energy(
-    r: Reaction
-) -> float:
-    """Computes the activation energy of a given compounds
-
-    Args:
-        r (:obj:`Reaction`): Reaction that will be used to calculate the Ea.
-
-    Returns:
-        float: Activation energy.
-
-    Note:
-        Note that the units are not checked. The energy of the :obj:`Reaction`
-            and its attached compounds should be in the same units.
-    """
-    return r.energy - (sum(map(lambda x: x.energy, r.compounds[0])))
-
-
-def calc_pseudo_k_constant(
-    ea: float
-    , T: float = DEF_T
-) -> float:
-    """Computes a pseudo equilibrium constant (k) for the given activation
-    energy. This constant serves a proxy to visually compare reaction kinetics.
-
-    Args:
-        ea (float): Reaction energy.
-        T (float): Temperature at which the kinetic constant is
-            computed. Defaults to :obj:`DEF_T`.
-
-    Returns:
-       float: Computed pseudo-k.
-
-    Notes:
-        Use :obj:`calc_activation_energy` to compute the energy for a give
-        :obj:`Reaction` object.
-
-       Units are not taken into account. Make sure that the temperature and
-       energy units match.
-    """
-    return exp(-ea / T)
-
-
-def calc_reactions_k_norms(
-    rs: Sequence[Reaction]
-    , T: float = DEF_T
-    , norm_range: tuple[float, float] = (0., 1.)
-) -> Iterator[float]:
-    """From a set of reactions, compute the norm of each reaction using the
-    pseudo kinetic constant (see :obj:`calc_pseudo_kconstant`).
-
-    Args:
-        rs (sequence of :obj:`Reaction`): Reactions to use to compute the norm.
-        T (float): Temperature at which the kinetic constant is
-            computed. Defaults to :obj:`DEF_T`.
-
-    Returns:
-        :obj:`Iterator` of float: Computed k norms preserving the order of the
-            given reactions.
-    """
-    ks: tuple[float, ...] = tuple(map(
-        lambda r: calc_pseudo_k_constant(calc_activation_energy(r), T)
-        , rs
-    ))
-    norm: Callable[[float], float] = normalizer(*minmax(ks))
-    n_ran: float = norm_range[1] - norm_range[0]
-
-    return map(lambda x: (norm(x) * n_ran) + norm_range[0], ks)
-
-
-def normalizer(
-    s: float
-    , e: float
-) -> Callable[[float], float]:
-    """Creates a normalization function that returns a value between 0 and
-    1 depending on the minimum and maximum values.
-
-    Args:
-        s (float): Starting (mininum) value used for the normalization.
-        e (float): Ending (maximum) value used for the normalization.
-
-    Returns:
-        Callable[[float], float]: Function that normalizes a float within the
-            normalization range.
-
-    Note:
-        If the normalization function overflows, it will return 0 in case of
-            values smaller than the minimum or 1 in case of values higher than
-            the ending value.
-    """
-    rang: float = e - s
-
-    def norm(
-        x: float
-    ) -> float:
-        if x < s:
-            return 0.
-        if x > e:
-            return 1.
-        return (x - s) / rang
-
-    return norm
-
-
-def minmax(
-    xs: Iterable[float]
-) -> tuple[float, float]:
-    """Simple function that returns the minimum and the maximum of a sequence
-    of floats.
-
-    Args:
-        xs (sequence of float): Sequence to examine.
-
-    Return:
-        tuple of two floats: With the form of (min, max).
-
-    Notes:
-        I tried to make this function from scratch, but it seems that the
-            implementation of min and max are extremely efficient; it is better
-             to create two maps and then search for the min and max.
-    """
-    ys: tuple[float, ...] = tuple(xs)
-    return (min(ys), max(ys))
-
-
-def network_energy_normalizer(
-    n: Network
-) -> Callable[[float], float]:
-    """Given a reaction network, build an energy normalizer based on the
-    maximum energies of the compounds and reactions.
-
-    Args:
-        n (:obj:`Network`): Network for which the normalizer will be built.
-
-    Returns:
-        Callable[[float], float]: Function that normalizes a float using
-        minimum and maximum values of the network and an offset
-    """
-    return normalizer(*minmax(chain.from_iterable(map(
-        lambda xs: starmap(
-            getattr
-            , zip(xs, repeat("energy")
-        ))
-        , (n.compounds, n.reactions)
-    ))))
-
-
-def network_color_interp(
-    n: Network
+def color_interp(
+    norm_fn: Callable[[float], float]
     , cs: Sequence[Color]
     , offset: tuple[float, float] = (0., 0.)
+    , cspace: ColorSpace = "lab"
 ) -> Callable[[float], Color]:
     """Given a reaction network and a sequence of colors, build a color
     interpolation function that converts the energy of a component inside the
@@ -312,6 +170,8 @@ def network_color_interp(
         cs (sequence of :obj:`Color`): Sequence of colors to interpolate.
         offset (tuple of 2 float, optional): Minimum and maximum energy offsets
             to add to the minimum and maximum detected energies.
+        c_space (str): Colorspace in which the interpolation will be
+            perform. Check :obj:`ColorSpace` for available values.
 
     Returns:
         Callable[[float], :obj:`Color`]: A function that takes a float as input
@@ -325,11 +185,10 @@ def network_color_interp(
         I found that the offset is extremely useful to avoid very dark and very
             bright zones of certain colorschemes.
     """
-    c_interp: Callable[[float], Color] = interp_cs(cs, "lab")
-    e_rng: Callable[[float], float] = network_energy_normalizer(n)
+    c_interp: Callable[[float], Color] = interp_cs(cs, cspace)
 
     def interp_fn(x: float) -> Color:
-        return c_interp(e_rng(x))
+        return c_interp(norm_fn(x))
 
     return interp_fn
 
@@ -408,15 +267,20 @@ def gen_react_arrows(
 
     Args:
         rt (sequence of :obj:`Compound`): Compounds acting as reactants.
-        pt (sequence of :obj:`compound`): Compounds acting as products.
+        pt (sequence of :obj:`Compound`): Compounds acting as products.
 
     Returns:
         :obj:Iterator[tuple[:obj:`Compound`, :obj:`Compound`]]: A consumable
             iterator with all the (react, product) combinations excluding
             the ones with non visible compounds.
+
+    Note:
+        To avoid duplicated edges due to duplicated compounds, e.g. 2H + 2O ->
+        2H2O ((H,H,O,O), (H2O,H2O)), only the unique reactants and products
+        will be taken into account.
     """
     filter_vis = partial(filter, lambda x: x.visible != Visibility.FALSE)
-    return product(filter_vis(rt), filter_vis(pt))
+    return product(filter_vis(set(rt)), filter_vis(set(pt)))
 
 
 def build_dotnode(
@@ -478,6 +342,7 @@ def build_dotedges(
             width and color.
     """
     sel_col = rgb_achromatize(color) if r.visible == Visibility.GREY else color
+
     def build_edge(o: str, t: str) -> Edge:
         return Edge(
             origin=o
@@ -504,7 +369,7 @@ def nodecolor_sel(
     Args:
         c_norm (Function taking a float as input and returns a :obj:`Color`):
             Color normalizer that will be used to compute the color of the
-            node background. See :obj:`network_color_interp`.
+            node background. See :obj:`network_color_enery_interp`.
         fg_c (:obj:`Color`, optional): Color of the text. Defaults to
             :obj:`C_BLACK`.
         fg_alt (:obj:`Color`, optional): If set, alternative :obj:`Color` for
@@ -570,8 +435,8 @@ def build_dotgraph(
     Returns:
         Dot :obj:`Graph` with the colors and shapes of the netwkork.
     """
-    c_norm: Callable[[float], Color] = network_color_interp(
-        n=nw
+    c_norm: Callable[[float], Color] = color_interp(
+        norm_fn=network_energy_normalizer(nw)
         , cs=cfg.colorscheme
         , offset=cfg.color_offset
     )
@@ -588,7 +453,6 @@ def build_dotgraph(
     else:
         e_widths = calc_reactions_k_norms(
             rs=nw.reactions
-            , T=cfg.edge.temperature
             , norm_range=(cfg.edge.width, cfg.edge.max_width)
           )
     e_colors: Iterator[Color]
@@ -613,3 +477,61 @@ def build_dotgraph(
         )))
         , options=build_glob_opt(cfg)
     )
+
+
+# def build_dotgraph_kinetic(
+#     nw: Network
+#     , cfg: GraphCfg = GraphCfg()
+#     , chemcfg: Chem
+# ) -> Graph:
+#     """Build a dotgraph from a reaction network.
+
+#         nw (:obj:`Network`): Network object to be converted into dot graph.
+#         cfg (:obj:`GraphCfg`, optional): Graphviz configuration.
+
+
+#     Returns:
+#         Dot :obj:`Graph` with the colors and shapes of the netwkork.
+#     """
+#     c_norm: Callable[[float], Color] = network_color_interp(
+#         n=nw
+#         , cs=cfg.colorscheme
+#         , offset=cfg.color_offset
+#     )
+#     n_color_fn: Callable[[Compound], tuple
+#                          [Color, Color]] = nodecolor_sel(
+#         c_norm=c_norm
+#         , fg_c=cfg.node.font_color
+#         , fg_alt=cfg.node.font_color_alt
+#         , lum_threshold=cfg.node.font_lum_threshold
+#     )
+#     e_widths: Iterator[float]
+#     if cfg.edge.max_width is None:
+#         e_widths = repeat(cfg.edge.width)
+#     else:
+#         e_widths = calc_reactions_k_norms(
+#             rs=nw.reactions
+#             , norm_range=(cfg.edge.width, cfg.edge.max_width)
+#           )
+#     e_colors: Iterator[Color]
+#     if cfg.edge.solid_color is None:
+#         e_colors = map(lambda r: c_norm(r.energy), nw.reactions)
+#     else:
+#         e_colors = repeat(cfg.edge.solid_color)
+
+#     return Graph(
+#         kind=cfg.kind
+#         , nodes=tuple(map(
+#             lambda c: build_dotnode(c, *n_color_fn(c))
+#             , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
+#         ))
+#         , edges=tuple(chain.from_iterable(starmap(
+#             build_dotedges
+#             , filter(
+#                 # Tuple for __getitem__
+#                 lambda xs: EdgeArgs(*xs).react.visible != Visibility.FALSE
+#                 , zip(nw.reactions, e_widths, e_colors)
+#             )
+#         )))
+#         , options=build_glob_opt(cfg)
+#     )

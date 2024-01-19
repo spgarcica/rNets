@@ -4,6 +4,7 @@
 Attributes:
     S (type): Type constraint for StrEnum.
     T (type): Type variable.
+    O (type): Type variable.
 """
 
 from collections.abc import Callable, Sequence
@@ -11,7 +12,7 @@ from enum import auto, StrEnum
 from functools import reduce
 from itertools import chain
 from pathlib import Path
-from typing import NamedTuple, TypeVar
+from typing import TypeVar
 
 from .struct import Compound, FFlags, Network, Reaction, Visibility
 
@@ -27,6 +28,7 @@ class CompoundCol(StrEnum):
     Visible = auto()
     Opts = auto()
     Fflags = auto()
+    Conc = auto()
 
 
 class Direction(StrEnum):
@@ -204,7 +206,8 @@ def parse_compound_line(
         , idx=idx
         , visible=Visibility.TRUE if vis is None else parse_vis(vis)
         , fflags=apply_maybe(parse_fflags, kw.get(CompoundCol.Fflags))
-        , opts=apply_maybe(parse_opts, kw.get(CompoundCol.Opts))
+        , conc=apply_maybe(float, kw.get(CompoundCol.Conc))
+        , opts=apply_maybe(parse_opts, kw.get(CompoundCol.Opts)))
 
 
 def parse_fflags(
@@ -305,7 +308,7 @@ def parse_network_from_file(
 
 def parse_opts(
     s: str
-) -> dict[str, str]:
+) -> dict[str, str] | None:
     """Parses the opts column associated with additional opt options.
 
     Args:
@@ -318,6 +321,7 @@ def parse_opts(
         Each option should have a label and a value separated by a '=', and
             different options should be separated with a ':'.
     """
+    if s == '': return None
     return dict(map(
         lambda x: x.split('=')
         , s.split(':')
@@ -432,8 +436,6 @@ def parse_reaction_line(
             , energy=float(kw[ReactionCol.Energy])
             , idx=int(idx)
             , visible=Visibility.TRUE if vis is None else parse_vis(vis)
-            , opts=apply_maybe(parse_opts, kw.get(CompoundCol.Opts))
-            , opts=parse_opts(ops) if ops else None
-        )
+            , opts=apply_maybe(parse_opts, kw.get(CompoundCol.Opts)))
         , ncs
     ))

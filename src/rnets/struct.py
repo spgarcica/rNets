@@ -39,22 +39,29 @@ class Compound(NamedTuple):
         name (str): Compound name.
         energy (float): Compound energy.
         idx (int): Compound index, in reading order.
-        opts (dict of str as keys and str as values or None, optional):
-            Additional options for the compound. Will be later used by the
-            writer to decide additional options. Defaults to None.
         visible (obj:`Visible`, optional): Wether the compound will be visible,
             grey or not visible. Defaults to :obj:`Visible.TRUE`.
         fflags (set of :obj:`FFlags` or None, optional): Format labels that
             will be used to represent the compound label. Defaults to None.
+        conc (float or None, optional): Concentration of the given
+            compound. Defaults to None.
+        opts (dict of str as keys and str as values or None, optional):
+            Additional options for the compound. Will be later used by the
+            writer to decide additional options. Defaults to None.
+
     """
     name: str
     energy: float
     idx: int
-    opts: dict[str, str] | None = None
     visible: Visibility = Visibility.TRUE
     fflags: set[FFlags] | None = None
+    conc: float | None = None
+    opts: dict[str, str] | None = None
+
 
     def __str__(self): return self.name
+
+    def __hash__(self): return hash((self.name, self.idx))
 
     def __repr__(self):
         return f"<{self.name}>"
@@ -89,6 +96,8 @@ class Reaction(NamedTuple):
             )
             , self.compounds
         ))
+
+    def __hash__(self): return hash(self.compounds)
 
     def __repr__(self):
         return f"<{self.name}:{str(self)}>"
