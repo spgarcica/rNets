@@ -122,24 +122,41 @@ def get_named_tuple_members_mapping(
 
         return object
 
+    def handle_special_types(t: type) -> NamedTupleMemberModifier | None:
+        if isinstance(t, EnumType):
+            # reveal_type(t) Type of "t" is "type" WHY, PYRIGHT, WHY?
+            t = typing.cast(EnumType, t)
+            return NamedTupleMemberModifier(
+                lambda x: x in t.__members__, t.__members__.get
+            )
+
+        return
+
     def create_member(
         k: str, v: Any, t: type, fl: NamedTupleMemberFlag
     ) -> NamedTupleMemberInfo:
         dt = get_deeply_nested_type(t)
+        check = lambda x: isinstance(x, dt)
+        transform = None
 
         if dt in type_modifiers:
             # we cast because somewhy type checkers think about Literals of
             # type TypeAliasType as of type itself, but when it's a free
             # variable it's not
             check, transform = type_modifiers[typing.cast(type, dt)]
-            return NamedTupleMemberInfo(v, check, transform)
-
-        if not isinstance(dt, (UnionType, type)):
+        elif not isinstance(dt, (UnionType, type)):
             raise ValueError(
-                f"Something gone wrong in deeply nested type search\nkey: {k}\ndt is of type {type(dt)}"
+                f"Something gone wrong in deeply nested type search\n"
+                f"key: {k}\n"
+                f"dt is of type {type(dt)}"
             )
+        elif (
+            isinstance(dt, type)
+            and (special_modifier := handle_special_types(dt)) is not None
+        ):
+            check, transform = special_modifier
 
-        return NamedTupleMemberInfo(v, lambda x: isinstance(x, dt))
+        return NamedTupleMemberInfo(v, check, transform, fl)
 
     def get_value(
         k: str, v: Any, t: type, fl: NamedTupleMemberFlag
