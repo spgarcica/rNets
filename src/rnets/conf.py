@@ -171,7 +171,7 @@ def create_named_tuple_from_mapping(
 
     return info.origin(
         **{
-            k: create_named_tuple_from_mapping(v, d[k])
+            k: create_named_tuple_from_mapping(v, d.get(k, {}))
             if isinstance(v, NamedTupleInfo)
             else check_and_return(k, d.get(k, None), v)
             for k, v in info.members.items()
