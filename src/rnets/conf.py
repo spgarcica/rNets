@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from enum import EnumType, Flag, auto
 import typing
 from typing import (
     Any,
@@ -25,12 +26,20 @@ class NamedTupleProtocol(Protocol):
     _field_defaults: dict[str, Any]
 
 
+# TODO: overengineering????
+class NamedTupleMemberFlag(Flag):
+    """Optional means that field can be omitted"""
+
+    OPTIONAL = auto()
+
+
 class NamedTupleMemberInfo[T](NamedTuple):
     """Metadata about named tuple member"""
 
     default: T
     check: Callable[[Any], bool] = lambda _: True
     transform: Callable[[Any], T] | None = None
+    flags: NamedTupleMemberFlag = NamedTupleMemberFlag(0)
 
 
 type NamedTupleMembersMappingValue[T] = NamedTupleMemberInfo[T] | NamedTupleInfo
@@ -60,23 +69,18 @@ def get_named_tuple_members_mapping(
     if type_modifiers is None:
         type_modifiers = {}
 
-    def generator() -> Generator[tuple[str, Any, type], None, None]:
+    def generator() -> (
+        Generator[tuple[str, Any, type, NamedTupleMemberFlag], None, None]
+    ):
         for k in named_tuple._fields:
             t = named_tuple.__annotations__.get(k, Any)
-            v: Any = named_tuple._field_defaults.get(k)
-            if (
-                v is None
-                # we do this because int | bool is not the same as Union[int, bool]
-                and not typing.get_origin(t) is UnionType
-                and not typing.get_origin(t) is Union
-                and not NoneType in typing.get_args(t)
-            ):
-                # TODO: maybe there is a better solution to this?
-                try:
-                    v = typing.get_origin(t)()
-                except Exception:
-                    pass
-            yield (k, v, t)
+            v = None
+            flags = NamedTupleMemberFlag(0)
+            if k in named_tuple._field_defaults:
+                v = named_tuple._field_defaults[k]
+                flags |= NamedTupleMemberFlag.OPTIONAL
+
+            yield (k, v, t, flags)
 
     def get_deeply_nested_type(
         t: type, *, ignore_type_modifiers: bool = False
@@ -118,7 +122,9 @@ def get_named_tuple_members_mapping(
 
         return object
 
-    def create_member(k: str, v: Any, t: type) -> NamedTupleMemberInfo:
+    def create_member(
+        k: str, v: Any, t: type, fl: NamedTupleMemberFlag
+    ) -> NamedTupleMemberInfo:
         dt = get_deeply_nested_type(t)
 
         if dt in type_modifiers:
@@ -135,15 +141,17 @@ def get_named_tuple_members_mapping(
 
         return NamedTupleMemberInfo(v, lambda x: isinstance(x, dt))
 
-    def get_value(k: str, v: Any, t: type) -> NamedTupleMemberInfo | NamedTupleInfo:
+    def get_value(
+        k: str, v: Any, t: type, fl: NamedTupleMemberFlag
+    ) -> NamedTupleMemberInfo | NamedTupleInfo:
         return (
             get_named_tuple_members_mapping(t, type_modifiers=type_modifiers)
             if isinstance(t, NamedTupleProtocol)
-            else create_member(k, v, t)
+            else create_member(k, v, t, fl)
         )
 
     return NamedTupleInfo(
-        named_tuple, {k: get_value(k, v, t) for k, v, t in generator()}
+        named_tuple, {k: get_value(k, v, t, fl) for k, v, t, fl in generator()}
     )
 
 
@@ -153,21 +161,26 @@ def create_named_tuple_from_mapping(
     for k in d:
         if k not in info.members:
             raise ValueError(
-                f"It seems you have supplied key {k}, which can't be found in the context of {info.origin.__name__} section"
+                f"It seems you have supplied key {k}, which can't be found "
+                f"in the context of {info.origin.__name__} section"
             )
 
     def check_and_return[
         T
     ](key: str, value: T | None, info: NamedTupleMemberInfo[T]) -> T:
-        res = value if value is not None else info.default
+        if value is None:
+            if NamedTupleMemberFlag.OPTIONAL not in info.flags:
+                raise ValueError(
+                    f"It seems you haven't declared a required value of {key!r}"
+                )
+            return info.default
 
-        if not info.check(res):
-            raise ValueError(f"It seems {key} isn't passing check\n{f"Got {res} while parsing" if res is not None else ""}")
+        if not info.check(value):
+            raise ValueError(
+                f"It seems {key} isn't passing check\nGot {value!r} while parsing"
+            )
 
-        if info.transform is not None:
-            res = info.transform(res)
-
-        return res
+        return info.transform(value) if info.transform is not None else value
 
     return info.origin(
         **{
