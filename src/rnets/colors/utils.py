@@ -15,6 +15,7 @@ from itertools import repeat, starmap
 from typing import Literal
 
 Color = tuple[float, float, float]
+ColorSpace = Literal["rgb", "lab", "hsl"]
 
 
 def ensure_color(
@@ -571,7 +572,7 @@ def lab_to_xyz(
 
 def interp_cs(
     cs: Sequence[Color]
-    , interp: Literal["rgb", "lab", "hsl"] = "lab"
+    , interp: ColorSpace = "lab"
 ) -> Callable[[float], Color]:
     """Given a sequence of :obj:`Color` in an arbitrary colorspace, convert
     them to another space and create an interpolation function. The value

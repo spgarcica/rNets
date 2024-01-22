@@ -162,6 +162,7 @@ def calc_pseudo_k_constant(
     """
     return A*exp((-ea/(kb*T)))
 
+
 def calc_net_rate(
     r: Reaction
     , T: float
@@ -293,14 +294,14 @@ def network_energy_normalizer(
     n: Network
 ) -> Callable[[float], float]:
     """Given a reaction network, build an energy normalizer based on the
-    maximum energies of the compounds and reactions.
+    minimum and maximum energies of the compounds and reactions.
 
     Args:
         n (:obj:`Network`): Network for which the normalizer will be built.
 
     Returns:
-        Callable[[float], float]: Function that normalizes a float using
-        minimum and maximum values of the network and an offset
+        Callable[[float], float]: Function that normalizes a given float using
+        minimum and maximum values of the network and an offset.
     """
     return normalizer(*minmax(chain.from_iterable(map(
         lambda xs: starmap(
@@ -309,3 +310,24 @@ def network_energy_normalizer(
         ))
         , (n.compounds, n.reactions)
     ))))
+
+
+def network_conc_normalizer(
+    nw: Network
+) -> Callable[[float], float]:
+    """Given a reaction network, build a concentration normalizer based on the
+    maximum and minimum concentration of the compounds in the network.
+
+    Args:
+        nw (:obj:`Network`): Network for which the normalizer will be built.
+
+    Returns:
+        Callable[[float], float]: Function that normalizes a float using
+        minimum and maximum values of the network and an offset
+    """
+    def f_none(xs: Sequence[float | None]) -> Iterator[float]:
+        return filter(lambda x: x is not None, xs)
+
+    return normalizer(*minmax(starmap(
+            getattr
+            , zip(f_none(nw.compounds), repeat("conc")))))

@@ -18,15 +18,15 @@ from functools import partial, reduce
 from itertools import chain, repeat, product, starmap
 from typing import NamedTuple
 
-from .chemistry import (
+from ..chemistry import (
     ChemCfg
     , calc_net_rate
     , calc_reactions_k_norms
     , network_energy_normalizer
 )
-from .dot import Edge, Graph, Node, Opts, OptsGlob
-from .struct import Compound, FFlags, Network, Reaction, Visibility
-from .colors.utils import (
+from ..dot import Edge, Graph, Node, Opts, OptsGlob
+from ..struct import Compound, FFlags, Network, Reaction, Visibility
+from ..colors.utils import (
     Color
     , ColorSpace
     , rgb_achromatize
@@ -34,8 +34,8 @@ from .colors.utils import (
     , interp_cs
     , rgb_to_hexstr
 )
-from .colors.colorschemes import VIRIDIS
-from .colors.palettes import css
+from ..colors.colorschemes import VIRIDIS
+from ..colors.palettes import css
 
 
 C_WHITE: Color = css["white"]
@@ -80,8 +80,9 @@ class EdgeArgs(NamedTuple):
         Internal use to avoid type checker complaints.
     """
     react: Reaction
-    width: float
-    color: Color
+    width: float | None
+    color: Color | None
+    reversed: bool = False
 
 
 class NodeCfg(NamedTuple):
@@ -323,10 +324,44 @@ def build_dotnode(
     )
 
 
+def build_dotedge(
+    o: str
+    , t: str
+    , opts: Opts | None = None
+    , c: Color | None = None
+    , w: float | None = None
+) -> Edge:
+    """Build a dot :obj:`Edge`.
+
+    Args:
+        o (str): Origin node.
+        t (str): Target node.
+        opts (:obj:`Opts` or None, optional): Graphviz attributes of the
+            edge. Defaults to None.
+        c (:obj:`Color` or None, optional): Color of edge. Defaults to None.
+        w (float or None, optional): Edge width. Defaults to None.
+
+    Note:
+        None values will not be defined in the generated file and default
+        Graphviz values will be used. Opts overrides color and width
+        definitions.
+    """
+    return Edge(
+        origin=o
+        , target=t
+        , direction="->"
+        , options=( {}
+            | {} if c is None else {
+                "color": f'"{rgb_to_hexstr(c, inc_hash=True)}"'}
+            | {} if w is None else {"penwidth": str(w)}
+            | {} if opts is None else opts))
+
+
 def build_dotedges(
     r: Reaction
     , width: float
-    , color: Color = C_BLACK
+    , color: Color | None = C_BLACK
+    , reverse: bool = False
 ) -> Iterator[Edge]:
     """Converts a `Reaction` into one or more dot :obj:`Edge`.
 
@@ -335,26 +370,25 @@ def build_dotedges(
         width (float): Width of the reaction arrow.
         color (:obj:`Color`, optional): Color of the arrow. Defaults to
             :obj:`C_BLACK`.
+        reverse (bool, optional): If True, invert the order of the reactants
+            and the products.
 
     Returns:
         :obj:`Iterator`[:obj:`Edge`]: Iterator with the generated dot
             :obj:`Edge` corresponding to the :obj:`Reaction` with the given
             width and color.
     """
-    sel_col = rgb_achromatize(color) if r.visible == Visibility.GREY else color
+    sel_col: Color | None
+    match (color, r.visible):
+        case (None, _): sel_col = None
+        case (_, Visibility.GREY): sel_col = rgb_achromatize(color)
+        case _: sel_col = color
 
-    def build_edge(o: str, t: str) -> Edge:
-        return Edge(
-            origin=o
-            , target=t
-            , direction="->"
-            , options=r.opts or {} | {
-                "color": f'"{rgb_to_hexstr(sel_col, inc_hash=True)}"'
-                , "penwidth": str(width)
-            }
-        )
+    rs, ps = reversed(r.compounds) if reverse else r.compounds
 
-    return starmap(build_edge, gen_react_arrows(*r.compounds))
+    return starmap(
+        partial(build_dotedge, opts=r.opts, c=sel_col, w=width)
+        , gen_react_arrows(rs, ps))
 
 
 def nodecolor_sel(
@@ -362,7 +396,7 @@ def nodecolor_sel(
     , fg_c: Color = C_BLACK
     , fg_alt: Color | None = None
     , lum_threshold: float | None = None
-) -> Callable[[Compound], tuple[Color, Color]]:
+) -> Callable[[float, Visibility], tuple[Color, Color]]:
     """Creates a function that takes an energy as input and returns the
     assigned color for the background of the node and the foreground.
 
@@ -392,9 +426,9 @@ def nodecolor_sel(
     else:
         def fg_fn(x: Color) -> Color: return fg_c
 
-    def out_fn(x: Compound) -> tuple[Color, Color]:
-        bg_c: Color = c_norm(x.energy)
-        if x.visible == Visibility.GREY:
+    def out_fn(x: float, v: Visibility) -> tuple[Color, Color]:
+        bg_c: Color = c_norm(x)
+        if v == Visibility.GREY:
             bg_c = rgb_achromatize(bg_c)
         return (bg_c, fg_fn(bg_c))
 
@@ -440,7 +474,7 @@ def build_dotgraph(
         , cs=cfg.colorscheme
         , offset=cfg.color_offset
     )
-    n_color_fn: Callable[[Compound], tuple
+    n_color_fn: Callable[[float, Visibility], tuple
                          [Color, Color]] = nodecolor_sel(
         c_norm=c_norm
         , fg_c=cfg.node.font_color
@@ -464,7 +498,7 @@ def build_dotgraph(
     return Graph(
         kind=cfg.kind
         , nodes=tuple(map(
-            lambda c: build_dotnode(c, *n_color_fn(c))
+            lambda c: build_dotnode(c, *n_color_fn(c.energy, c.visible))
             , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
         ))
         , edges=tuple(chain.from_iterable(starmap(
@@ -477,61 +511,3 @@ def build_dotgraph(
         )))
         , options=build_glob_opt(cfg)
     )
-
-
-# def build_dotgraph_kinetic(
-#     nw: Network
-#     , cfg: GraphCfg = GraphCfg()
-#     , chemcfg: Chem
-# ) -> Graph:
-#     """Build a dotgraph from a reaction network.
-
-#         nw (:obj:`Network`): Network object to be converted into dot graph.
-#         cfg (:obj:`GraphCfg`, optional): Graphviz configuration.
-
-
-#     Returns:
-#         Dot :obj:`Graph` with the colors and shapes of the netwkork.
-#     """
-#     c_norm: Callable[[float], Color] = network_color_interp(
-#         n=nw
-#         , cs=cfg.colorscheme
-#         , offset=cfg.color_offset
-#     )
-#     n_color_fn: Callable[[Compound], tuple
-#                          [Color, Color]] = nodecolor_sel(
-#         c_norm=c_norm
-#         , fg_c=cfg.node.font_color
-#         , fg_alt=cfg.node.font_color_alt
-#         , lum_threshold=cfg.node.font_lum_threshold
-#     )
-#     e_widths: Iterator[float]
-#     if cfg.edge.max_width is None:
-#         e_widths = repeat(cfg.edge.width)
-#     else:
-#         e_widths = calc_reactions_k_norms(
-#             rs=nw.reactions
-#             , norm_range=(cfg.edge.width, cfg.edge.max_width)
-#           )
-#     e_colors: Iterator[Color]
-#     if cfg.edge.solid_color is None:
-#         e_colors = map(lambda r: c_norm(r.energy), nw.reactions)
-#     else:
-#         e_colors = repeat(cfg.edge.solid_color)
-
-#     return Graph(
-#         kind=cfg.kind
-#         , nodes=tuple(map(
-#             lambda c: build_dotnode(c, *n_color_fn(c))
-#             , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
-#         ))
-#         , edges=tuple(chain.from_iterable(starmap(
-#             build_dotedges
-#             , filter(
-#                 # Tuple for __getitem__
-#                 lambda xs: EdgeArgs(*xs).react.visible != Visibility.FALSE
-#                 , zip(nw.reactions, e_widths, e_colors)
-#             )
-#         )))
-#         , options=build_glob_opt(cfg)
-#     )
