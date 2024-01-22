@@ -11,7 +11,7 @@ from typing import (
     runtime_checkable,
 )
 from collections.abc import Sequence, Mapping, Callable, Generator
-from types import NoneType, UnionType
+from types import UnionType
 from functools import reduce
 
 
@@ -113,9 +113,10 @@ def get_named_tuple_members_mapping(
             return reduce(
                 reduce_fn,
                 (
-                    get_deeply_nested_type(rest.__value__, ignore_type_modifiers=True)
-                    if isinstance(rest, TypeAliasType)
-                    else rest
+                    get_deeply_nested_type(
+                        rest.__value__ if isinstance(rest, TypeAliasType) else rest,
+                        ignore_type_modifiers=True,
+                    )
                     for rest in typing.get_args(t)
                 ),
             )
