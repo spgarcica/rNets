@@ -1,3 +1,9 @@
+"""Kinetic plot module. Given the energies and concentrations of the compounds
+and the energies transition states, this module creates a graph summarizing the
+kinetic behavior of the system. The background of the nodes is colored
+depending on their concentration, while the width of the edges and the
+direction of the arrows is decided based on the calculated net rate.
+"""
 from collections.abc import Sequence
 from itertools import chain, repeat, starmap
 from functools import partial, reduce
@@ -12,7 +18,7 @@ from ..chemistry import (
     , network_conc_normalizer
 )
 from ..dot import Graph
-from ..struct import Compound, Reaction, Network, Visibility
+from ..struct import Reaction, Network, Visibility
 
 from .utils import (
     EdgeArgs
@@ -30,6 +36,13 @@ def filter_unique_react(
 ) -> tuple[Reaction, ...]:
     """Given a set of reactions that may contain biderectional reactions,
     return a set without the reversed reactions.
+
+    Args:
+        rs (sequence of :obj:`Reaction`): Sequence of reactions that will bee
+           filtered.
+
+    Returns:
+        Tuple containing the unique :obj:`Reaction`s.
     """
     def r_fn(xs: tuple[Reaction, ...], x: Reaction) -> tuple[Reaction, ...]:
         cmp_hash: int = hash(tuple(reversed(x.compounds)))
@@ -44,13 +57,17 @@ def build_dotgraph(
     , graph_cfg: GraphCfg = GraphCfg()
     , chem_cfg: ChemCfg = ChemCfg()
 ) -> Graph:
-    """Build a dotgraph from a reaction network.
+    """Build a kinetic dotgraph from a reaction network.
 
         nw (:obj:`Network`): Network object to be converted into dot graph.
-        cfg (:obj:`GraphCfg`, optional): Graphviz configuration.
+        graph_cfg (:obj:`GraphCfg`, optional): Graphviz configuration. Defaults
+            to :obj:`ChemCfg`
+        chem_cfg (:obj:`ChemCfg`, optional): Chemical parameters fo the
+            system. Defaults to :obj:`ChemCfg`
 
     Returns:
-        Dot :obj:`Graph` with the colors and shapes of the netwkork.
+        Dot :obj:`Graph` representing the kinetic information with the colors
+        and shapes of the network.
     """
     c_norm: Callable[[float], Color] = color_interp(
         norm_fn=network_conc_normalizer(nw)

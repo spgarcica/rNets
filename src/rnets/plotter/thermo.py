@@ -1,4 +1,10 @@
-from itertools import chain, repeat
+"""Thermodynamic plot module. Given the energies of the compounds
+and the transition states, this module creates a graph summarizing the
+thermodynamic/kinetic behavior of the system. The background of the nodes and
+the fill color of the edges is set depending on their energies, while the width
+of the edges is based on their computed kinetic constants.
+"""
+from itertools import chain, repeat, starmap
 from typing import Callable, Iterator
 
 from ..colors import Color
@@ -7,12 +13,13 @@ from ..chemistry import (
     , calc_reactions_k_norms
 )
 from ..dot import Graph
-from ..struct import Compound, Network, Visibility
+from ..struct import Network, Visibility
 
 from .utils import (
     EdgeArgs
     , build_glob_opt
     , build_dotnode
+    , build_dotedges
     , nodecolor_sel
     , color_interp
     , GraphCfg
@@ -36,7 +43,7 @@ def build_dotgraph(
         , cs=cfg.colorscheme
         , offset=cfg.color_offset
     )
-    n_color_fn: Callable[[Compound], tuple
+    n_color_fn: Callable[[float, Visibility], tuple
                          [Color, Color]] = nodecolor_sel(
         c_norm=c_norm
         , fg_c=cfg.node.font_color
@@ -60,7 +67,7 @@ def build_dotgraph(
     return Graph(
         kind=cfg.kind
         , nodes=tuple(map(
-            lambda c: build_dotnode(c, *n_color_fn(c))
+            lambda c: build_dotnode(c, *n_color_fn(c.energy, c.visible))
             , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
         ))
         , edges=tuple(chain.from_iterable(starmap(

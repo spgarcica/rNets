@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Given a set of compound/reaction/graph objects, write a the dot file
-representing thte objects adjusting the colors and shapes.
+"""Utility module for plotting reactions/compounds/networks dotfiles.
 
 Attributes:
     C_WHITE (obj:`Color`): Default white color.
@@ -20,7 +19,6 @@ from typing import NamedTuple
 
 from ..chemistry import (
     ChemCfg
-    , calc_net_rate
     , calc_reactions_k_norms
     , network_energy_normalizer
 )
@@ -455,59 +453,3 @@ def build_glob_opt(
     os: tuple[Opts | None, ...] = (cfg.opts, cfg.node.opts, cfg.edge.opts)
 
     return {k: v for k, v in zip(nms, os) if v is not None} or None
-
-
-def build_dotgraph(
-    nw: Network
-    , cfg: GraphCfg = GraphCfg()
-) -> Graph:
-    """Build a dotgraph from a reaction network.
-
-        nw (:obj:`Network`): Network object to be converted into dot graph.
-        cfg (:obj:`GraphCfg`, optional): Graphviz configuration.
-
-    Returns:
-        Dot :obj:`Graph` with the colors and shapes of the netwkork.
-    """
-    c_norm: Callable[[float], Color] = color_interp(
-        norm_fn=network_energy_normalizer(nw)
-        , cs=cfg.colorscheme
-        , offset=cfg.color_offset
-    )
-    n_color_fn: Callable[[float, Visibility], tuple
-                         [Color, Color]] = nodecolor_sel(
-        c_norm=c_norm
-        , fg_c=cfg.node.font_color
-        , fg_alt=cfg.node.font_color_alt
-        , lum_threshold=cfg.node.font_lum_threshold
-    )
-    e_widths: Iterator[float]
-    if cfg.edge.max_width is None:
-        e_widths = repeat(cfg.edge.width)
-    else:
-        e_widths = calc_reactions_k_norms(
-            rs=nw.reactions
-            , norm_range=(cfg.edge.width, cfg.edge.max_width)
-          )
-    e_colors: Iterator[Color]
-    if cfg.edge.solid_color is None:
-        e_colors = map(lambda r: c_norm(r.energy), nw.reactions)
-    else:
-        e_colors = repeat(cfg.edge.solid_color)
-
-    return Graph(
-        kind=cfg.kind
-        , nodes=tuple(map(
-            lambda c: build_dotnode(c, *n_color_fn(c.energy, c.visible))
-            , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
-        ))
-        , edges=tuple(chain.from_iterable(starmap(
-            build_dotedges
-            , filter(
-                # Tuple for __getitem__
-                lambda xs: EdgeArgs(*xs).react.visible != Visibility.FALSE
-                , zip(nw.reactions, e_widths, e_colors)
-            )
-        )))
-        , options=build_glob_opt(cfg)
-    )
