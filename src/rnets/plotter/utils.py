@@ -351,10 +351,10 @@ def build_dotedge(
         , target=t
         , direction="->"
         , options=( {}
-            | {} if c is None else {
-                "color": f'"{rgb_to_hexstr(c, inc_hash=True)}"'}
-            | {} if w is None else {"penwidth": str(w)}
-            | {} if opts is None else opts))
+            | ({} if c is None else {
+                "color": f'"{rgb_to_hexstr(c, inc_hash=True)}"'})
+            | ({} if w is None else {"penwidth": str(w)})
+            | ({} if opts is None else opts)))
 
 
 def build_dotedges(
