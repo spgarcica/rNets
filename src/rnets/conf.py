@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+from collections.abc import Sequence, Mapping, Callable, Generator
+from functools import reduce
 from enum import EnumType, Flag, auto
+from types import UnionType
 import typing
 from typing import (
     Any,
@@ -10,9 +13,6 @@ from typing import (
     Union,
     runtime_checkable,
 )
-from collections.abc import Sequence, Mapping, Callable, Generator
-from types import UnionType
-from functools import reduce
 
 
 # TODO: maybe extract to some utils?
