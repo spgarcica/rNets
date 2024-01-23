@@ -10,7 +10,7 @@ include = ["rnets"]
 name = "rnets"
 version = "24.01"
 dependencies = []
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 authors = [
     {name = "Sergio Pablo-Garcia", email = "spgarcica@gmail.com"},
     {name = "Raul Perez Soto", email = "rperezsoto.research@gmail.com"},
