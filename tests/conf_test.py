@@ -29,8 +29,8 @@ class ConfTestCase(unittest.TestCase):
         data = {"a": 1, "b": "2", "c": 3.0}
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t)
-        struct = conf.create_named_tuple_from_mapping(mapping, data)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
         self.assertIsInstance(struct, Struct)
         struct = typing.cast(Struct, struct)
         self.assertIsInstance(struct.a, int)
@@ -46,9 +46,9 @@ class ConfTestCase(unittest.TestCase):
         data = {"a": 2.0, "b": "1"}
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t)
+        mapping = conf.named_tuple_info(t)
         with self.assertRaises(ValueError):
-            conf.create_named_tuple_from_mapping(mapping, data)
+            conf.recreate_named_tuple(mapping, data)
 
     def test_optional_fields(self):
         class Struct(NamedTuple):
@@ -58,10 +58,10 @@ class ConfTestCase(unittest.TestCase):
         data = {"b": "bbbb"}
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t)
+        mapping = conf.named_tuple_info(t)
         self.assertIn(conf.NamedTupleMemberFlag.OPTIONAL, mapping.members["a"])
         self.assertNotIn(conf.NamedTupleMemberFlag.OPTIONAL, mapping.members["b"])
-        struct = conf.create_named_tuple_from_mapping(mapping, data)
+        struct = conf.recreate_named_tuple(mapping, data)
         self.assertIsInstance(struct, Struct)
         struct = typing.cast(Struct, struct)
         # it needs to create Struct, because `Struct.a` is a property, not a
@@ -81,9 +81,9 @@ class ConfTestCase(unittest.TestCase):
         data2 = {"a": 1, "b": 2}
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t)
-        struct1 = conf.create_named_tuple_from_mapping(mapping, data1)
-        struct2 = conf.create_named_tuple_from_mapping(mapping, data2)
+        mapping = conf.named_tuple_info(t)
+        struct1 = conf.recreate_named_tuple(mapping, data1)
+        struct2 = conf.recreate_named_tuple(mapping, data2)
         self.assertIsInstance(struct1, Struct)
         self.assertIsInstance(struct2, Struct)
         struct1 = typing.cast(Struct, struct1)
@@ -104,8 +104,8 @@ class ConfTestCase(unittest.TestCase):
         data = {"a": {"a": 1, "b": "abc"}, "b": "def", "c": 2}
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t)
-        struct = conf.create_named_tuple_from_mapping(mapping, data)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
         self.assertIsInstance(struct, Struct)
         struct = typing.cast(Struct, struct)
         self.assertEqual(struct, Struct(NestedStruct(1, "abc"), "def", 2))
@@ -122,8 +122,8 @@ class ConfTestCase(unittest.TestCase):
         data = {"a": "c", "b": "b"}
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t)
-        struct = conf.create_named_tuple_from_mapping(mapping, data)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
         self.assertIsInstance(struct, Struct)
         struct = typing.cast(Struct, struct)
 
@@ -140,8 +140,8 @@ class ConfTestCase(unittest.TestCase):
         data = {"a": 1, "b": 2}
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t)
-        struct = conf.create_named_tuple_from_mapping(mapping, data)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
         self.assertIsInstance(struct, Struct)
         struct = typing.cast(Struct, struct)
 
@@ -155,9 +155,9 @@ class ConfTestCase(unittest.TestCase):
         data = {"a": 1, "b": "2"}
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t)
+        mapping = conf.named_tuple_info(t)
         with self.assertRaises(ValueError):
-            conf.create_named_tuple_from_mapping(mapping, data)
+            conf.recreate_named_tuple(mapping, data)
 
     def test_empty_nested_structs(self):
         class NestedStruct(NamedTuple):
@@ -169,8 +169,8 @@ class ConfTestCase(unittest.TestCase):
             b: float = 3.0
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t)
-        struct = conf.create_named_tuple_from_mapping(mapping, {})
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, {})
         self.assertIsInstance(struct, Struct)
         struct = typing.cast(Struct, struct)
 
@@ -189,8 +189,8 @@ class ConfTestCase(unittest.TestCase):
         }
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t, type_modifiers=type_modifiers)
-        struct = conf.create_named_tuple_from_mapping(mapping, data)
+        mapping = conf.named_tuple_info(t, type_modifiers=type_modifiers)
+        struct = conf.recreate_named_tuple(mapping, data)
         self.assertIsInstance(struct, Struct)
         struct = typing.cast(Struct, struct)
 
@@ -237,8 +237,8 @@ class ConfTestCase(unittest.TestCase):
         }
 
         t = self.check_nm_proto(Struct)
-        mapping = conf.get_named_tuple_members_mapping(t, type_modifiers=type_modifiers)
-        struct = conf.create_named_tuple_from_mapping(mapping, data)
+        mapping = conf.named_tuple_info(t, type_modifiers=type_modifiers)
+        struct = conf.recreate_named_tuple(mapping, data)
         self.assertIsInstance(struct, Struct)
         struct = typing.cast(Struct, struct)
 

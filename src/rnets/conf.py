@@ -61,7 +61,7 @@ class NamedTupleMemberModifier[T](NamedTuple):
     transform: Callable[[Any], T]
 
 
-def get_named_tuple_members_mapping(
+def named_tuple_info(
     named_tuple: type[NamedTupleProtocol],
     *,
     type_modifiers: Mapping[type, NamedTupleMemberModifier] | None = None,
@@ -82,7 +82,7 @@ def get_named_tuple_members_mapping(
 
             yield (k, v, t, flags)
 
-    def get_deeply_nested_type(
+    def resolve_type(
         t: type, *, ignore_type_modifiers: bool = False
     ) -> UnionType | type:
         while True:
@@ -113,7 +113,7 @@ def get_named_tuple_members_mapping(
             return reduce(
                 reduce_fn,
                 (
-                    get_deeply_nested_type(
+                    resolve_type(
                         rest.__value__ if isinstance(rest, TypeAliasType) else rest,
                         ignore_type_modifiers=True,
                     )
@@ -136,7 +136,7 @@ def get_named_tuple_members_mapping(
     def create_member(
         k: str, v: Any, t: type, fl: NamedTupleMemberFlag
     ) -> NamedTupleMemberInfo:
-        dt = get_deeply_nested_type(t)
+        dt = resolve_type(t)
         check = lambda x: isinstance(x, dt)
         transform = None
 
@@ -163,7 +163,7 @@ def get_named_tuple_members_mapping(
         k: str, v: Any, t: type, fl: NamedTupleMemberFlag
     ) -> NamedTupleMemberInfo | NamedTupleInfo:
         return (
-            get_named_tuple_members_mapping(t, type_modifiers=type_modifiers)
+            named_tuple_info(t, type_modifiers=type_modifiers)
             if isinstance(t, NamedTupleProtocol)
             else create_member(k, v, t, fl)
         )
@@ -173,7 +173,7 @@ def get_named_tuple_members_mapping(
     )
 
 
-def create_named_tuple_from_mapping(
+def recreate_named_tuple(
     info: NamedTupleInfo, d: dict[str, Any]
 ) -> NamedTupleProtocol:
     for k in d:
@@ -202,7 +202,7 @@ def create_named_tuple_from_mapping(
 
     return info.origin(
         **{
-            k: create_named_tuple_from_mapping(v, d.get(k, {}))
+            k: recreate_named_tuple(v, d.get(k, {}))
             if isinstance(v, NamedTupleInfo)
             else check_and_return(k, d.get(k, None), v)
             for k, v in info.members.items()
