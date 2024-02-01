@@ -31,3 +31,5 @@ classifiers = [
 homepage = "https://codeberg.org/spgarcica/rNets"
 repository = "https://codeberg.org/spgarcica/rNets"
 
+[project.scripts]
+rnets = "rnets.__main__:run"
