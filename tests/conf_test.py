@@ -1,4 +1,4 @@
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from enum import Enum
 import enum
 from typing import NamedTuple
@@ -243,6 +243,163 @@ class ConfTestCase(unittest.TestCase):
         struct = typing.cast(Struct, struct)
 
         self.assertEqual(struct, Struct(1, (2, 3), 456))
+
+    def test_sequence(self):
+        class Struct(NamedTuple):
+            a: Sequence[int]
+
+        data = {"a": [1, 3, 5]}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
+        self.assertIsInstance(struct, Struct)
+        struct = typing.cast(Struct, struct)
+
+        self.assertEqual(struct, Struct([1, 3, 5]))
+
+    def test_sequence_fail(self):
+        class Struct(NamedTuple):
+            a: Sequence[int]
+
+        data = {"a": [1, "2", 3]}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        with self.assertRaises(ValueError):
+            conf.recreate_named_tuple(mapping, data)
+
+    def test_sequence_union(self):
+        class Struct(NamedTuple):
+            a: Sequence[int | str]
+
+        data = {"a": [1, "3", 5]}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
+        self.assertIsInstance(struct, Struct)
+        struct = typing.cast(Struct, struct)
+
+        self.assertEqual(struct, Struct([1, "3", 5]))
+
+    def test_mapping(self):
+        class Struct(NamedTuple):
+            a: Mapping[int, str]
+
+        data = {"a": {1: "b", 9: "c"}}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
+        self.assertIsInstance(struct, Struct)
+        struct = typing.cast(Struct, struct)
+
+        self.assertEqual(struct, Struct({1: "b", 9: "c"}))
+
+    def test_mapping_fail(self):
+        class Struct(NamedTuple):
+            a: Mapping[int, str]
+
+        data = {"a": {"a": 2, 3: 5}}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        with self.assertRaises(ValueError):
+            conf.recreate_named_tuple(mapping, data)
+
+    def test_mapping_union(self):
+        class Struct(NamedTuple):
+            a: Mapping[int | str, int]
+
+        data = {"a": {"a": 2, 3: 5}}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
+        self.assertIsInstance(struct, Struct)
+        struct = typing.cast(Struct, struct)
+
+        self.assertEqual(struct, Struct({"a": 2, 3: 5}))
+
+    def test_nested_sequence(self):
+        class Struct(NamedTuple):
+            a: Sequence[Sequence[int]]
+
+        data = {"a": [[1], [2, 3]]}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
+        self.assertIsInstance(struct, Struct)
+        struct = typing.cast(Struct, struct)
+
+        self.assertEqual(struct, Struct([[1], [2, 3]]))
+
+    def test_mapping_sequence(self):
+        class Struct(NamedTuple):
+            a: Mapping[str, Sequence[Mapping[int, str]]]
+
+        data = {"a": {"b": [{1: "c", 2: "d"}, {3: "e", 4: "f"}]}}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
+        self.assertIsInstance(struct, Struct)
+        struct = typing.cast(Struct, struct)
+
+        self.assertEqual(struct, Struct({"b": [{1: "c", 2: "d"}, {3: "e", 4: "f"}]}))
+
+    def test_tuple(self):
+        class Struct(NamedTuple):
+            a: tuple[int, str]
+
+        data = {"a": (1, "2")}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
+        self.assertIsInstance(struct, Struct)
+        struct = typing.cast(Struct, struct)
+
+        self.assertEqual(struct, Struct((1, "2")))
+
+    def test_empty_tuple_fail(self):
+        class Struct(NamedTuple):
+            a: tuple[()]
+            b: int
+
+        data = {"a": (1, 2, 3), "b": 4}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        with self.assertRaises(ValueError):
+            conf.recreate_named_tuple(mapping, data)
+
+    def test_tuple_sequence(self):
+        class Struct(NamedTuple):
+            a: tuple[int, ...]
+
+        data = {"a": (1, 2, 3, 4)}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        struct = conf.recreate_named_tuple(mapping, data)
+        self.assertIsInstance(struct, Struct)
+        struct = typing.cast(Struct, struct)
+
+        self.assertEqual(struct, Struct((1, 2, 3, 4)))
+
+    def test_tuple_sequence_fail(self):
+        class Struct(NamedTuple):
+            a: tuple[int, ...]
+
+        data = {"a": (1, 2, 3, "4")}
+
+        t = self.check_nm_proto(Struct)
+        mapping = conf.named_tuple_info(t)
+        with self.assertRaises(ValueError):
+            conf.recreate_named_tuple(mapping, data)
 
 
 def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, ignore: str):
