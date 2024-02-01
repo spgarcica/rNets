@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from collections.abc import Sequence, Mapping, Callable, Generator
-from functools import reduce
 from enum import EnumType, Flag, auto
 from types import UnionType
 import typing
@@ -13,6 +12,11 @@ from typing import (
     Union,
     runtime_checkable,
 )
+import inspect
+
+
+def _id[T](x: T) -> T:
+    return x
 
 
 # TODO: maybe extract to some utils?
@@ -38,7 +42,7 @@ class NamedTupleMemberInfo[T](NamedTuple):
 
     default: T
     check: Callable[[Any], bool] = lambda _: True
-    transform: Callable[[Any], T] | None = None
+    transform: Callable[[Any], T] = _id
     flags: NamedTupleMemberFlag = NamedTupleMemberFlag(0)
 
 
@@ -58,13 +62,180 @@ class NamedTupleMemberModifier[T](NamedTuple):
     """
 
     check: Callable[[Any], bool]
-    transform: Callable[[Any], T]
+    transform: Callable[[Any], T] = _id
+
+
+type TypeModifiersDict = Mapping[type, NamedTupleMemberModifier]
+
+
+def __singular_modifier[T](
+    t: type[T], type_modifiers: TypeModifiersDict
+) -> NamedTupleMemberModifier[T]:
+    if t in type_modifiers:
+        return type_modifiers[t]
+
+    return NamedTupleMemberModifier(lambda x: isinstance(x, t))
+
+
+def __tuple_modifier[T: tuple](
+    origin: type[T], args: tuple[type, ...], type_modifiers: TypeModifiersDict
+) -> NamedTupleMemberModifier[T]:
+    ocheck, otransform = resolve_type(origin, type_modifiers=type_modifiers)
+
+    otransform = tuple if otransform is _id else otransform
+
+    def check(x: Any) -> bool:
+        return ocheck(x) and all(mod.check(i) for i, mod in zip(x, modifiers))
+
+    def transform(x: Any) -> T:
+        return typing.cast(
+            T, otransform(mod.transform(i) for i, mod in zip(x, modifiers))
+        )
+
+    match args:
+        case ():
+            return NamedTupleMemberModifier(
+                check=lambda x: isinstance(x, origin) and len(x) == 0
+            )
+
+        case (t, el) if el is ...:
+            return __sequence_modifier(origin, (t,), type_modifiers)
+
+        case (*_,):
+            modifiers = [resolve_type(at, type_modifiers=type_modifiers) for at in args]
+            return NamedTupleMemberModifier(check=check, transform=transform)
+
+
+def __sequence_modifier[T](
+    origin: type[T], args: tuple[type, ...], type_modifiers: TypeModifiersDict
+) -> NamedTupleMemberModifier[T]:
+    (arg,) = args
+    ocheck, otransform = resolve_type(origin, type_modifiers=type_modifiers)
+    acheck, atransform = resolve_type(arg, type_modifiers=type_modifiers)
+    otransform = (
+        (list if inspect.isabstract(origin) else origin)
+        if otransform is _id
+        else otransform
+    )
+
+    def check(x: Any) -> bool:
+        return ocheck(x) and all(acheck(i) for i in x)
+
+    def transform(x: Any) -> T:
+        return typing.cast(T, otransform(atransform(i) for i in x))
+
+    return NamedTupleMemberModifier(check, transform)
+
+
+def __mapping_modifier[T](
+    origin: type[T], args: tuple[type, ...], type_modifiers: TypeModifiersDict
+) -> NamedTupleMemberModifier[T]:
+    (karg, varg) = args
+    ocheck, otransform = resolve_type(origin, type_modifiers=type_modifiers)
+    kcheck, ktransform = resolve_type(karg, type_modifiers=type_modifiers)
+    vcheck, vtransform = resolve_type(varg, type_modifiers=type_modifiers)
+
+    otransform = (
+        (dict if inspect.isabstract(origin) else origin)
+        if otransform is _id
+        else otransform
+    )
+
+    def check(x: Any) -> bool:
+        return ocheck(x) and all(kcheck(k) and vcheck(v) for k, v in x.items())
+
+    def transform(x: Any) -> T:
+        return typing.cast(
+            T, otransform((ktransform(k), vtransform(v)) for k, v in x.items())
+        )
+
+    return NamedTupleMemberModifier(check, transform)
+
+
+def __union_modifier[T](
+    origin: type[T], args: tuple[type, ...], type_modifiers: TypeModifiersDict
+) -> NamedTupleMemberModifier[T]:
+    _ = origin
+    modifiers = [resolve_type(at, type_modifiers=type_modifiers) for at in args]
+
+    def check(x: Any) -> bool:
+        return any(check(x) for check, _ in modifiers)
+
+    def transform(x: Any) -> T:
+        for check, trans in modifiers:
+            if check(x):
+                return trans(x)
+
+        raise ValueError("It shouldn't pop, but if pops, then there is a problem")
+
+    return NamedTupleMemberModifier(check, transform)
+
+
+def resolve_type(
+    t: type | TypeAliasType,
+    *,
+    type_modifiers: TypeModifiersDict,
+) -> NamedTupleMemberModifier:
+    while True:
+        if type_modifiers is not None and t in type_modifiers:
+            # TypeAliasTypes aren't usually type subclasses, but when they
+            # are Literals they are, l -- type
+            return type_modifiers[typing.cast(type, t)]
+
+        if not isinstance(t, TypeAliasType):
+            break
+
+        t = t.__value__
+
+    if t is Any:
+        return NamedTupleMemberModifier(lambda _: True)
+
+    if t is float:
+        # sincerely, python typing system is a mess, and in typing world
+        # int is a subclass of float, but in real world it's not true, but
+        # writing 3 instead of 3.0 is kinda fancy
+        return NamedTupleMemberModifier(
+            lambda x: isinstance(x, (int, float)), lambda x: float(x)
+        )
+
+    if isinstance(t, EnumType):
+        return NamedTupleMemberModifier(lambda x: x in t.__members__, t.__members__.get)
+
+    origin = typing.get_origin(t)
+    args = typing.get_args(t)
+
+    if origin is None:
+        return __singular_modifier(t, type_modifiers)
+
+    f = None
+
+    if issubclass(origin, tuple):
+        f = __tuple_modifier
+
+    elif issubclass(origin, Sequence):
+        f = __sequence_modifier
+
+    elif issubclass(origin, Mapping):
+        f = __mapping_modifier
+
+    elif origin is UnionType or origin is Union:
+        f = __union_modifier
+
+    if f is None:
+        # warning?
+        raise ValueError("CAN'T GET WHAT YOU WANT")
+
+    return f(
+        origin,  # type: ignore
+        args,
+        type_modifiers,
+    )
 
 
 def named_tuple_info(
     named_tuple: type[NamedTupleProtocol],
     *,
-    type_modifiers: Mapping[type, NamedTupleMemberModifier] | None = None,
+    type_modifiers: TypeModifiersDict | None = None,
 ) -> NamedTupleInfo:
     if type_modifiers is None:
         type_modifiers = {}
@@ -82,80 +253,11 @@ def named_tuple_info(
 
             yield (k, v, t, flags)
 
-    def resolve_type(
-        t: type, *, ignore_type_modifiers: bool = False
-    ) -> UnionType | type:
-        while True:
-            if not ignore_type_modifiers and t in type_modifiers:
-                return t
-
-            if isinstance(t, TypeAliasType):
-                t = t.__value__
-            else:
-                break
-
-        origin = typing.get_origin(t)
-
-        if origin is None:
-            return t
-
-        if not ignore_type_modifiers and origin in type_modifiers:
-            return origin
-
-        if issubclass(origin, (Mapping, Sequence)):
-            return origin
-
-        if origin is UnionType or origin is Union:
-
-            def reduce_fn(x: type | UnionType, y: type | UnionType) -> UnionType:
-                return x | y
-
-            return reduce(
-                reduce_fn,
-                (
-                    resolve_type(
-                        rest.__value__ if isinstance(rest, TypeAliasType) else rest,
-                        ignore_type_modifiers=True,
-                    )
-                    for rest in typing.get_args(t)
-                ),
-            )
-
-        return object
-
-    def handle_special_types(t: type) -> NamedTupleMemberModifier | None:
-        if isinstance(t, EnumType):
-            # reveal_type(t) Type of "t" is "type" WHY, PYRIGHT, WHY?
-            t = typing.cast(EnumType, t)
-            return NamedTupleMemberModifier(
-                lambda x: x in t.__members__, t.__members__.get
-            )
-
-        return
-
     def create_member(
         k: str, v: Any, t: type, fl: NamedTupleMemberFlag
     ) -> NamedTupleMemberInfo:
-        dt = resolve_type(t)
-        check = lambda x: isinstance(x, dt)
-        transform = None
-
-        if dt in type_modifiers:
-            # we cast because somewhy type checkers think about Literals of
-            # type TypeAliasType as of type itself, but when it's a free
-            # variable it's not
-            check, transform = type_modifiers[typing.cast(type, dt)]
-        elif not isinstance(dt, (UnionType, type)):
-            raise ValueError(
-                f"Something gone wrong in deeply nested type search\n"
-                f"key: {k}\n"
-                f"dt is of type {type(dt)}"
-            )
-        elif (
-            isinstance(dt, type)
-            and (special_modifier := handle_special_types(dt)) is not None
-        ):
-            check, transform = special_modifier
+        _ = k
+        check, transform = resolve_type(t, type_modifiers=type_modifiers)
 
         return NamedTupleMemberInfo(v, check, transform, fl)
 
@@ -173,9 +275,7 @@ def named_tuple_info(
     )
 
 
-def recreate_named_tuple(
-    info: NamedTupleInfo, d: dict[str, Any]
-) -> NamedTupleProtocol:
+def recreate_named_tuple(info: NamedTupleInfo, d: dict[str, Any]) -> NamedTupleProtocol:
     for k in d:
         if k not in info.members:
             raise ValueError(
@@ -183,9 +283,9 @@ def recreate_named_tuple(
                 f"in the context of {info.origin.__name__} section"
             )
 
-    def check_and_return[
-        T
-    ](key: str, value: T | None, info: NamedTupleMemberInfo[T]) -> T:
+    def check_and_return[T](
+        key: str, value: T | None, info: NamedTupleMemberInfo[T]
+    ) -> T:
         if value is None:
             if NamedTupleMemberFlag.OPTIONAL not in info.flags:
                 raise ValueError(
