@@ -206,8 +206,26 @@ def parse_compound_line(
         , idx=idx
         , visible=Visibility.TRUE if vis is None else parse_vis(vis)
         , fflags=apply_maybe(parse_fflags, kw.get(CompoundCol.Fflags))
-        , conc=apply_maybe(float, kw.get(CompoundCol.Conc))
+        , conc=apply_maybe(parse_conc, kw.get(CompoundCol.Conc))
         , opts=apply_maybe(parse_opts, kw.get(CompoundCol.Opts)))
+
+
+def parse_conc(
+    s: str
+) -> float | None:
+    """
+    Parse concentration value
+
+    Args:
+        s (str): String to parse.
+
+    Returns:
+        float with the parsed value or None
+    """
+    try:
+        return float(s)
+    except ValueError:
+        return None
 
 
 def parse_fflags(

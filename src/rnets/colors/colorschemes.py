@@ -1307,3 +1307,11 @@ CIVIDIS: Colorscheme = (
     , (0.995503, 0.903866, 0.212370)
     , (0.995737, 0.909344, 0.217772)
 )
+
+available: dict[str, Colorscheme] = {
+    "viridis": VIRIDIS
+    , "plasma": PLASMA
+    , "magma": MAGMA
+    , "inferno": INFERNO
+    , "cividis": CIVIDIS
+}
