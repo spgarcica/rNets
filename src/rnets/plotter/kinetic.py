@@ -93,14 +93,17 @@ def build_dotgraph(
         rates: tuple[float, ...] = tuple(map(
             partial(calc_net_rate, T=chem_cfg.T, A=chem_cfg.A, kb=chem_cfg.kb)
             , u_react))
-        e_widths: Iterator[float] = tuple(map(
-            lambda x: (
-                x * (graph_cfg.edge.max_width - graph_cfg.edge.width)
-                + graph_cfg.edge.width)
+
+        def e_width_aux(x: float) -> float:
+            assert graph_cfg.edge.max_width is not None
+            return x * (graph_cfg.edge.max_width - graph_cfg.edge.width) + graph_cfg.edge.width
+
+        e_widths: Iterator[float] = map(
+            e_width_aux
             , map(
                 normalizer(*minmax(map(abs, rates)))
                 , rates)
-        ))
+        )
         e_dir = map(lambda x: x < 0, rates)
 
     return Graph(

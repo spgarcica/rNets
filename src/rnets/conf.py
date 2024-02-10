@@ -93,7 +93,7 @@ def __tuple_modifier[T: tuple](
         )
 
     match args:
-        case ():
+        case tuple() if len(args) == 0:
             return NamedTupleMemberModifier(
                 check=lambda x: isinstance(x, origin) and len(x) == 0
             )

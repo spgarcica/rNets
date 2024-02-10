@@ -17,7 +17,7 @@ test:
 	$(VENV_NAME)/bin/python -m unittest discover -s tests -p "*_test.py"
 
 pyright:
-	$(VENV_NAME)/bin/pip install pyright
+	$(VENV_NAME)/bin/pip install -U pyright
 	$(VENV_NAME)/bin/pyright src/rnets
 
 clean:
