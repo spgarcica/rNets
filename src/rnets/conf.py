@@ -49,10 +49,10 @@ class NamedTupleMemberInfo[T](NamedTuple):
 type NamedTupleMembersMappingValue[T] = NamedTupleMemberInfo[T] | NamedTupleInfo
 
 
-class NamedTupleInfo(NamedTuple):
+class NamedTupleInfo[T: type[NamedTupleProtocol]](NamedTuple):
     """Metadata about named tuple itself"""
 
-    origin: type[NamedTupleProtocol]
+    origin: T
     members: dict[str, NamedTupleMembersMappingValue]
 
 
@@ -65,7 +65,7 @@ class NamedTupleMemberModifier[T](NamedTuple):
     transform: Callable[[Any], T] = _id
 
 
-type TypeModifiersDict = Mapping[type, NamedTupleMemberModifier]
+type TypeModifiersDict = Mapping[type | TypeAliasType, NamedTupleMemberModifier]
 
 
 def __singular_modifier[T](
@@ -178,9 +178,7 @@ def resolve_type(
 ) -> NamedTupleMemberModifier:
     while True:
         if type_modifiers is not None and t in type_modifiers:
-            # TypeAliasTypes aren't usually type subclasses, but when they
-            # are Literals they are, l -- type
-            return type_modifiers[typing.cast(type, t)]
+            return type_modifiers[t]
 
         if not isinstance(t, TypeAliasType):
             break
@@ -232,11 +230,11 @@ def resolve_type(
     )
 
 
-def named_tuple_info(
-    named_tuple: type[NamedTupleProtocol],
+def named_tuple_info[T: type[NamedTupleProtocol]](
+    named_tuple: T,
     *,
     type_modifiers: TypeModifiersDict | None = None,
-) -> NamedTupleInfo:
+) -> NamedTupleInfo[T]:
     if type_modifiers is None:
         type_modifiers = {}
 
@@ -275,7 +273,9 @@ def named_tuple_info(
     )
 
 
-def recreate_named_tuple(info: NamedTupleInfo, d: dict[str, Any]) -> NamedTupleProtocol:
+def recreate_named_tuple[T: type[NamedTupleProtocol]](
+    info: NamedTupleInfo[T], d: Mapping[str, Any]
+) -> T:
     for k in d:
         if k not in info.members:
             raise ValueError(
@@ -283,9 +283,9 @@ def recreate_named_tuple(info: NamedTupleInfo, d: dict[str, Any]) -> NamedTupleP
                 f"in the context of {info.origin.__name__} section"
             )
 
-    def check_and_return[T](
-        key: str, value: T | None, info: NamedTupleMemberInfo[T]
-    ) -> T:
+    def check_and_return[K](
+        key: str, value: K | None, info: NamedTupleMemberInfo[K]
+    ) -> K:
         if value is None:
             if NamedTupleMemberFlag.OPTIONAL not in info.flags:
                 raise ValueError(
