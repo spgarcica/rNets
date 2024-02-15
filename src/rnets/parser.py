@@ -260,7 +260,7 @@ def parse_lines(
         s (str): String to parse.
         h (:obj:`StrEnum`): Possible column values.
         r (set of str): Required column values.
-        fn (:obj:`Callable`[int, str, S] -> T): Function to parse a single line.
+        fn (:obj:`Callable[int, str, S] -> T`): Function to parse a single line.
 
     Returns:
         tuple of T: Where T with the parsed values. Where T is the output type
