@@ -56,7 +56,7 @@ def rgb_to_hexstr(
         str: Color string with the RRGGBB form.
 
     Note:
-        Note that :obj:`Color` follows the :obj:`colorsys representation,
+        Note that :obj:`Color` follows the :obj:`colorsys` representation,
             meaning that it consists of 3 float values ranging from [0, 1].
     """
     return ('#' * inc_hash
@@ -81,7 +81,7 @@ def hexstr_to_rgb(
         None: If the conversion fails.
 
     Note:
-        Note that :obj:`Color` follows the :obj:`colorsys representation,
+        Note that :obj:`Color` follows the :obj:`colorsys` representation,
             meaning that it consists of 3 float values ranging from [0, 1].
     """
     if len(s) != 7 or s[0] != '#':
@@ -301,7 +301,7 @@ def interp_fn_cspace(
             colorspaces.
 
     Note:
-        The :arg:`origin` and :arg:`target` take 3 floats as input for
+        The :obj:`origin` and :obj:`target` take 3 floats as input for
         to ease the integration with the colorsys library.
     """
     cs_hls: Sequence[Color] = tuple(starmap(target, cs))

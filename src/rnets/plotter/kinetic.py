@@ -42,7 +42,7 @@ def filter_unique_react(
            filtered.
 
     Returns:
-        Tuple containing the unique :obj:`Reaction`s.
+        Tuple containing the unique :obj:`Reaction` s.
     """
     def r_fn(xs: tuple[Reaction, ...], x: Reaction) -> tuple[Reaction, ...]:
         cmp_hash: int = hash(tuple(reversed(x.compounds)))
@@ -59,6 +59,7 @@ def build_dotgraph(
 ) -> Graph:
     """Build a kinetic dotgraph from a reaction network.
 
+    Args:
         nw (:obj:`Network`): Network object to be converted into dot graph.
         graph_cfg (:obj:`GraphCfg`, optional): Graphviz configuration. Defaults
             to :obj:`ChemCfg`

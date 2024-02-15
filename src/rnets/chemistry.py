@@ -51,26 +51,28 @@ def build_chemcfg(
 ) -> ChemCfg:
     """Wrapper to build a ChemCfg taking into account pre-known constant values.
 
-    Attributes:
+    Args:
         T (float): Temperature of the chemical system in Kelvin. Defaults to
             the standard temperature (:obj:`DEF_T`.).
         e_units (str, optional): Energy units. Defaults to "eV".
-        kb: (float): Boltzmann constat. If None, its value will be search at
+        kb (float): Boltzmann constat. If None, its value will be search at
             :obj:`CONSTANTS`. If the constant is not found, a
             :obj:`NotImplementedError` will be raised.
-        h: (float): Planck constat. In case :arg:`h` and :arg:`A` are None, its
+        h (float): Planck constat. In case :obj:`h` and :obj:`A` are None, its
             value will be search at :obj:`CONSTANTS` based on the provided
             units. If the constant is not found, a :obj:`NotImplementedError`
             will be raised. Defaults to None
-        A: (float): Arrhenius pre-exponential factor. If not provided, it
+        A (float): Arrhenius pre-exponential factor. If not provided, it
             will be computed with kb and h.
 
     Returns:
-        :obj:`ChemCfg` with the given configuration.
+        :obj:`ChemCfg` 
+        with the given configuration.
 
     Raises:
-        :obj:`NotADirectoryError` if a constant is not provided and is not
-        found in :obj:`CONSTANTS` for the given units (:arg:`e_units`)
+        :obj:`NotADirectoryError`  
+            if a constant is not provided and is not found in :obj:`CONSTANTS` 
+            for the given units (:obj:`e_units`)
     """
     if kb is None:
         if CONSTANTS["kb"].get(e_units) is None:

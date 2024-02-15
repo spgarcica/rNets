@@ -2,12 +2,12 @@
 """Utility module for plotting reactions/compounds/networks dotfiles.
 
 Attributes:
-    C_WHITE (obj:`Color`): Default white color.
-    C_BLACK (obj:`Color`): Default black color.
-    COLORSCH (sequence of obj:`Color`): Default colorscheme.
-    GRAPH_ATTR_DEF (obj:`Opts`): Default graph global attributes.
-    NODE_ATTR_DEF (obj:`Opts`): Default node global attributes.
-    EDCE_ATTR_DEF (obj:`Opts`): Default edge global attributes.
+    C_WHITE (:obj:`Color`): Default white color.
+    C_BLACK (:obj:`Color`): Default black color.
+    COLORSCH (sequence of :obj:`Color`): Default colorscheme.
+    GRAPH_ATTR_DEF (:obj:`Opts`): Default graph global attributes.
+    NODE_ATTR_DEF (:obj:`Opts`): Default node global attributes.
+    EDCE_ATTR_DEF (:obj:`Opts`): Default edge global attributes.
     BOX_TMP (str): HTML box template.
     LABEL_TMP (str): HTML label template.
  """
@@ -173,8 +173,9 @@ def color_interp(
             perform. Check :obj:`ColorSpace` for available values.
 
     Returns:
-        Callable[[float], :obj:`Color`]: A function that takes a float as input
-            an returns a :obj:`Color` as output.
+        :obj:`Callable[[float], Color]`: 
+            A function that takes a float as input an returns a :obj:`Color` 
+            as output.
 
     Notes:
         The normalizer is set for the input network and thus, if an energy
@@ -201,7 +202,8 @@ def fformat_to_html(
         f (:obj:`FFlags`): FFlags to convert.
 
     Returns:
-       :obj:`HTMLFormat`: HTML format conversion.
+       :obj:`HTMLFormat`: 
+           HTML format conversion.
     """
     match f:
         case FFlags.I: return HTMLFormat.Italic
@@ -269,9 +271,9 @@ def gen_react_arrows(
         pt (sequence of :obj:`Compound`): Compounds acting as products.
 
     Returns:
-        :obj:Iterator[tuple[:obj:`Compound`, :obj:`Compound`]]: A consumable
-            iterator with all the (react, product) combinations excluding
-            the ones with non visible compounds.
+        :obj:`Iterator[tuple[Compound, Compound]]`: 
+            A consumable iterator with all the (react, product) combinations 
+            excluding the ones with non visible compounds.
 
     Note:
         To avoid duplicated edges due to duplicated compounds, e.g. 2H + 2O ->
@@ -297,9 +299,10 @@ def build_dotnode(
             (:obj:`C_BLACK`).
 
     Returns:
-        :obj:`Node`: Dot node with the given font and background colors.
+        :obj:`Node`: 
+            Dot node with the given font and background colors.
             Inherits applies the format flags and the dot opts in
-           :obj:`Compound`.
+            :obj:`Compound`.
 
     Note:
         To allow custom labels, this function will check for "label" in
@@ -339,6 +342,9 @@ def build_dotedge(
         c (:obj:`Color` or None, optional): Color of edge. Defaults to None.
         w (float or None, optional): Edge width. Defaults to None.
 
+    Returns:
+        :obj:`Edge`:
+        
     Note:
         None values will not be defined in the generated file and default
         Graphviz values will be used. Opts overrides color and width
@@ -372,9 +378,9 @@ def build_dotedges(
             and the products.
 
     Returns:
-        :obj:`Iterator`[:obj:`Edge`]: Iterator with the generated dot
-            :obj:`Edge` corresponding to the :obj:`Reaction` with the given
-            width and color.
+        :obj:`Iterator[Edge]`: 
+            Iterator with the generated dot :obj:`Edge` corresponding to the 
+            :obj:`Reaction` with the given width and color.
     """
     sel_col: Color | None
     match (color, r.visible):
@@ -413,9 +419,9 @@ def nodecolor_sel(
             a value between 0. and 1. Defaults to None.
 
     Returns:
-        :obj`Callable`[[:obj:`Compound`], tuple[:obj:`Color`, :obj:`Color`]:
+        :obj:`Callable(Compound) -> tuple[Color, Color]` :
             A function that given a :obj:`Compound` returns a tuple of two
-            :obj:`Color`s, the first being the background color and the second
+            :obj:`Color` s, the first being the background color and the second
             one being the color of the font.
     """
     if fg_alt:
@@ -443,9 +449,10 @@ def build_glob_opt(
         cfg (:obj:`GraphCfg`): Configuration to use to generate the dictionary.
 
     Returns:
-        :obj:`OptsGlob`: With the given dictionary. Using graph, node and edge
+        :obj:`OptsGlob`: 
+            With the given dictionary. Using graph, node and edge
             as keys and their corresponding :obj:`Opts` as values.
-        None: If no Opts are found.
+            None: If no Opts are found.
     """
     # After dealing with the type checker, this is the less problematic
     # solution to convince it that there are no None values in the dictionary.
