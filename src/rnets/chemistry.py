@@ -58,7 +58,7 @@ def build_chemcfg(
         kb: (float): Boltzmann constat. If None, its value will be search at
             :obj:`CONSTANTS`. If the constant is not found, a
             :obj:`NotImplementedError` will be raised.
-        h: (float): Planck constat. In case :arg:`h` and :arg:`A` are None, its
+        h (float): Planck constat. In case :obj:`h` and :obj:`A` are None, its
             value will be search at :obj:`CONSTANTS` based on the provided
             units. If the constant is not found, a :obj:`NotImplementedError`
             will be raised. Defaults to None
@@ -69,8 +69,7 @@ def build_chemcfg(
         :obj:`ChemCfg` with the given configuration.
 
     Raises:
-        :obj:`NotADirectoryError` if a constant is not provided and is not
-        found in :obj:`CONSTANTS` for the given units (:arg:`e_units`)
+            for the given units (:obj:`e_units`)
     """
     if kb is None:
         if CONSTANTS["kb"].get(e_units) is None:

@@ -2,12 +2,12 @@
 """Utility module for plotting reactions/compounds/networks dotfiles.
 
 Attributes:
-    C_WHITE (obj:`Color`): Default white color.
-    C_BLACK (obj:`Color`): Default black color.
-    COLORSCH (sequence of obj:`Color`): Default colorscheme.
-    GRAPH_ATTR_DEF (obj:`Opts`): Default graph global attributes.
-    NODE_ATTR_DEF (obj:`Opts`): Default node global attributes.
-    EDCE_ATTR_DEF (obj:`Opts`): Default edge global attributes.
+    C_WHITE (:obj:`Color`): Default white color.
+    C_BLACK (:obj:`Color`): Default black color.
+    COLORSCH (sequence of :obj:`Color`): Default colorscheme.
+    GRAPH_ATTR_DEF (:obj:`Opts`): Default graph global attributes.
+    NODE_ATTR_DEF (:obj:`Opts`): Default node global attributes.
+    EDCE_ATTR_DEF (:obj:`Opts`): Default edge global attributes.
     BOX_TMP (str): HTML box template.
     LABEL_TMP (str): HTML label template.
  """

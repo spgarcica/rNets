@@ -146,8 +146,8 @@ def parse_compounds(
     Args:
         s (str): String containing the header and the compounds separated by
             new lines.
-        req (set of :opt:`CompoundCol`, optional): Required header values.
-            Defaults to :opt:`REQ_COMP_COL`.
+        req (set of :obj:`CompoundCol`, optional): Required header values.
+            Defaults to :obj:`REQ_COMP_COL`.
 
     Returns:
         tuple of :obj:`Compound`: A tuple containing the parsed compounds.
