@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["rnets"]
+include = ["rnets","rnets.plotter","rnets.colors"]
 
 [project]
 name = "rnets"
