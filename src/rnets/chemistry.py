@@ -232,6 +232,10 @@ def normalizer(
     """
     rang: float = e - s
 
+    if rang == 0:
+        def norm(x: float) -> float: return 0
+        return norm
+
     def norm(
         x: float
     ) -> float:
