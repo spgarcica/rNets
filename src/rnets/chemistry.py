@@ -317,7 +317,6 @@ def network_energy_normalizer(
         , (n.compounds, n.reactions)
     ))))
 
-
 def network_conc_normalizer(
     nw: Network
 ) -> Callable[[float], float]:
@@ -331,8 +330,8 @@ def network_conc_normalizer(
         Callable[[float], float]: Function that normalizes a float using
         minimum and maximum values of the network and an offset
     """
-    def f_none(xs: Sequence[float | None]) -> Iterator[float]:
-        return filter(lambda x: x is not None, xs)
+    def f_none[T](xs: Iterable[T | None]) -> Iterable[T]:
+        return (x for x in xs if x is not None)
 
     return normalizer(*minmax(starmap(
             getattr

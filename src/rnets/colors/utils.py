@@ -14,8 +14,8 @@ from colorsys import rgb_to_hls, hls_to_rgb
 from itertools import repeat, starmap
 from typing import Literal
 
-Color = tuple[float, float, float]
-ColorSpace = Literal["rgb", "lab", "hsl"]
+type Color = tuple[float, float, float]
+type ColorSpace = Literal["rgb", "lab", "hsl"]
 
 
 def ensure_color(

@@ -12,13 +12,7 @@ from enum import auto, StrEnum
 from functools import reduce
 from itertools import chain
 from pathlib import Path
-from typing import TypeVar
-
 from .struct import Compound, FFlags, Network, Reaction, Visibility
-
-S = TypeVar('S', bound=StrEnum)
-T = TypeVar('T')
-O = TypeVar('O')
 
 
 class CompoundCol(StrEnum):
@@ -86,7 +80,7 @@ def assure_compound(
             f"Compound of name {cn} in reactions not found in compounds"
         )
 
-def apply_maybe(
+def apply_maybe[T, O](
     fn: Callable[[T,], O]
     , s: T | None
 ) -> O | None:
@@ -248,7 +242,7 @@ def parse_fflags(
         , list(FFlags)))
 
 
-def parse_lines(
+def parse_lines[T, S: StrEnum](
     s: str
     , h: type[S]
     , r: set[S]

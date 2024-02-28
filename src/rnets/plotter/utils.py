@@ -32,13 +32,13 @@ from ..colors.utils import (
     , interp_cs
     , rgb_to_hexstr
 )
-from ..colors.colorschemes import VIRIDIS
+from ..colors.colorschemes import VIRIDIS, Colorscheme
 from ..colors.palettes import css
 
 
 C_WHITE: Color = css["white"]
 C_BLACK: Color = css["black"]
-COLORSCH: Sequence[Color] = VIRIDIS
+COLORSCH: Colorscheme = VIRIDIS
 
 GRAPH_ATTR_DEF: Opts = {
     "rankdir": 'TB'
@@ -148,7 +148,7 @@ class GraphCfg(NamedTuple):
     """
     opts: Opts | None = GRAPH_ATTR_DEF
     kind: str = "digraph"
-    colorscheme: Sequence[Color] = COLORSCH
+    colorscheme: Colorscheme = COLORSCH
     color_offset: tuple[float, float] = (0., 0.)
     node: NodeCfg = NodeCfg()
     edge: EdgeCfg = EdgeCfg()

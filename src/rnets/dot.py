@@ -20,8 +20,8 @@ from typing import NamedTuple
 from enum import auto, StrEnum
 
 
-Opts = dict[str, str]
-OptsGlob = dict[str, Opts]
+type Opts = dict[str, str]
+type OptsGlob = dict[str, Opts]
 
 IDENT = 4
 SEP_S_LV = '\n' * 2
