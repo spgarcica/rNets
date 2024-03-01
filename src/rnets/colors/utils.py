@@ -339,6 +339,23 @@ def interp_fn_rgb_hls(
         , cyclic=(True, False, False))
 
 
+def adjust_range(
+    x: float
+) -> float:
+    """Given an float, adjust it to the [0., 1.] interval, making underflow
+    values 0 and overflow values 1.
+
+    Args:
+        x (float): Value to adjust.
+
+    Returns:
+        Adjusted float value.
+    """
+    if x < 0.: return 0.
+    if x > 1.: return 1.
+    else: return x
+
+
 def interp_fn_rgb_lab(
     cs: Sequence[Color]
 ) -> Callable[[float], Color]:
@@ -358,6 +375,9 @@ def interp_fn_rgb_lab(
 
     Note:
         D65 illuminant. Gamma correction assuming sRGB.
+        Sometimes the obtained color components are negative numbers near to
+        0. To assure that the colors are within the [0., 1.] interval,
+        :func:`adjust_range` is applied to the output values.
 
     References:
         CIE Colorimetry 15 (Third ed.). CIE. 2004. ISBN 3-901-906-33-9.
@@ -378,7 +398,7 @@ def interp_fn_rgb_lab(
         , b: float
     ) -> Color:
         r, g, b = map(
-            lambda x: unapply_gamma(x, None, 1)
+            lambda x: adjust_range(unapply_gamma(x, None, 1))
             , xyz_to_rgb(*lab_to_xyz(l, a, b)))
         return (r, g, b)
 
@@ -420,7 +440,7 @@ def unapply_gamma(
     , g: float | None = None
     , A: float = 1.
 ) -> float:
-    """Unapply gammag to color component.
+    """Unapply gamma to color component.
 
     Args:
         x (float): Component to which the Gamma will be unaapplied.
