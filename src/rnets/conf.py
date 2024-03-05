@@ -1,27 +1,27 @@
 # -*- coding: utf-8 -*-
-from collections.abc import Sequence, Mapping, Callable, Generator
+import inspect
+import typing
+from abc import abstractmethod
+from collections.abc import Callable, Generator, Mapping, Sequence
 from enum import EnumType, Flag, auto
 from types import UnionType
-import typing
 from typing import (
     Any,
     NamedTuple,
-    NoReturn,
+    NotRequired,
     Protocol,
+    Self,
     TypeAliasType,
+    TypedDict,
     Union,
+    Unpack,
     runtime_checkable,
 )
-import inspect
 
 
-def _id[T](x: T) -> T:
+def _id[T](x: T, **kwargs) -> T:
+    _ = kwargs
     return x
-
-
-# TODO: maybe extract to some utils?
-def error(exception: Exception | None = None) -> NoReturn:
-    raise exception or ValueError()
 
 
 @runtime_checkable
@@ -37,12 +37,33 @@ class NamedTupleMemberFlag(Flag):
     OPTIONAL = auto()
 
 
+class NamedTupleMemberModifierKwargs[T](TypedDict):
+    key: NotRequired[str]
+    default: NotRequired[T]
+
+
+class NamedTupleMemberModifierCheckCallback[T](Protocol):
+    @abstractmethod
+    def __call__(
+        self: Self, x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs[T]]
+    ) -> bool:
+        ...
+
+
+class NamedTupleMemberModifierTransformCallback[T](Protocol):
+    @abstractmethod
+    def __call__(
+        self: Self, x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs[T]]
+    ) -> T:
+        ...
+
+
 class NamedTupleMemberInfo[T](NamedTuple):
     """Metadata about named tuple member"""
 
     default: T
-    check: Callable[[Any], bool] = lambda _: True
-    transform: Callable[[Any], T] = _id
+    check: NamedTupleMemberModifierCheckCallback[T] = lambda x, **kwargs: True
+    transform: NamedTupleMemberModifierTransformCallback[T] = _id
     flags: NamedTupleMemberFlag = NamedTupleMemberFlag(0)
 
 
@@ -61,8 +82,8 @@ class NamedTupleMemberModifier[T](NamedTuple):
     modifiers map
     """
 
-    check: Callable[[Any], bool]
-    transform: Callable[[Any], T] = _id
+    check: NamedTupleMemberModifierCheckCallback[T]
+    transform: NamedTupleMemberModifierTransformCallback[T] = _id
 
 
 type TypeModifiersDict = Mapping[type | TypeAliasType, NamedTupleMemberModifier]
@@ -74,7 +95,7 @@ def __singular_modifier[T](
     if t in type_modifiers:
         return type_modifiers[t]
 
-    return NamedTupleMemberModifier(lambda x: isinstance(x, t))
+    return NamedTupleMemberModifier(lambda x, **kwargs: isinstance(x, t))
 
 
 def __tuple_modifier[T: tuple](
@@ -82,20 +103,22 @@ def __tuple_modifier[T: tuple](
 ) -> NamedTupleMemberModifier[T]:
     ocheck, otransform = resolve_type(origin, type_modifiers=type_modifiers)
 
-    otransform = tuple if otransform is _id else otransform
+    otransform: NamedTupleMemberModifierTransformCallback = (
+        lambda x, **kwargs: tuple(x) if otransform is _id else otransform
+    )
 
-    def check(x: Any) -> bool:
-        return ocheck(x) and all(mod.check(i) for i, mod in zip(x, modifiers))
+    def check(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> bool:
+        return ocheck(x, **kwargs) and all(mod.check(i) for i, mod in zip(x, modifiers))
 
-    def transform(x: Any) -> T:
+    def transform(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> T:
         return typing.cast(
-            T, otransform(mod.transform(i) for i, mod in zip(x, modifiers))
+            T, otransform((mod.transform(i) for i, mod in zip(x, modifiers)), **kwargs)
         )
 
     match args:
         case tuple() if len(args) == 0:
             return NamedTupleMemberModifier(
-                check=lambda x: isinstance(x, origin) and len(x) == 0
+                check=lambda x, **kwargs: isinstance(x, origin) and len(x) == 0
             )
 
         case (t, el) if el is ...:
@@ -118,10 +141,12 @@ def __sequence_modifier[T](
         else otransform
     )
 
-    def check(x: Any) -> bool:
+    def check(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> bool:
+        _ = kwargs
         return ocheck(x) and all(acheck(i) for i in x)
 
-    def transform(x: Any) -> T:
+    def transform(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> T:
+        _ = kwargs
         return typing.cast(T, otransform(atransform(i) for i in x))
 
     return NamedTupleMemberModifier(check, transform)
@@ -141,12 +166,17 @@ def __mapping_modifier[T](
         else otransform
     )
 
-    def check(x: Any) -> bool:
-        return ocheck(x) and all(kcheck(k) and vcheck(v) for k, v in x.items())
+    def check(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> bool:
+        return ocheck(x, **kwargs) and all(
+            kcheck(k) and vcheck(v) for k, v in x.items()
+        )
 
-    def transform(x: Any) -> T:
+    def transform(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> T:
         return typing.cast(
-            T, otransform((ktransform(k), vtransform(v)) for k, v in x.items())
+            T,
+            otransform(
+                ((ktransform(k), vtransform(v)) for k, v in x.items()), **kwargs
+            ),
         )
 
     return NamedTupleMemberModifier(check, transform)
@@ -158,13 +188,13 @@ def __union_modifier[T](
     _ = origin
     modifiers = [resolve_type(at, type_modifiers=type_modifiers) for at in args]
 
-    def check(x: Any) -> bool:
-        return any(check(x) for check, _ in modifiers)
+    def check(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> bool:
+        return any(check(x, **kwargs) for check, _ in modifiers)
 
-    def transform(x: Any) -> T:
+    def transform(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> T:
         for check, trans in modifiers:
-            if check(x):
-                return trans(x)
+            if check(x, **kwargs):
+                return trans(x, **kwargs)
 
         raise ValueError("It shouldn't pop, but if pops, then there is a problem")
 
@@ -186,18 +216,22 @@ def resolve_type(
         t = t.__value__
 
     if t is Any:
-        return NamedTupleMemberModifier(lambda _: True)
+        return NamedTupleMemberModifier(lambda x, **kwargs: True)
 
     if t is float:
         # sincerely, python typing system is a mess, and in typing world
         # int is a subclass of float, but in real world it's not true, but
         # writing 3 instead of 3.0 is kinda fancy
         return NamedTupleMemberModifier(
-            lambda x: isinstance(x, (int, float)), lambda x: float(x)
+            lambda x, **kwargs: isinstance(x, (int, float)),
+            lambda x, **kwargs: float(x),
         )
 
     if isinstance(t, EnumType):
-        return NamedTupleMemberModifier(lambda x: x in t.__members__, t.__members__.get)
+        return NamedTupleMemberModifier(
+            lambda x, **kwargs: x in t.__members__,
+            lambda x, **kwargs: t.__members__.get,
+        )
 
     origin = typing.get_origin(t)
     args = typing.get_args(t)
@@ -293,12 +327,19 @@ def recreate_named_tuple[T: type[NamedTupleProtocol]](
                 )
             return info.default
 
-        if not info.check(value):
+        kwargs = {
+            "key": key,
+            "default": info.default,
+        }
+        if not info.check(value, **(kwargs.copy())):
             raise ValueError(
                 f"It seems {key} isn't passing check\nGot {value!r} while parsing"
             )
 
-        return info.transform(value) if info.transform is not None else value
+        if info.transform is None:
+            return value
+
+        return info.transform(value, **kwargs)
 
     return info.origin(
         **{
