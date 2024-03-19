@@ -1,0 +1,27 @@
+[graph]
+kind = "digraph"  # Graph kind, digraph almost all the time.
+colorscheme = ["#151515", "white"]  # Either name or list of colors (see ./src/color)
+color_offset = [0.5, -0.5]  
+
+[graph.node]
+box_tmp = ""  # Use "" for None values, or do not specify it
+font_color = "#000000"   # Black
+font_color_alt = "#ffffff"  # White
+font_lum_threshold = 0.5
+
+[graph.edge]
+solid_color = "" 
+width = 1  # Minimum width of the arrows
+max_width = 5  # Maximum width of the arrows
+temperature = 273.15  # Temperature to compute the kinetic constant
+
+
+# Now the dotgraph specific options
+# https://graphviz.org/doc/info/attrs.html
+[graph.opts]
+rankdir = "TB"
+ranksep = 0.2
+nodesep = 0.2
+
+[graph.node.opts]
+shape = "plaintext"

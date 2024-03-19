@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["rnets","rnets.plotter","rnets.colors"]
+
+[project]
+name = "rnets"
+version = "24.01"
+dependencies = []
+requires-python = ">=3.12"
+authors = [
+    {name = "Sergio Pablo-Garcia", email = "spgarcica@gmail.com"},
+    {name = "Raul Perez Soto", email = "rperezsoto.research@gmail.com"},
+    {name = "wvlab"}
+]
+maintainers = [
+    {name = "Sergio Pablo-Garcia", email = "spgarcica@gmail.com"}
+]
+description = "Rnets software for the visualization of reaction networks"
+readme = "README.md"
+license  = {file = "LICENSE"}
+keywords = ["dot", "graphviz", "reaction", "networks", "chemistry", "reactivity"]
+classifiers = [
+    "Programming Language :: Python"
+]
+
+[project.urls]
+homepage = "https://codeberg.org/spgarcica/rNets"
+repository = "https://codeberg.org/spgarcica/rNets"
+
+[project.scripts]
+rnets = "rnets.__main__:run"
