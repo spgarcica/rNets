@@ -109,12 +109,7 @@ def build_dotgraph(
         e_dir = map(lambda x: x < 0, rates)
 
     return Graph(
-        kind=graph_cfg.kind
-<<<<<<< HEAD
-        , nodes=tuple(map(
-=======
-        , nodes=tuple(map(n
->>>>>>> 05443bf511c6f03959420ada8941611afe95ec10
+        kind=graph_cfg.kind, nodes=tuple(map(
             lambda c: build_dotnode(c, *n_color_fn(c.conc, c.visible))
             , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
         ))
