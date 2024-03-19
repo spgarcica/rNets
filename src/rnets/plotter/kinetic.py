@@ -89,6 +89,7 @@ def build_dotgraph(
     e_dir: Iterator[bool]
     if graph_cfg.edge.max_width is None:
         e_widths = repeat(graph_cfg.edge.width)
+        # TODO: Draw it with lines
         e_dir = repeat(False)
     else:
         rates: tuple[float, ...] = tuple(map(
@@ -109,7 +110,7 @@ def build_dotgraph(
 
     return Graph(
         kind=graph_cfg.kind
-        , nodes=tuple(map(
+        , nodes=tuple(map(n
             lambda c: build_dotnode(c, *n_color_fn(c.conc, c.visible))
             , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
         ))

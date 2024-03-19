@@ -204,10 +204,11 @@ def calc_net_rate(
                 , T, A, kb)
             , (False, True))
 
-    return sum(starmap(
+    d, i = starmap(
         lambda r, k: reduce(lambda x, y: x*y, (k,) + r, 1)
         , zip(rr, ks)
-    ))
+    )
+    return d - i
 
 
 def normalizer(
@@ -293,6 +294,7 @@ def minmax(
              to create two maps and then search for the min and max.
     """
     ys: tuple[float, ...] = tuple(xs)
+
     return (min(ys), max(ys))
 
 
