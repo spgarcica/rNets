@@ -1,0 +1,6 @@
+To run the example:
+python RNets_KG_Parser.py comps.csv reactions.csv CycOct.owl --reference EpOr+CO2+TMABr --hidden-species CO2,TMA,TMABr
+
+Energies are computed automatically from the knowledge graph, using the three selected species as reference and hiding the auxiliary species.
+
+Requires rdflib and owlready2 to process and query the knowledge graph

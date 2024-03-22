@@ -1,0 +1,7 @@
+To use this script type:
+
+python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx Pd_reac.csv -in_comp Pd_g.mkm -in_rx rm.mkm -in_theta theta.csv
+
+For further information type:
+
+python parser_visual.py -h

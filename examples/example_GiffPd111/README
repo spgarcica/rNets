@@ -1,0 +1,13 @@
+To generate the Supporting Gif, first generate all the required .dot graphs from the microkinetick ouputs.
+
+To do so, run the do_graphs.sh script by typing:
+
+chmod u+x do_graphs.sh
+
+./do_graphs.sh
+
+Afterwards, type:
+
+cd graphs/scripts/
+
+Once you are there, read the following README
