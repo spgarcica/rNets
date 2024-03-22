@@ -7,9 +7,11 @@ Summary of the project
 
 .. toctree::
    :maxdepth: 3
-   :caption: Installation
+   :caption: Quick Start
 
-   installation
+   quick_start/installation
+   quick_start/basic_usage
+   quick_start/file_formats
 
 .. toctree::
    :maxdepth: 3

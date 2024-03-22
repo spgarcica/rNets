@@ -10,7 +10,7 @@ rnets
    rnets.dot
    rnets.parser
    rnets.plotter
-..   rnets.struct
+   rnets.struct
 
 
 

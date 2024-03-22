@@ -2,3 +2,5 @@
 src/rnets.egg-info/
 *.py[cod]
 __pycache__
+build
+sphinx/_build
