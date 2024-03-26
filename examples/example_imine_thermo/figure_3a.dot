@@ -1,0 +1,596 @@
+strict digraph {
+
+    graph [
+        rankdir=TB,
+        ranksep=0.5,
+        nodesep=0.25
+    ];
+    
+    node [
+        shape=plaintext,
+        style=filled
+    ];
+    
+    edge [
+        weight=2.
+    ];
+
+
+    "A" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>A</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#45085b"
+    ];
+    
+    "N" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>N</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#45085b"
+    ];
+    
+    "W" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>W</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#45085b"
+    ];
+    
+    "[N+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[N+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#471264"
+    ];
+    
+    "[A+N+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[A+N+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#3f4687"
+    ];
+    
+    "[N+W+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[N+W+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#482071"
+    ];
+    
+    "[A+N+N+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[A+N+N+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#3a518a"
+    ];
+    
+    "[A+N+W+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[A+N+W+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#404386"
+    ];
+    
+    "[H+N+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[H+N+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#33628d"
+    ];
+    
+    "[H+W+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[H+W+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#39538b"
+    ];
+    
+    "I" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>I</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#430153"
+    ];
+    
+    "[I+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[I+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#471365"
+    ];
+    
+    "[I+W+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[I+W+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#472374"
+    ];
+    
+    "[I+N+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[I+N+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#462f7c"
+    ];
+    
+    "[I+N+W+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[I+N+W+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#443781"
+    ];
+    
+    "[I+W+W+W]" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>[I+W+W+W]</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#443680"
+    ];
+
+
+    "[N+W]" -> "N"[
+        color="#3f4688",
+        penwidth=1.0227662062018008
+    ];
+    
+    "[N+W]" -> "W"[
+        color="#3f4688",
+        penwidth=1.0227662062018008
+    ];
+    
+    "N" -> "[N+W]"[
+        color="#3f4688",
+        penwidth=1.0014817434811094
+    ];
+    
+    "W" -> "[N+W]"[
+        color="#3f4688",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[A+N+W]" -> "A"[
+        color="#31658d",
+        penwidth=4.999999999999986
+    ];
+    
+    "[A+N+W]" -> "[N+W]"[
+        color="#31658d",
+        penwidth=4.999999999999986
+    ];
+    
+    "A" -> "[A+N+W]"[
+        color="#31658d",
+        penwidth=1.0000002393638558
+    ];
+    
+    "[N+W]" -> "[A+N+W]"[
+        color="#31658d",
+        penwidth=1.0000002393638558
+    ];
+    
+    "[A+N+W]" -> "N"[
+        color="#31658d",
+        penwidth=4.999999999999986
+    ];
+    
+    "N" -> "[A+N+W]"[
+        color="#31658d",
+        penwidth=1.0000329764057996
+    ];
+    
+    "[N+W+W]" -> "N"[
+        color="#38568b",
+        penwidth=1.0056950738212538
+    ];
+    
+    "N" -> "[N+W+W]"[
+        color="#38568b",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[A+N+W]" -> "W"[
+        color="#31668d",
+        penwidth=4.176555392051451
+    ];
+    
+    "W" -> "[A+N+W]"[
+        color="#31668d",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[N+W+W]" -> "W"[
+        color="#3c4e8a",
+        penwidth=1.1067445454868081
+    ];
+    
+    "[N+W+W]" -> "[N+W]"[
+        color="#3c4e8a",
+        penwidth=1.1067445454868081
+    ];
+    
+    "W" -> "[N+W+W]"[
+        color="#3c4e8a",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[N+W]" -> "[N+W+W]"[
+        color="#3c4e8a",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[A+N+N+W]" -> "[N+W]"[
+        color="#2d6e8d",
+        penwidth=4.999999999999993
+    ];
+    
+    "[N+W]" -> "[A+N+N+W]"[
+        color="#2d6e8d",
+        penwidth=1.0006771745430434
+    ];
+    
+    "[A+N+W+W]" -> "[N+W]"[
+        color="#32628d",
+        penwidth=4.999999999999993
+    ];
+    
+    "[N+W]" -> "[A+N+W+W]"[
+        color="#32628d",
+        penwidth=1.0014536632272353
+    ];
+    
+    "[H+W+W]" -> "[A+N+W+W]"[
+        color="#1f958b",
+        penwidth=1.0000009190945094
+    ];
+    
+    "[A+N+W+W]" -> "[H+W+W]"[
+        color="#1f958b",
+        penwidth=1.0000000029537122
+    ];
+    
+    "[H+N+W]" -> "[A+N+N+W]"[
+        color="#20a385",
+        penwidth=1.0000005755541777
+    ];
+    
+    "[A+N+N+W]" -> "[H+N+W]"[
+        color="#20a385",
+        penwidth=1.000000000939668
+    ];
+    
+    "[N+W]" -> "[H+N+W]"[
+        color="#26818d",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[H+N+W]" -> "[N+W]"[
+        color="#26818d",
+        penwidth=1.9202542347590927
+    ];
+    
+    "N" -> "[H+N+W]"[
+        color="#26808d",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[H+N+W]" -> "N"[
+        color="#26808d",
+        penwidth=2.355339247608523
+    ];
+    
+    "W" -> "[H+W+W]"[
+        color="#26808d",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[H+W+W]" -> "W"[
+        color="#26808d",
+        penwidth=1.0056688075560176
+    ];
+    
+    "[I+W+W+W]" -> "[H+W+W]"[
+        color="#24a982",
+        penwidth=1.0000000000000062
+    ];
+    
+    "[H+W+W]" -> "[I+W+W+W]"[
+        color="#24a982",
+        penwidth=1.0000000001659999
+    ];
+    
+    "[I+N+W+W]" -> "[H+N+W]"[
+        color="#26ac80",
+        penwidth=1.0000000000000024
+    ];
+    
+    "[H+N+W]" -> "[I+N+W+W]"[
+        color="#26ac80",
+        penwidth=1.000000011131713
+    ];
+    
+    "I" -> "[I+W]"[
+        color="#414186",
+        penwidth=1.0014817434811094
+    ];
+    
+    "W" -> "[I+W]"[
+        color="#414186",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+W]" -> "I"[
+        color="#414186",
+        penwidth=1.2239085374147352
+    ];
+    
+    "[I+W]" -> "W"[
+        color="#414186",
+        penwidth=1.2239085374147352
+    ];
+    
+    "I" -> "[I+W+W]"[
+        color="#3a518a",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+W+W]" -> "I"[
+        color="#3a518a",
+        penwidth=1.099134172865587
+    ];
+    
+    "[I+W]" -> "[I+W+W]"[
+        color="#3b4f8a",
+        penwidth=1.0014817434811094
+    ];
+    
+    "W" -> "[I+W+W]"[
+        color="#3b4f8a",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+W+W]" -> "[I+W]"[
+        color="#3b4f8a",
+        penwidth=1.188925131767661
+    ];
+    
+    "[I+W+W]" -> "W"[
+        color="#3b4f8a",
+        penwidth=1.188925131767661
+    ];
+    
+    "I" -> "[I+N+W]"[
+        color="#3a518a",
+        penwidth=1.0000793698738857
+    ];
+    
+    "[N+W]" -> "[I+N+W]"[
+        color="#3a518a",
+        penwidth=1.0000793698738857
+    ];
+    
+    "[I+N+W]" -> "I"[
+        color="#3a518a",
+        penwidth=4.999999999999986
+    ];
+    
+    "[I+N+W]" -> "[N+W]"[
+        color="#3a518a",
+        penwidth=4.999999999999986
+    ];
+    
+    "W" -> "[I+N+W]"[
+        color="#355c8c",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+N+W]" -> "W"[
+        color="#355c8c",
+        penwidth=1.0496110808966306
+    ];
+    
+    "N" -> "[I+N+W]"[
+        color="#3a518a",
+        penwidth=1.0007806128179204
+    ];
+    
+    "[I+W]" -> "[I+N+W]"[
+        color="#3a518a",
+        penwidth=1.0007806128179204
+    ];
+    
+    "[I+N+W]" -> "N"[
+        color="#3a518a",
+        penwidth=4.999999999999986
+    ];
+    
+    "[I+N+W]" -> "[I+W]"[
+        color="#3a518a",
+        penwidth=4.999999999999986
+    ];
+    
+    "I" -> "[I+N+W+W]"[
+        color="#37588c",
+        penwidth=1.0003911045704799
+    ];
+    
+    "[N+W+W]" -> "[I+N+W+W]"[
+        color="#37588c",
+        penwidth=1.0003911045704799
+    ];
+    
+    "[I+N+W+W]" -> "I"[
+        color="#37588c",
+        penwidth=4.999999999999993
+    ];
+    
+    "[I+N+W+W]" -> "[N+W+W]"[
+        color="#37588c",
+        penwidth=4.999999999999993
+    ];
+    
+    "N" -> "[I+N+W+W]"[
+        color="#355c8c",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+W+W]" -> "[I+N+W+W]"[
+        color="#355c8c",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+N+W+W]" -> "N"[
+        color="#355c8c",
+        penwidth=1.8705948543513997
+    ];
+    
+    "[I+N+W+W]" -> "[I+W+W]"[
+        color="#355c8c",
+        penwidth=1.8705948543513997
+    ];
+    
+    "W" -> "[I+N+W+W]"[
+        color="#31658d",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+N+W]" -> "[I+N+W+W]"[
+        color="#31658d",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+N+W+W]" -> "W"[
+        color="#31658d",
+        penwidth=1.0216624957946248
+    ];
+    
+    "[I+N+W+W]" -> "[I+N+W]"[
+        color="#31658d",
+        penwidth=1.0216624957946248
+    ];
+    
+    "I" -> "[I+W+W+W]"[
+        color="#34608c",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+W+W+W]" -> "I"[
+        color="#34608c",
+        penwidth=1.1378059682126598
+    ];
+    
+    "[I+W]" -> "[I+W+W+W]"[
+        color="#345e8c",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+W+W+W]" -> "[I+W]"[
+        color="#345e8c",
+        penwidth=1.2608092000539153
+    ];
+    
+    "W" -> "[I+W+W+W]"[
+        color="#355c8c",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+W+W]" -> "[I+W+W+W]"[
+        color="#355c8c",
+        penwidth=1.0014817434811094
+    ];
+    
+    "[I+W+W+W]" -> "W"[
+        color="#355c8c",
+        penwidth=1.5890744315540775
+    ];
+    
+    "[I+W+W+W]" -> "[I+W+W]"[
+        color="#355c8c",
+        penwidth=1.5890744315540775
+    ];
+{rank = same; "[A+N+W+W]"; "[A+N+N+W]"};
+{rank = same; "[I+N+W+W]"; "[I+W+W+W]"};
+{rank = same; "[H+W+W]"; "[H+N+W]"};
+{rank = same; "[I+N+W]"; "[I+W+W]";"[I+W]"};
+{rank = same; "N"; "[N+W]"; "W"};
+}
