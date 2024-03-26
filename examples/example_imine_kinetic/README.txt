@@ -18,8 +18,9 @@ files at different times, which are used in the generation of the Figure
 generate all the .dot files required to generate the .gif file included as SI. 
 
 The files with the termination "simple.csv" include the ones required to 
-generate the figures as presented in the manuscript (Figure 7a and 7b). The files without the termination "simple.csv" correspond to the full reaction 
-network (Used to generate the figure SZ and SZZ in the SI). The '42' 
+generate the figures as presented in the manuscript (Figure 7a and 7b). The 
+files without the termination "simple.csv" correspond to the full reaction 
+network (Used to generate the figure S5 and S6 in the SI). The '42' 
 makes reference to the systematic bias included into the DFT computed energies,
 specifically 4.2 kcal/mol which in the main document shows as 17.56 kJ/mol.
 
@@ -39,8 +40,8 @@ CPU performance of the computer.
 Static Figure Generation
 ------------------------
 
-Next, To illustrate the generation of Figures 7a, 7b, SZ and SZZ I will use as example the generation of Figures 7a and 7b. 
-First we will execute the following line: 
+Next, To illustrate the generation of Figures 7a, 7b, S5 and S6 I will use as example the 
+generation of Figures 7a and 7b. First we will execute the following line: 
 
 python generate_kinetic_snapshots.py comps_draco_42_simple.csv reactions_draco_42_simple.csv kinetic_model.data
 
@@ -50,7 +51,8 @@ The following step is to use graphviz to render the images:
 dot -Tpng snapshot_00600.dot -o figure_7a.png
 dot -Tpng snapshot_02400.dot -o figure_7b.png
 
-In order to generate figures SZ and SZZ we should substitute the the *simple.csv files by the *_42.csv files, which correspond to the full network. 
+In order to generate figures S5 and S6 we should substitute the the *simple.csv files by 
+the *_42.csv files, which correspond to the full network. 
 
 GIF generation
 --------------

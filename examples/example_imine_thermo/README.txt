@@ -15,8 +15,8 @@ b) correspond to the files required to generate Figure 3b. Inkscape was used
 to compose both figures into a single figure. 
 
 The files in c) are the non-simplified reaction network of Figure 3a, included
-in the SI as Figure SX. The files in d) are the non-simplified reaction network
-of Figure 3b, included in the SI as Figure SY.  
+in the SI as Figure S3. The files in d) are the non-simplified reaction network
+of Figure 3b, included in the SI as Figure S4.  
 
 To illustrate the generation of any of these figures I will use as example
 the generation of Figure 3a. 
