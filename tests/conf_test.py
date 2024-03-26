@@ -1,11 +1,12 @@
-from collections.abc import Mapping, Sequence
-from enum import Enum
+import doctest
 import enum
-from typing import NamedTuple
 import typing
 import unittest
-import doctest
-from rnets import conf
+from collections.abc import Mapping, Sequence
+from enum import Enum
+from typing import NamedTuple
+
+from rnets import conf_type_checker as conf
 
 
 class ConfTestCase(unittest.TestCase):
