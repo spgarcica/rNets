@@ -1,8 +1,8 @@
-All the scripts in this folder were developed by Dr. Diego Garay-Ruiz, with a little help of Dr. Albert Sabadell-Rendón, who now is an entusiast of regex.
+All the scripts in this folder were developed by Dr. Diego Garay-Ruiz, with a little help of Dr. Albert Sabadell-Rendón.
 
 To generate the example just type:
 
-chmod u+x super_pirate_nodes_loop.sh
+chmod u+x generate_kinetic_graphs.sh
 
-./super_pirate_nodes_loop.sh
+./generate_kinetic_graphs.sh
 
