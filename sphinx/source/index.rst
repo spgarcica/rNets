@@ -19,8 +19,9 @@ Welcome to rNets' Documentation!
    :maxdepth: 3
    :caption: Examples
 
-   examples/my_first_reaction_graph
-   examples/coloring_by_data
+   examples/command_line
+   examples/python_api
+   examples/published_article
 
 .. toctree::
    :maxdepth: 2
