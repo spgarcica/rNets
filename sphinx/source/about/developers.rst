@@ -2,4 +2,7 @@
 Developers
 ==========
 
-Sergio Pablo-García, Albert Sabadell-Rendón, Diego Garay, Raúl Pérez-Soto
+.. include:: ../../../README.rst
+   :start-after: project-authors-start
+   :end-before: project-authors-end
+   

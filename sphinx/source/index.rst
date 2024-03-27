@@ -2,7 +2,9 @@
 Welcome to rNets' Documentation!
 =====================================
 
-Summary of the project
+.. include:: ../../README.rst
+   :start-after: project-description-start
+   :end-before: project-description-end
 
 
 .. toctree::
@@ -37,7 +39,9 @@ Summary of the project
 License
 -------
 
-License type
+.. include:: ../../README.rst
+   :start-after: project-license-start
+   :end-before: project-license-end
 
 Indices and tables
 ------------------
