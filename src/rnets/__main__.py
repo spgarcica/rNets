@@ -4,7 +4,8 @@ from itertools import chain
 from pathlib import Path
 from typing import Any, Mapping, NamedTuple, NoReturn, TypeAliasType, Unpack
 
-from rnets import chemistry, conf, parser
+from rnets import chemistry, parser
+from rnets import conf_type_checker as conf
 from rnets.colors import colorschemes, palettes
 from rnets.colors import utils as col_utils
 from rnets.dot import Opts
@@ -67,17 +68,13 @@ def colorsequence_transform(
             error()
 
 
-class TestCfg(NamedTuple):
-    opts: Opts | None = {"a": "b"}
-
-
 def opts_transform(
     x: Any, **kwargs: Unpack[conf.NamedTupleMemberModifierKwargs]
 ) -> Opts:
     return (kwargs.get("default") or {}) | x
 
 
-def run():
+def run() -> None:
     assert isinstance(GeneralCfg, conf.NamedTupleProtocol)
     type_modifiers: Mapping[type | TypeAliasType, conf.NamedTupleMemberModifier] = {
         Opts: conf.NamedTupleMemberModifier(
@@ -98,7 +95,6 @@ def run():
         ),
     }
 
-    global config, config_dict, config_info
     config_info = conf.named_tuple_info(GeneralCfg, type_modifiers=type_modifiers)
     with open("config.toml", mode="rb") as f:
         config_dict = tomllib.load(f)

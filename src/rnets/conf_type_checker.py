@@ -331,7 +331,7 @@ def recreate_named_tuple[T: type[NamedTupleProtocol]](
             "key": key,
             "default": info.default,
         }
-        if not info.check(value, **(kwargs.copy())):
+        if not info.check(value, **kwargs):
             raise ValueError(
                 f"It seems {key} isn't passing check\nGot {value!r} while parsing"
             )
