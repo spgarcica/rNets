@@ -5,18 +5,8 @@ from abc import abstractmethod
 from collections.abc import Callable, Generator, Mapping, Sequence
 from enum import EnumType, Flag, auto
 from types import UnionType
-from typing import (
-    Any,
-    NamedTuple,
-    NotRequired,
-    Protocol,
-    Self,
-    TypeAliasType,
-    TypedDict,
-    Union,
-    Unpack,
-    runtime_checkable,
-)
+from typing import (Any, NamedTuple, NotRequired, Protocol, Self,
+                    TypeAliasType, TypedDict, Union, Unpack, runtime_checkable)
 
 
 def _id[T](x: T, **kwargs) -> T:
@@ -26,13 +16,13 @@ def _id[T](x: T, **kwargs) -> T:
 
 @runtime_checkable
 class NamedTupleProtocol(Protocol):
-    _fields: list[str]
+    _fields: tuple[str, ...]
     _field_defaults: dict[str, Any]
 
 
 # TODO: overengineering????
 class NamedTupleMemberFlag(Flag):
-    """Optional means that field can be omitted"""
+    """Some additional metadata, that is neatly packed in flag enum"""
 
     OPTIONAL = auto()
 
@@ -42,20 +32,20 @@ class NamedTupleMemberModifierKwargs[T](TypedDict):
     default: NotRequired[T]
 
 
+# TODO: change it to callable, to accept different names
+# Here we use protocols to make use of Unpack[TypedDict],
+# even if mypy supports it in Callable, pyright doesn't
 class NamedTupleMemberModifierCheckCallback[T](Protocol):
-    @abstractmethod
     def __call__(
         self: Self, x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs[T]]
-    ) -> bool:
-        ...
+    ) -> bool: ...
 
 
+# see NamedTupleMemberModifierCheckCallback
 class NamedTupleMemberModifierTransformCallback[T](Protocol):
-    @abstractmethod
     def __call__(
         self: Self, x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs[T]]
-    ) -> T:
-        ...
+    ) -> T: ...
 
 
 class NamedTupleMemberInfo[T](NamedTuple):
@@ -70,10 +60,10 @@ class NamedTupleMemberInfo[T](NamedTuple):
 type NamedTupleMembersMappingValue[T] = NamedTupleMemberInfo[T] | NamedTupleInfo
 
 
-class NamedTupleInfo[T: type[NamedTupleProtocol]](NamedTuple):
+class NamedTupleInfo[T: NamedTupleProtocol](NamedTuple):
     """Metadata about named tuple itself"""
 
-    origin: T
+    origin: type[T]
     members: dict[str, NamedTupleMembersMappingValue]
 
 
@@ -264,8 +254,16 @@ def resolve_type(
     )
 
 
-def named_tuple_info[T: type[NamedTupleProtocol]](
-    named_tuple: T,
+def is_named_tuple(t: type) -> type[NamedTupleProtocol] | None:
+    """Use it for typecasting, when pyright can't infer"""
+    if isinstance(t, NamedTupleProtocol):
+        return t
+
+    return None
+
+
+def named_tuple_info[T: NamedTupleProtocol](
+    named_tuple: type[T],
     *,
     type_modifiers: TypeModifiersDict | None = None,
 ) -> NamedTupleInfo[T]:
@@ -297,8 +295,8 @@ def named_tuple_info[T: type[NamedTupleProtocol]](
         k: str, v: Any, t: type, fl: NamedTupleMemberFlag
     ) -> NamedTupleMemberInfo | NamedTupleInfo:
         return (
-            named_tuple_info(t, type_modifiers=type_modifiers)
-            if isinstance(t, NamedTupleProtocol)
+            named_tuple_info(nt, type_modifiers=type_modifiers)
+            if (nt := is_named_tuple(t))
             else create_member(k, v, t, fl)
         )
 
@@ -307,7 +305,7 @@ def named_tuple_info[T: type[NamedTupleProtocol]](
     )
 
 
-def recreate_named_tuple[T: type[NamedTupleProtocol]](
+def recreate_named_tuple[T: NamedTupleProtocol](
     info: NamedTupleInfo[T], d: Mapping[str, Any]
 ) -> T:
     for k in d:
