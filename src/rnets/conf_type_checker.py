@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import inspect
 import typing
-from abc import abstractmethod
 from collections.abc import Callable, Generator, Mapping, Sequence
 from enum import EnumType, Flag, auto
 from types import UnionType
@@ -93,9 +92,8 @@ def __tuple_modifier[T: tuple](
 ) -> NamedTupleMemberModifier[T]:
     ocheck, otransform = resolve_type(origin, type_modifiers=type_modifiers)
 
-    otransform: NamedTupleMemberModifierTransformCallback = (
-        lambda x, **kwargs: tuple(x) if otransform is _id else otransform
-    )
+    if otransform is _id:
+        otransform = lambda x, **kwargs: tuple(x)
 
     def check(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> bool:
         return ocheck(x, **kwargs) and all(mod.check(i) for i, mod in zip(x, modifiers))
@@ -125,18 +123,14 @@ def __sequence_modifier[T](
     (arg,) = args
     ocheck, otransform = resolve_type(origin, type_modifiers=type_modifiers)
     acheck, atransform = resolve_type(arg, type_modifiers=type_modifiers)
-    otransform = (
-        (list if inspect.isabstract(origin) else origin)
-        if otransform is _id
-        else otransform
-    )
+    if otransform is _id:
+        output_origin = list if inspect.isabstract(origin) else origin
+        otransform = lambda x, **kwargs: output_origin(x)
 
     def check(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> bool:
-        _ = kwargs
         return ocheck(x) and all(acheck(i) for i in x)
 
     def transform(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> T:
-        _ = kwargs
         return typing.cast(T, otransform(atransform(i) for i in x))
 
     return NamedTupleMemberModifier(check, transform)
@@ -150,11 +144,9 @@ def __mapping_modifier[T](
     kcheck, ktransform = resolve_type(karg, type_modifiers=type_modifiers)
     vcheck, vtransform = resolve_type(varg, type_modifiers=type_modifiers)
 
-    otransform = (
-        (dict if inspect.isabstract(origin) else origin)
-        if otransform is _id
-        else otransform
-    )
+    if otransform is _id:
+        output_origin = dict if inspect.isabstract(origin) else origin
+        otransform = lambda x, **kwargs: output_origin(x)
 
     def check(x: Any, **kwargs: Unpack[NamedTupleMemberModifierKwargs]) -> bool:
         return ocheck(x, **kwargs) and all(
@@ -220,7 +212,7 @@ def resolve_type(
     if isinstance(t, EnumType):
         return NamedTupleMemberModifier(
             lambda x, **kwargs: x in t.__members__,
-            lambda x, **kwargs: t.__members__.get,
+            lambda x, **kwargs: t.__members__.get(x),
         )
 
     origin = typing.get_origin(t)
