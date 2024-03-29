@@ -4,7 +4,10 @@ File Formats
 
 To simplify the creation of the reaction network rNets relies on the CSV format
 which is a tabular format that can be easily created using your preferred 
-spreadsheet software or even a plain text editor. 
+spreadsheet software or even a plain text editor. There are two types of files 
+that are required, namely the "Compounds" file and the "Reactions" file. These 
+files have multiple columns, where the column name may be repeated, and only a 
+subset of all possible columns is required.  
 
 .. warning:: 
    
@@ -16,21 +19,58 @@ spreadsheet software or even a plain text editor.
 Compounds File
 --------------
 
-The compounds file requires 5 different colummns: 
+The compounds file contains the individual entries of each species in the 
+reaction network. Each entry must consist at least of a name, a text 
+representation of the compound, and an energy. Below we have an example of how 
+the compounds file may look like: 
 
-*  :code:`name` Corresponds to the text label to uniquely identify the species
+.. code:: none
+
+   name,energy
+   reactant,0
+   intermediate,0
+   product,0
+
+Here we have three species :code:`reactant`, :code:`intermediate` and 
+:code:`product`. In this case the energy of all of them is :code:`0`
+
+Required columns
+................
+
+*  :code:`name` Corresponds to the text label to uniquely identify the species.
+   It is the text that will show in the generated graph to represent the compound.
 *  :code:`energy` Corresponds to the absolute or relative energy of the species. 
-   Typically the free energy.  
-*  :code:`fflags` b, whatever it is. 
+   Typically the free energy.
+
+Optional columns
+................
+
+*  :code:`fflags` The format of the text for name, there are four possible options:
+   :code:`b` ( Bold ), :code:`i`( italics ), :code:`u` ( underlined ) or if it 
+   is not specified it will be without any format. 
 *  :code:`visible` This column allows to hide certain compounds to simplify the 
    final graph, however these hidden compounds are still considered when the 
-   normalization is carried out. To hide a compound add :code:`f`.  
-*  :code:`opts` Whatever it is 
+   normalization is carried out. To hide a compound add :code:`f`, to reduce 
+   its visibility but still show it :code:`grey` and to show the node use 
+   :code:`v` (although it is the default behavior so not specifying any other 
+   value will default to this option).   
+*  :code:`opts` This allows to add more specific graphviz node attributes. 
+   these can be found in graphviz `docs <https://graphviz.org/docs/nodes/>`__
+   typically they are specified as :code:`"key=value"` where :code:`key` is the 
+   attribute, i.e. image, and the :code:`value` is the value that the attribute
+   will take for that node, i.e. path/to/my/beautiful.png.   
 
-.. todo:: 
+.. note:: 
    
-   Fill in the descriptions of fflags and opts
+   Hidden compounds (entries with an :code:`f` value in the :code:`visibility`
+   column) are considered in for normalizing the color scale but are not shown 
+   in the graph. 
 
+.. warning::
+
+   Although :code:`opts` allows a large degree of customization through graphviz
+   please note that the default format of the nodes is specified with html, thus
+   it is discouraged for beginner-level users to use this option. 
 
 Reactions Files
 ---------------
