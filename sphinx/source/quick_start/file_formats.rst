@@ -72,25 +72,61 @@ Optional columns
    please note that the default format of the nodes is specified with html, thus
    it is discouraged for beginner-level users to use this option. 
 
-Reactions Files
----------------
+Reactions File
+--------------
 
-rNets does not allow the inclusion of tri-molecular reactions, as such the 
-maximum number of reactants or products is 2. This constraint is enforced in the 
-reactions file, which requires 8 different colummns: 
+The reactions file contains one reaction entry per row. The reaction may be 
+unidirectional or bidirectional. The reactions are defined by the compounds that
+are involved, thus the same :code:`name` values defined in the compounds file
+should be used. Below we have an example of how the reactions file may look like:
 
-*  :code:`cleft` Text label of the first reactant
-*  :code:`cleft` Text label of the second reactant or empty.  
+.. code:: none
+
+   cleft,cright,direction,name,visible
+   reactant,,intermediate,,0.5,<->,R0,
+   intermediate,,product,,0.4,<->,R1,
+
+
+Required columns
+................
+
+*  :code:`cleft` Text label of the first reactant.
 *  :code:`cright` Text label of the first product. 
-*  :code:`cright` Text label of the second product or empty. 
+
+At least 1 :code:`cleft` and 1 :code:`cright` must be specified. A second column
+:code:`cleft` or :code:`cright` is also accepted, which allows specifying 
+bimolecular reactions, but this second column is optional. An example of 
+a reactions file containing a bimolecular reaction is shown below: 
+
+.. code:: none
+
+   cleft,cright,cright,direction,name,visible
+   reactant,,intermediate,,0.5,<->,R0,
+   intermediate,,product1,product2,0.4,<->,R1,
+
+
+Optional columns
+................
+
 *  :code:`energy` Absolute energy of the TS connecting reactants and products.
    Used to compute the energy barrier. 
 *  :code:`direction` Direction of the reaction. :code:`<->` for reversible 
-   reactions and `->` for irreversible reactions. 
-*  :code:`name` Text identifier of the reaction, typically R0,R1,R2 ...
+   reactions and :code:`->` for irreversible reactions. 
+*  :code:`name` Text identifier of the reaction, typically R0,R1,R2 ... It does 
+   not have any effect in the produced graph, but may be used as a guide by the 
+   user when preparing/editing the files for complex reaction networks.
 *  :code:`visible` This column allows to hide certain reactions with a similar 
-   effect as hiding compounds.
+   effect as hiding compounds. To hide a reaction add :code:`f`, to reduce 
+   its visibility but still show it :code:`grey` and to show the node use 
+   :code:`v` (although it is the default behavior so not specifying any other 
+   value will default to this option).
+*  :code:`opts` This allows to add more specific graphviz edge attributes. 
+   these can be found in graphviz `docs <https://graphviz.org/docs/edges/>`__
+   typically they are specified as :code:`"key=value"` where :code:`key` is the 
+   attribute and the :code:`value` is the value that the attribute
+   will take for that edge. 
 
-.. todo::
-
-    more details
+.. note::
+   
+   rNets does not allow the inclusion of tri-molecular reactions, as such the 
+   maximum number of reactants is 2 and the same for the number of products is 2. 
