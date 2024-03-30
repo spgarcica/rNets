@@ -36,7 +36,8 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.todo',
               'sphinx.ext.napoleon',
-              'sphinx.ext.intersphinx']
+              'sphinx.ext.intersphinx',
+              'sphinx.ext.graphviz',]
 
 templates_path = ['_templates']
 exclude_patterns = []
