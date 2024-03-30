@@ -100,7 +100,7 @@ First we will execute the :code:`do_graphs.sh` script which uses the
 
 .. code:: shell-session
 
-   $ bash do_graphs.sh 
+   $ bash do_graph.sh 
 
 This will generate all the required dotfiles, but to ensure a persistent layout 
 we need to use the contents of the :code:`graphs/scripts` so we need to move 
@@ -128,5 +128,5 @@ Specifically for the manuscript, imagemagick was used:
 
 .. code:: shell-session
 
-   $ convert -delay 0 -loop 1 *.png Pd111_animation.gif
-
+   $ cd ..
+   $ convert -delay 0 -loop 1 graph_{0..14}_nw.png Pd111_animation.gif
