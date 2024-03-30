@@ -55,8 +55,9 @@ we will execute the following command:
    $ python RNets_KG_Parser.py comps.csv reactions.csv CycOct.owl --reference EpOr+CO2+TMABr --hidden-species CO2,TMA,TMABr
 
 Here, we will generate the :code:`comps.csv` and :code:`reactions.csv` files 
-that will have as 0 in energy the `EpOr+CO2+TMABr` of the knowledge graph 
-and will set the species :code:`CO2`,:code:`TMA` and :code:`TMABr` as not visible. 
+that will have as reference state in energy the :code:`EpOr+CO2+TMABr` of the 
+knowledge graph and will set the species :code:`CO2`, :code:`TMA` and 
+:code:`TMABr` as not visible. 
 
 Next we use rNets to generate the :code:`.dot` file containing the reaction 
 network:
