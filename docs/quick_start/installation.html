@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Basic Usage" href="basic_usage.html" />
+    <link rel="prev" title="Welcome to rNets&#39; Documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-the-dependencies">Installing the dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-rnets">Installing rNets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#uninstalling-rnets">Uninstalling rNets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#developed-with">Developed with</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/python_api.html">Python API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/published_article.html">Published article</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/rnets.html">rnets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/quick_start/installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<p>These instructions will get you a copy of the project up and running on your
+local machine.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>python &gt;= 3.12</p></li>
+</ul>
+</section>
+<section id="installing-the-dependencies">
+<h2>Installing the dependencies<a class="headerlink" href="#installing-the-dependencies" title="Link to this heading"></a></h2>
+<p>rNets only depends on the python standard library that usually comes with the
+cpython interpreter, the default one adopted by the python community. This means
+the the only requisite for installing rNets is python. The python community has
+placed a lot of effort into the documentation and actively maintains it so for
+further instructions on how to install python into your computer we highly
+recommend to check the official
+<a class="reference external" href="https://wiki.python.org/moin/BeginnersGuide">python</a> documentation.</p>
+<p>Although for being able to install and run rNets only python is required, rNets
+relies heavily on graphviz for the actual rendering of the images, as the output
+of rNets is tipically a .dot file. Installing graphviz is tipically a
+straightforward and quick process. Graphviz may be downloaded from their
+<a class="reference external" href="https://graphviz.org/download/">official</a> webpage.</p>
+</section>
+<section id="installing-rnets">
+<h2>Installing rNets<a class="headerlink" href="#installing-rnets" title="Link to this heading"></a></h2>
+<p>rNets can be directly installed through pip as a version of the package is
+hosted at the Python Package Index (PyPI):</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>rNets
+</pre></div>
+</div>
+<p>However, if the user does prefer it, it can also be easily installed from the
+source code. For that we will start by downloading the source code using git.</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://codeberg.org/spgarcica/rNets.git<span class="w"> </span>rnets-source
+</pre></div>
+</div>
+<p>Next we proceed to install it using pip</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>rnets-source/
+</pre></div>
+</div>
+<p>If you do not have git or do prefer to download manually the source
+code as a .zip or .tar.gz do it install it.</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>rNets.tar.gz
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is possible to unpack it and install it as indicated in the previous step
+but it is not required.</p>
+</div>
+</section>
+<section id="uninstalling-rnets">
+<h2>Uninstalling rNets<a class="headerlink" href="#uninstalling-rnets" title="Link to this heading"></a></h2>
+<p>Completely uninstalling rNets is also quite easy due to its lack of dependencies.
+All that is needed is to command pip to uninstall the package</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>uninstall<span class="w"> </span>rNets
+</pre></div>
+</div>
+</section>
+<section id="developed-with">
+<h2>Developed with<a class="headerlink" href="#developed-with" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>python 3.12</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to rNets&#39; Documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="basic_usage.html" class="btn btn-neutral float-right" title="Basic Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

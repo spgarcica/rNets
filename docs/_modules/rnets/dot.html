@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rnets.dot &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/python_api.html">Python API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/published_article.html">Published article</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/rnets.html">rnets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">rnets.dot</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rnets.dot</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;This module is a minimal implementation of a writer for the dot language. It</span>
+<span class="sd">does contain the minimum functionality to allow the writing of the reaction</span>
+<span class="sd">networks in dot format.</span>
+
+<span class="sd">Attributes:</span>
+<span class="sd">    Opts (type): Type synonym to define options.</span>
+<span class="sd">    OptsGlob (type): Type synonym defining global options.</span>
+
+<span class="sd">    IDENT (int): Identation level when writing the dot file.</span>
+<span class="sd">    SEP_S_LV (str): Single level separation, e.g: between two node definition.</span>
+<span class="sd">    SEP_D_LV (str): Double level separation, e.g: between node and edge</span>
+<span class="sd">       definition.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">starmap</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">auto</span><span class="p">,</span> <span class="n">StrEnum</span>
+
+
+<span class="nb">type</span> <span class="n">Opts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+<span class="nb">type</span> <span class="n">OptsGlob</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Opts</span><span class="p">]</span>
+
+<span class="n">IDENT</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">SEP_S_LV</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="n">SEP_D_LV</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="mi">3</span>
+
+
+<div class="viewcode-block" id="OptKind">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.OptKind">[docs]</a>
+<span class="k">class</span> <span class="nc">OptKind</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
+    <span class="s2">&quot;Enum representing the possible kind of global :obj:`Opts` values&quot;</span>
+    <span class="n">Graph</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Node</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Edge</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="Node">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.Node">[docs]</a>
+<span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure representing a dot graph node.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        name (str): Name of the node.</span>
+<span class="sd">        options (:obj:`Opts`): dot options for the node.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">options</span><span class="p">:</span> <span class="n">Opts</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="n">node_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Edge">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.Edge">[docs]</a>
+<span class="k">class</span> <span class="nc">Edge</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure representing a dot edge between two nodes.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        start (str): Starting node name.</span>
+<span class="sd">        target (str): Target node name.</span>
+<span class="sd">        direction (str): Symbol to use to connect both nodes.</span>
+<span class="sd">            See dot manual for possible values.</span>
+<span class="sd">        options (:obj:`Opts`): Options of the edge.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">origin</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">direction</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;-&gt;&quot;</span>
+    <span class="n">options</span><span class="p">:</span> <span class="n">Opts</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="n">edge_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Graph">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.Graph">[docs]</a>
+<span class="k">class</span> <span class="nc">Graph</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Structure representing a dot graph.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        kind (str): Graph type.</span>
+<span class="sd">        nodes (sequence of :obj:`Node`): Nodes in the graph.</span>
+<span class="sd">        edges (sequence of :obj:`Edge`): Edges in the graph.</span>
+<span class="sd">        options(dict of str as keys and :obj:`Opts` as values):</span>
+<span class="sd">            Dictionary containing multiple global options.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">nodes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Node</span><span class="p">]</span>
+    <span class="n">edges</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Edge</span><span class="p">]</span>
+    <span class="n">options</span><span class="p">:</span> <span class="n">OptsGlob</span> <span class="o">|</span> <span class="kc">None</span>
+
+    <span class="n">HEADER</span> <span class="o">=</span> <span class="s2">&quot;strict </span><span class="si">{}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="n">graph_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ident">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.ident">[docs]</a>
+<span class="k">def</span> <span class="nf">ident</span><span class="p">(</span>
+    <span class="n">s</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ident the given string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        s (str): String that will be idented.</span>
+<span class="sd">        i (int): Identation level.</span>
+<span class="sd">        first (bool, optional): Wether or not ident the first line.</span>
+<span class="sd">            defaults to True</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Idented string.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This is not the optimal way to perform the identation as we should</span>
+<span class="sd">            build new string every time that we ident. However, I think that it</span>
+<span class="sd">            is more useful than to put the identation during the writing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="n">first</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ident_if">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.ident_if">[docs]</a>
+<span class="k">def</span> <span class="nf">ident_if</span><span class="p">(</span>
+    <span class="n">s</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Same as `ident` but returns an empty string if the input string is</span>
+<span class="sd">    empty or None.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        s (str or None): String that will be idented.</span>
+<span class="sd">        i (int): Identation level.</span>
+<span class="sd">        first (bool, optional): Wether or not ident the first line.</span>
+<span class="sd">            defaults to True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Either the idented string or an empty string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ident</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">first</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="graph_to_str">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.graph_to_str">[docs]</a>
+<span class="k">def</span> <span class="nf">graph_to_str</span><span class="p">(</span>
+    <span class="n">g</span><span class="p">:</span> <span class="n">Graph</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a :obj:`Graph` into a dot string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        g (:obj:`Graph`): Graph that will be converted.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Graph in dot format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">g</span><span class="o">.</span><span class="n">options</span><span class="p">:</span> <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">HEADER</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="o">+</span> <span class="s1">&#39;{&#39;</span>
+        <span class="o">+</span> <span class="n">SEP_S_LV</span> <span class="o">+</span> <span class="n">ident</span><span class="p">(</span><span class="n">opts_glob_to_str</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">options</span><span class="p">),</span> <span class="n">IDENT</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">SEP_D_LV</span>
+        <span class="o">+</span> <span class="n">SEP_D_LV</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">ident_if</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">x</span><span class="p">)),</span> <span class="n">IDENT</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="p">,</span> <span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">)))</span>
+        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">}&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="opts_to_str">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.opts_to_str">[docs]</a>
+<span class="k">def</span> <span class="nf">opts_to_str</span><span class="p">(</span>
+    <span class="n">o</span><span class="p">:</span> <span class="n">Opts</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a :obj:`Opts` into a string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n (:obj:`Opts`): Options that will be converted.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: of the dot format</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="s1">&#39;,</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="s1">&#39;=&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="se">\n</span><span class="si">{</span><span class="n">ident</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="n">IDENT</span><span class="p">,</span><span class="w"> </span><span class="kc">True</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">]&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="edge_to_str">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.edge_to_str">[docs]</a>
+<span class="k">def</span> <span class="nf">edge_to_str</span><span class="p">(</span>
+    <span class="n">e</span><span class="p">:</span> <span class="n">Edge</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a :obj:`Edge` into a string.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n (:obj:`Edge`): Edge that will be converted.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Edge in dot format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">origin</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
+        <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">direction</span>
+        <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">target</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
+        <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">opts_to_str</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">options</span><span class="p">))</span>
+        <span class="o">+</span> <span class="s1">&#39;;&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="node_to_str">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.node_to_str">[docs]</a>
+<span class="k">def</span> <span class="nf">node_to_str</span><span class="p">(</span>
+    <span class="n">n</span><span class="p">:</span> <span class="n">Node</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a :obj:`Node` into a string</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n (:obj:`Node`): Node that will be converted.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Node in the dot format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">n</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
+        <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+        <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">opts_to_str</span><span class="p">(</span><span class="n">n</span><span class="o">.</span><span class="n">options</span><span class="p">))</span>
+        <span class="o">+</span> <span class="s1">&#39;;&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="opt_glob_to_str">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.opt_glob_to_str">[docs]</a>
+<span class="k">def</span> <span class="nf">opt_glob_to_str</span><span class="p">(</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">,</span> <span class="n">o</span><span class="p">:</span> <span class="n">Opts</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a name followed by :obj:`Opts`. Used to define global variables.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        k (str): :obj:`OptKind` for which the global options will be decided.</span>
+<span class="sd">        o (:obj:`Opts`): Global options to define.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Options in dot format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+        <span class="o">+</span> <span class="n">opts_to_str</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="opts_glob_to_str">
+<a class="viewcode-back" href="../../api/rnets.dot.html#rnets.dot.opts_glob_to_str">[docs]</a>
+<span class="k">def</span> <span class="nf">opts_glob_to_str</span><span class="p">(</span>
+    <span class="n">os</span><span class="p">:</span> <span class="n">OptsGlob</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a :obj:`OptsGlob` in dot format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        os (:obj:`OptsGlob`): To convert to dot format.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Global options in dot format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">SEP_S_LV</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">starmap</span><span class="p">(</span><span class="n">opt_glob_to_str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

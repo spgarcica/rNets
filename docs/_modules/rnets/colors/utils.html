@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rnets.colors.utils &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/python_api.html">Python API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/published_article.html">Published article</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/rnets.html">rnets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">rnets.colors.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rnets.colors.utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Utils for Color parsing, writing and interpolation.</span>
+
+<span class="sd">Attributes:</span>
+<span class="sd">    Color (type): Type synonym to define a color.</span>
+
+<span class="sd">Note:</span>
+<span class="sd">    This library only works with 3-D colorspaces. Its extension N-D colorspaces</span>
+<span class="sd">    should be straightforward, however, it has been decided not to include it</span>
+<span class="sd">    in benefit of a strict definition of Color.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">colorsys</span> <span class="kn">import</span> <span class="n">rgb_to_hls</span><span class="p">,</span> <span class="n">hls_to_rgb</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">repeat</span><span class="p">,</span> <span class="n">starmap</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
+
+<span class="nb">type</span> <span class="n">Color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+<span class="nb">type</span> <span class="n">ColorSpace</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;rgb&quot;</span><span class="p">,</span> <span class="s2">&quot;lab&quot;</span><span class="p">,</span> <span class="s2">&quot;hsl&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ensure_color">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.ensure_color">[docs]</a>
+<span class="k">def</span> <span class="nf">ensure_color</span><span class="p">(</span>
+    <span class="n">c</span><span class="p">:</span> <span class="n">Color</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests wether a :obj:`Color` is valid or not.</span>
+
+<span class="sd">    Arg:</span>
+<span class="sd">        c (:obj:`Color`): Color to be tested.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: wether the color is valid or not.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        :obj:`Color` follows the colorsys representation, meaning that it</span>
+<span class="sd">            consists of 3 float values ranging from [0, 1].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mf">0.</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">1.</span>
+        <span class="p">,</span> <span class="n">c</span>
+    <span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="rgb_to_hexstr">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.rgb_to_hexstr">[docs]</a>
+<span class="k">def</span> <span class="nf">rgb_to_hexstr</span><span class="p">(</span>
+    <span class="n">c</span><span class="p">:</span> <span class="n">Color</span>
+    <span class="p">,</span> <span class="n">inc_hash</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the given color as an hexadecimal string of the form #RRGGBB</span>
+<span class="sd">    where R, G and B are represented from a number from 0 to 9 and a letter</span>
+<span class="sd">    from a (10) to f (15).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        c (:obj:`Color`): :obj:`Color` to transform into string.</span>
+<span class="sd">        inc_hash (bool, optional): If True, include the hash character at the</span>
+<span class="sd">            beggining of the color string. Defaults to True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Color string with the RRGGBB form.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Note that :obj:`Color` follows the :obj:`colorsys` representation,</span>
+<span class="sd">            meaning that it consists of 3 float values ranging from [0, 1].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;#&#39;</span> <span class="o">*</span> <span class="n">inc_hash</span>
+        <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">starmap</span><span class="p">(</span>
+            <span class="nb">format</span>
+            <span class="p">,</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">255</span><span class="p">),</span> <span class="n">c</span><span class="p">)</span>
+                <span class="p">,</span> <span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;02x&#39;</span><span class="p">))</span>
+        <span class="p">)))</span></div>
+
+
+
+<div class="viewcode-block" id="hexstr_to_rgb">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.hexstr_to_rgb">[docs]</a>
+<span class="k">def</span> <span class="nf">hexstr_to_rgb</span><span class="p">(</span>
+    <span class="n">s</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parses a color string of the form #RRGGBB into a :obj:`Color`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        s (str): Color string to be parsed.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :obj:`Color`: With the values of the parsed string</span>
+<span class="sd">        None: If the conversion fails.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Note that :obj:`Color` follows the :obj:`colorsys` representation,</span>
+<span class="sd">            meaning that it consists of 3 float values ranging from [0, 1].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">7</span> <span class="ow">or</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;#&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Force only three values in the tuple</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="nb">map</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">16</span><span class="p">))</span> <span class="o">/</span> <span class="mf">255.</span>
+            <span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">::</span><span class="mi">2</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="cyclic_conditions">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.cyclic_conditions">[docs]</a>
+<span class="k">def</span> <span class="nf">cyclic_conditions</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Assuming that the range [0, 1] represent a periodic one-dimensional</span>
+<span class="sd">    space, find the representation of the values that minimizes the distance</span>
+<span class="sd">    between them.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (float): First value.</span>
+<span class="sd">        y (float): Second value.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple of the form (x, y) containing the new representation of the</span>
+<span class="sd">        values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dist</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">y</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">:</span> <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="interp_c_seq">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.interp_c_seq">[docs]</a>
+<span class="k">def</span> <span class="nf">interp_c_seq</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">cs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span>
+    <span class="p">,</span> <span class="n">cyclic</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a value float x in the range [0., 1.] and a sequence of colors,</span>
+<span class="sd">    interpolate a color being represented by x, being 0 the first color in the</span>
+<span class="sd">    list and 1. the last.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (float): Floating point number in the range of [0., 1.] representing</span>
+<span class="sd">            the position in the color sequence.</span>
+<span class="sd">        cs (Sequence of :obj:`Color`): Sequence of colors to be interpolated.</span>
+<span class="sd">        cyclic (bool, optional): Index of the components of the color that are</span>
+<span class="sd">           cyclic. In a cyclic component, the 0 and 1 values are connected, and</span>
+<span class="sd">           thus the algorithm will consider the shortest path.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :obj:`Color`: Interpolation using the :obj:colorsys implementation (3</span>
+<span class="sd">            float values in [0. ,1.])</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Note that this function will perform the interpolation withing the</span>
+<span class="sd">            color space provided. i. e. if RGB is used, the interpolation will</span>
+<span class="sd">            be done within the RGB colorspace. If x overflows on the roof, the</span>
+<span class="sd">            last color of the sequence is returned while if x overflows on the</span>
+<span class="sd">            floor, the first color of the sequence is returned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Ensure x in [0, 1]</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mf">1.</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">0.</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">val</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="n">p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">val</span> <span class="o">-</span> <span class="n">idx</span>
+
+
+    <span class="c1"># Force 3 values in the tuple</span>
+    <span class="n">comp</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">p</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span>
+        <span class="p">,</span> <span class="nb">map</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">xs</span><span class="p">:</span> <span class="n">cyclic_conditions</span><span class="p">(</span><span class="o">*</span><span class="n">xs</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="n">xs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">xs</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+            <span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cs</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">cs</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">cyclic</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">xs</span><span class="p">:</span> <span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">cyclic</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="rgb_achromatize">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.rgb_achromatize">[docs]</a>
+<span class="k">def</span> <span class="nf">rgb_achromatize</span><span class="p">(</span>
+    <span class="n">c</span><span class="p">:</span> <span class="n">Color</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Achromatize the given RGB color.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        c (:obj:`Color`): Color that will be achromatized.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :obj:`Color` Achromatized color.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Formula taken from the pillow library:</span>
+<span class="sd">        https://pillow.readthedocs.io/en/stable/reference/Image.html#PIL.Image.Image.convert</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.299</span>
+        <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.587</span>
+        <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.114</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="interp_fn">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.interp_fn">[docs]</a>
+<span class="k">def</span> <span class="nf">interp_fn</span><span class="p">(</span>
+    <span class="n">cs</span><span class="p">:</span> <span class="n">Sequence</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="n">Color</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a sequence of :obj:`Color`, returns an interpolated function based</span>
+<span class="sd">    on it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cs (Sequence of :obj:`Color`): Sequence of colors to be interpolated.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :obj:Callable[[float], :obj:`Color`]: A function that takes a float in</span>
+<span class="sd">            the range [0., 1.] as an argument and returns the interpolated</span>
+<span class="sd">            color from the given Sequence of :obj:`Color`.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This function acts as a wrapper of :obj:`interp`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">fn</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">interp_c_seq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">cs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fn</span></div>
+
+
+
+<div class="viewcode-block" id="calc_relative_luminance">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.calc_relative_luminance">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_relative_luminance</span><span class="p">(</span>
+    <span class="n">c</span><span class="p">:</span> <span class="n">Color</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the relative luminance of a :obj:`Color` in the RGB space.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        c (:obj:`Color`): Color in the RGB colorspace to compute its luminance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float:  Computed luminance.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        https://www.w3.org/WAI/GL/wiki/Relative_luminance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="mf">0.2126</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="o">+</span> <span class="mf">0.7152</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="o">+</span> <span class="mf">0.0722</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="color_sel_lum">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.color_sel_lum">[docs]</a>
+<span class="k">def</span> <span class="nf">color_sel_lum</span><span class="p">(</span>
+    <span class="n">c1</span><span class="p">:</span> <span class="n">Color</span>
+    <span class="p">,</span> <span class="n">c2</span><span class="p">:</span> <span class="n">Color</span>
+    <span class="p">,</span> <span class="n">dc</span><span class="p">:</span> <span class="n">Color</span>
+    <span class="p">,</span> <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a pair of colors, select a color from it based on the relative</span>
+<span class="sd">    luminance of a third one.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        c1 (:obj:`Color`): Color to select if the luminance is below the</span>
+<span class="sd">            threshold.</span>
+<span class="sd">        c2 (:obj:`Color`): Color to select if the luminance is above the</span>
+<span class="sd">            threshold.</span>
+<span class="sd">        dc (:obj:`Color`): Color to use to compute the relative luminance.</span>
+<span class="sd">        threshold (float, optional): Threshold to make the decision. Ideally, a</span>
+<span class="sd">            value between 0. and 1. Defaults to 0.5.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">       :obj:`Color`: c1 or c2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)[</span><span class="n">calc_relative_luminance</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="interp_fn_cspace">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.interp_fn_cspace">[docs]</a>
+<span class="k">def</span> <span class="nf">interp_fn_cspace</span><span class="p">(</span>
+    <span class="n">cs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span>
+    <span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">Color</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">Color</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">,</span> <span class="n">cyclic</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="n">Color</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a sequence of :obj:`Color` in an arbitrary colorspace, convert</span>
+<span class="sd">    them to another space and create an interpolation function. The value</span>
+<span class="sd">    returned by the interpolation function will be converted again to the</span>
+<span class="sd">    original colorspace.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cs (Sequence of `Color`): Sequence of colors in the RGB to be converted</span>
+<span class="sd">            HSL and interpolated.</span>
+<span class="sd">        target (function of taking three floats as input and returning a</span>
+<span class="sd">            :obj:`Color`, optional): Function that projects the given color</span>
+<span class="sd">            components to the colorspace in which the interpolation will be</span>
+<span class="sd">            performed. Defaults to the identity function.</span>
+<span class="sd">        origin (function of taking three floats as input and returning a</span>
+<span class="sd">            :obj:`Color`, optional): Function that returns the interpolated</span>
+<span class="sd">            color to the original colorspace. Defaults to the identity</span>
+<span class="sd">            function.</span>
+<span class="sd">        cyclic (tuple of three bools, optional): During the interpolation,</span>
+<span class="sd">            treat the dimension marked as True as cyclic. Defaults to (False,</span>
+<span class="sd">            False, False)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :obj:Callable[[float], :obj:`Color`]: A function that takes a float in</span>
+<span class="sd">            the range [0., 1.] as an argument and returns the interpolated</span>
+<span class="sd">            color from the given Sequence of :obj:`Color` using the specified</span>
+<span class="sd">            colorspaces.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        The :obj:`origin` and :obj:`target` take 3 floats as input for</span>
+<span class="sd">        to ease the integration with the colorsys library.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cs_hls</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">starmap</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">cs</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">fn</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">origin</span><span class="p">(</span><span class="o">*</span><span class="n">interp_c_seq</span><span class="p">(</span>
+            <span class="n">x</span>
+            <span class="p">,</span> <span class="n">cs_hls</span>
+            <span class="p">,</span> <span class="n">cyclic</span><span class="o">=</span><span class="n">cyclic</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">fn</span></div>
+
+
+
+<div class="viewcode-block" id="interp_fn_rgb_hls">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.interp_fn_rgb_hls">[docs]</a>
+<span class="k">def</span> <span class="nf">interp_fn_rgb_hls</span><span class="p">(</span>
+    <span class="n">cs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="n">Color</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a sequence of :obj:`Color` representing the RGB colorspace,</span>
+<span class="sd">    convert them to the CIEL*ab space and create an interpolation function. The</span>
+<span class="sd">    value returned by the interpolation function will be converted again to</span>
+<span class="sd">    RGB.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cs (Sequence of `Color`): Sequence of colors in the RGB to be converted</span>
+<span class="sd">            CIEL*ab and interpolated.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :obj:Callable[[float], :obj:Color]: A function that takes a float in</span>
+<span class="sd">            the range [0., 1.] as an argument and returns the CIEL*ab interpolated</span>
+<span class="sd">            color from the given Sequence of RGB :obj:`Color`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">interp_fn_cspace</span><span class="p">(</span>
+        <span class="n">cs</span>
+        <span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">rgb_to_hls</span>
+        <span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">hls_to_rgb</span>
+        <span class="p">,</span> <span class="n">cyclic</span><span class="o">=</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="adjust_range">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.adjust_range">[docs]</a>
+<span class="k">def</span> <span class="nf">adjust_range</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given an float, adjust it to the [0., 1.] interval, making underflow</span>
+<span class="sd">    values 0 and overflow values 1.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (float): Value to adjust.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Adjusted float value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">:</span> <span class="k">return</span> <span class="mf">0.</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.</span><span class="p">:</span> <span class="k">return</span> <span class="mf">1.</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span></div>
+
+
+
+<div class="viewcode-block" id="interp_fn_rgb_lab">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.interp_fn_rgb_lab">[docs]</a>
+<span class="k">def</span> <span class="nf">interp_fn_rgb_lab</span><span class="p">(</span>
+    <span class="n">cs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="n">Color</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a sequence of :obj:`Color` representing the RGB colorspace,</span>
+<span class="sd">    convert them to the HSL space and create an interpolation function. The</span>
+<span class="sd">    value returned by the interpolation function will be converted again to</span>
+<span class="sd">    rgb.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cs (Sequence of `Color`): Sequence of colors in the RGB to be converted</span>
+<span class="sd">            HSL and interpolated.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :obj:Callable[[float], :obj:Color]: A function that takes a float in</span>
+<span class="sd">            the range [0., 1.] as an argument and returns the HSL interpolated</span>
+<span class="sd">            color from the given Sequence of RGB :obj:`Color`.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        D65 illuminant. Gamma correction assuming sRGB.</span>
+<span class="sd">        Sometimes the obtained color components are negative numbers near to</span>
+<span class="sd">        0. To assure that the colors are within the [0., 1.] interval,</span>
+<span class="sd">        :func:`adjust_range` is applied to the output values.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        CIE Colorimetry 15 (Third ed.). CIE. 2004. ISBN 3-901-906-33-9.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">t</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="n">l</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">xyz_to_lab</span><span class="p">(</span><span class="o">*</span><span class="n">rgb_to_xyz</span><span class="p">(</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">apply_gamma</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="p">))))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">o</span><span class="p">(</span>
+        <span class="n">l</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">adjust_range</span><span class="p">(</span><span class="n">unapply_gamma</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="p">,</span> <span class="n">xyz_to_rgb</span><span class="p">(</span><span class="o">*</span><span class="n">lab_to_xyz</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">interp_fn_cspace</span><span class="p">(</span>
+        <span class="n">cs</span>
+        <span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">t</span>
+        <span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">o</span>
+        <span class="p">,</span> <span class="n">cyclic</span><span class="o">=</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="apply_gamma">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.apply_gamma">[docs]</a>
+<span class="k">def</span> <span class="nf">apply_gamma</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">,</span> <span class="n">A</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply gamma to color component.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (float): Component to which the Gamma will be applied.</span>
+<span class="sd">        g (float, optional): Gamma value to apply. If None, assume sRGB</span>
+<span class="sd">            gamma. Defaults to None.</span>
+<span class="sd">        A (float, optional): A value for the gamma function. In most cases 1. Defaults to 1.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Component with the new Gamma value.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        The input and the output value are assumed to be a float within the</span>
+<span class="sd">        [0, 1] interval.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">g</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">/</span><span class="mf">12.92</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.04045</span> <span class="k">else</span> <span class="p">((</span><span class="n">x</span><span class="o">+</span><span class="mf">0.055</span><span class="p">)</span><span class="o">/</span><span class="mf">1.055</span><span class="p">)</span><span class="o">**</span><span class="mf">2.4</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">**</span><span class="n">g</span></div>
+
+
+
+<div class="viewcode-block" id="unapply_gamma">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.unapply_gamma">[docs]</a>
+<span class="k">def</span> <span class="nf">unapply_gamma</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">,</span> <span class="n">A</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unapply gamma to color component.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (float): Component to which the Gamma will be unaapplied.</span>
+<span class="sd">        g (float, optional): Gamma value to apply. If None, assume sRGB</span>
+<span class="sd">            gamma. Defaults to None.</span>
+<span class="sd">        A (float, optional): A value for the gamma function. In most cases 1. Defaults to 1.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Ungamma component.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        The input and the output value are assumed to be a float within the</span>
+<span class="sd">        [0, 1] interval.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">g</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">*</span><span class="mf">12.92</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">0.0031308</span> <span class="k">else</span> <span class="mf">1.055</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="p">((</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.4</span><span class="p">))</span><span class="o">-</span><span class="mf">0.055</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">**</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">g</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="rgb_to_xyz">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.rgb_to_xyz">[docs]</a>
+<span class="k">def</span> <span class="nf">rgb_to_xyz</span><span class="p">(</span>
+    <span class="n">r</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Projects the given RGB :obj:`Color` value to the L*a*b* colorspace.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        r, g, b (float): Floating point number in the interval [0, 1]</span>
+<span class="sd">            representing the red, green and blue components respectively.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Projected :obj:`Color`.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Obeserver. = 2, Illuminant = D65</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Smith, Thomas; Guild, John (1931–32). &quot;The C.I.E. colorimetric</span>
+<span class="sd">        standards and their use&quot;. Transactions of the Optical Society. 33 (3):</span>
+<span class="sd">        73–134. DOI 10.1088/1475-4878/33/3/301</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">r</span> <span class="o">*</span> <span class="mf">0.4124</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="mf">0.3576</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="mf">0.1805</span>    <span class="c1"># X</span>
+        <span class="p">,</span> <span class="n">r</span> <span class="o">*</span> <span class="mf">0.2126</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="mf">0.7152</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="mf">0.0722</span>  <span class="c1"># Y</span>
+        <span class="p">,</span> <span class="n">r</span> <span class="o">*</span> <span class="mf">0.0193</span> <span class="o">+</span> <span class="n">g</span> <span class="o">*</span> <span class="mf">0.1192</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="mf">0.9505</span>  <span class="c1"># Z</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="xyz_to_rgb">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.xyz_to_rgb">[docs]</a>
+<span class="k">def</span> <span class="nf">xyz_to_rgb</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Projects the given xyz :obj:`Color` value to the rgb colorspace.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x, y, z (float): Floating point number in the interval [0, 1]</span>
+<span class="sd">            representing the X, Y and Z components respectively.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Projected :obj:`Color`.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Obeserver. = 2, Illuminant = D65</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Smith, Thomas; Guild, John (1931–32). &quot;The C.I.E. colorimetric</span>
+<span class="sd">        standards and their use&quot;. Transactions of the Optical Society. 33 (3):</span>
+<span class="sd">        73–134. DOI 10.1088/1475-4878/33/3/301</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">x</span> <span class="o">*</span> <span class="mf">3.2406</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="o">-</span><span class="mf">1.5372</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="o">-</span><span class="mf">0.4968</span>   <span class="c1"># R</span>
+        <span class="p">,</span> <span class="n">x</span> <span class="o">*</span> <span class="o">-</span><span class="mf">0.9689</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="mf">1.8758</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="mf">0.0415</span>  <span class="c1"># G</span>
+        <span class="p">,</span> <span class="n">x</span> <span class="o">*</span> <span class="mf">0.0557</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="o">-</span><span class="mf">0.2040</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="mf">1.0570</span>  <span class="c1"># B</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="xyz_to_lab">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.xyz_to_lab">[docs]</a>
+<span class="k">def</span> <span class="nf">xyz_to_lab</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Projects the given XYZ :obj:`Color` value to the L*a*b* colorspace.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x, y, z (float): Floating point number in the interval [0, 1]</span>
+<span class="sd">            representing the X, Y, Z components respectively.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Projected :obj:`Color`.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Smith, Thomas; Guild, John (1931–32). &quot;The C.I.E. colorimetric</span>
+<span class="sd">        standards and their use&quot;. Transactions of the Optical Society. 33 (3):</span>
+<span class="sd">        73–134. DOI 10.1088/1475-4878/33/3/301</span>
+
+<span class="sd">        CIE Colorimetry 15 (Third ed.). CIE. 2004. ISBN 3-901-906-33-9.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Adapted from OpenCV.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="mf">0.950456</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">/</span> <span class="mf">1.088754</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">**</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mf">0.008856</span> <span class="k">else</span> <span class="mf">7.787</span><span class="o">*</span><span class="n">t</span> <span class="o">+</span> <span class="mi">16</span><span class="o">/</span><span class="mi">116</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mf">116.</span><span class="o">*</span><span class="p">(</span><span class="n">y</span><span class="o">**</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)))</span><span class="o">-</span><span class="mf">16.</span> <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mf">0.008856</span> <span class="k">else</span> <span class="mf">903.3</span><span class="o">*</span><span class="n">y</span>  <span class="c1"># L</span>
+        <span class="p">,</span> <span class="mf">500.</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>                                  <span class="c1"># a</span>
+        <span class="p">,</span> <span class="mf">200.</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>                                  <span class="c1"># b</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="lab_to_xyz">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.lab_to_xyz">[docs]</a>
+<span class="k">def</span> <span class="nf">lab_to_xyz</span><span class="p">(</span>
+    <span class="n">l</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Projects the given L*a*b :obj:`Color` value to the XYZ colorspace.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        l, a, b (float): Floating point number in the interval [0, 1]</span>
+<span class="sd">            representing the L, a, b components respectively.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Projected :obj:`Color`.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Smith, Thomas; Guild, John (1931–32). &quot;The C.I.E. colorimetric</span>
+<span class="sd">        standards and their use&quot;. Transactions of the Optical Society. 33 (3):</span>
+<span class="sd">        73–134. DOI 10.1088/1475-4878/33/3/301</span>
+
+<span class="sd">        CIE Colorimetry 15 (Third ed.). CIE. 2004. ISBN 3-901-906-33-9.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Adapted from OpenCV.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mf">16.</span><span class="p">)</span><span class="o">/</span><span class="mf">116.</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="mf">500.</span><span class="p">)</span><span class="o">+</span><span class="n">y</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">y</span><span class="o">-</span><span class="p">(</span><span class="n">b</span><span class="o">/</span><span class="mf">200.</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">**</span><span class="mi">3</span> <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mf">0.008856</span> <span class="k">else</span> <span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="mi">16</span><span class="o">/</span><span class="mi">116</span><span class="p">)</span><span class="o">/</span><span class="mf">7.787</span>
+
+    <span class="k">return</span><span class="p">(</span>
+        <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.950456</span>    <span class="c1"># X</span>
+        <span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>             <span class="c1"># Y</span>
+        <span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.088754</span>  <span class="c1"># Z</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="interp_cs">
+<a class="viewcode-back" href="../../../api/rnets.colors.html#rnets.colors.utils.interp_cs">[docs]</a>
+<span class="k">def</span> <span class="nf">interp_cs</span><span class="p">(</span>
+    <span class="n">cs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span>
+    <span class="p">,</span> <span class="n">interp</span><span class="p">:</span> <span class="n">ColorSpace</span> <span class="o">=</span> <span class="s2">&quot;lab&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="n">Color</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a sequence of :obj:`Color` in an arbitrary colorspace, convert</span>
+<span class="sd">    them to another space and create an interpolation function. The value</span>
+<span class="sd">    returned by the interpolation function will be converted again to the</span>
+<span class="sd">    original colorspace.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cs (Sequence of `Color`): Sequence of colors in the RGB to be converted</span>
+<span class="sd">            HSL and interpolated.</span>
+<span class="sd">        interp (Literal: rgb, lab or hsl, optional): The colorspace in which</span>
+<span class="sd">            the interpolation will be perform.</span>
+
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :obj:Callable[[float], :obj:`Color`]: A function that takes a float in</span>
+<span class="sd">            the range [0., 1.] as an argument and returns the interpolated</span>
+<span class="sd">            color from the given Sequence of :obj:`Color` using the specified</span>
+<span class="sd">            colorspaces.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Wrapper for :obj:`interp_fn_cspace`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">match</span> <span class="n">interp</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s2">&quot;rgb&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">interp_c_seq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">cs</span><span class="p">,</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+        <span class="k">case</span> <span class="s2">&quot;lab&quot;</span><span class="p">:</span> <span class="k">return</span> <span class="n">interp_fn_rgb_lab</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;hsl&quot;</span><span class="p">:</span> <span class="k">return</span> <span class="n">interp_fn_rgb_hls</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

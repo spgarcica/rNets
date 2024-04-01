@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>struct &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Developers" href="../about/developers.html" />
+    <link rel="prev" title="utils" href="rnets.plotter.utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/python_api.html">Python API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/published_article.html">Published article</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="rnets.html">rnets</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="rnets.chemistry.html">chemistry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.colors.html">colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.dot.html">dot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.parser.html">parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.plotter.html">plotter</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">struct</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.struct.Compound"><code class="docutils literal notranslate"><span class="pre">Compound</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Compound.name"><code class="docutils literal notranslate"><span class="pre">Compound.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Compound.energy"><code class="docutils literal notranslate"><span class="pre">Compound.energy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Compound.idx"><code class="docutils literal notranslate"><span class="pre">Compound.idx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Compound.fflags"><code class="docutils literal notranslate"><span class="pre">Compound.fflags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Compound.conc"><code class="docutils literal notranslate"><span class="pre">Compound.conc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Compound.opts"><code class="docutils literal notranslate"><span class="pre">Compound.opts</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.struct.FFlags"><code class="docutils literal notranslate"><span class="pre">FFlags</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.struct.Network"><code class="docutils literal notranslate"><span class="pre">Network</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Network.compounds"><code class="docutils literal notranslate"><span class="pre">Network.compounds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Network.reactions"><code class="docutils literal notranslate"><span class="pre">Network.reactions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.struct.Reaction"><code class="docutils literal notranslate"><span class="pre">Reaction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Reaction.name"><code class="docutils literal notranslate"><span class="pre">Reaction.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Reaction.compounds"><code class="docutils literal notranslate"><span class="pre">Reaction.compounds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Reaction.energy"><code class="docutils literal notranslate"><span class="pre">Reaction.energy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Reaction.idx"><code class="docutils literal notranslate"><span class="pre">Reaction.idx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.struct.Reaction.opts"><code class="docutils literal notranslate"><span class="pre">Reaction.opts</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.struct.Visibility"><code class="docutils literal notranslate"><span class="pre">Visibility</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="rnets.html">rnets</a></li>
+      <li class="breadcrumb-item active">struct</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/rnets.struct.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-rnets.struct">
+<span id="struct"></span><h1>struct<a class="headerlink" href="#module-rnets.struct" title="Link to this heading"></a></h1>
+<p>Proxy structures to store parsed compounds, reactions and networks.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.struct.Compound">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.struct.</span></span><span class="sig-name descname"><span class="pre">Compound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#rnets.struct.Visibility" title="rnets.struct.Visibility"><span class="pre">Visibility</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Visibility.TRUE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fflags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.struct.FFlags" title="rnets.struct.FFlags"><span class="pre">FFlags</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/struct.html#Compound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.struct.Compound" title="Link to this definition"></a></dt>
+<dd><p>Struct for a chemical compound.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Compound.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#rnets.struct.Compound.name" title="Link to this definition"></a></dt>
+<dd><p>Compound name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Compound.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><a class="headerlink" href="#rnets.struct.Compound.energy" title="Link to this definition"></a></dt>
+<dd><p>Compound energy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Compound.idx">
+<span class="sig-name descname"><span class="pre">idx</span></span><a class="headerlink" href="#rnets.struct.Compound.idx" title="Link to this definition"></a></dt>
+<dd><p>Compound index, in reading order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">visible</span> <span class="pre">(obj</span></span></dt>
+<dd><p><cite>Visible</cite>, optional): Wether the compound will be visible,
+grey or not visible. Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">Visible.TRUE</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Compound.fflags">
+<span class="sig-name descname"><span class="pre">fflags</span></span><a class="headerlink" href="#rnets.struct.Compound.fflags" title="Link to this definition"></a></dt>
+<dd><p>Format labels that
+will be used to represent the compound label. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>set of <a class="reference internal" href="#rnets.struct.FFlags" title="rnets.struct.FFlags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FFlags</span></code></a> or None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Compound.conc">
+<span class="sig-name descname"><span class="pre">conc</span></span><a class="headerlink" href="#rnets.struct.Compound.conc" title="Link to this definition"></a></dt>
+<dd><p>Concentration of the given
+compound. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Compound.opts">
+<span class="sig-name descname"><span class="pre">opts</span></span><a class="headerlink" href="#rnets.struct.Compound.opts" title="Link to this definition"></a></dt>
+<dd><p>Additional options for the compound. Will be later used by the
+writer to decide additional options. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of str as keys and str as values or None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.struct.FFlags">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.struct.</span></span><span class="sig-name descname"><span class="pre">FFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/struct.html#FFlags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.struct.FFlags" title="Link to this definition"></a></dt>
+<dd><p>Format flags. They are used to decide the format of the name.</p>
+<p>i -&gt; italics
+b -&gt; bold
+u -&gt; underscore</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.struct.Network">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.struct.</span></span><span class="sig-name descname"><span class="pre">Network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reactions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.struct.Reaction" title="rnets.struct.Reaction"><span class="pre">Reaction</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/struct.html#Network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.struct.Network" title="Link to this definition"></a></dt>
+<dd><p>Representation of a reaction network.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Network.compounds">
+<span class="sig-name descname"><span class="pre">compounds</span></span><a class="headerlink" href="#rnets.struct.Network.compounds" title="Link to this definition"></a></dt>
+<dd><p>Compounds of the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sequence of <a class="reference internal" href="#rnets.struct.Compound" title="rnets.struct.Compound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Network.reactions">
+<span class="sig-name descname"><span class="pre">reactions</span></span><a class="headerlink" href="#rnets.struct.Network.reactions" title="Link to this definition"></a></dt>
+<dd><p>Reactions in the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sequence of <a class="reference internal" href="#rnets.struct.Reaction" title="rnets.struct.Reaction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Reaction</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.struct.Reaction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.struct.</span></span><span class="sig-name descname"><span class="pre">Reaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#rnets.struct.Visibility" title="rnets.struct.Visibility"><span class="pre">Visibility</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Visibility.TRUE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/struct.html#Reaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.struct.Reaction" title="Link to this definition"></a></dt>
+<dd><p>Unidirectional chemical reaction.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Reaction.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#rnets.struct.Reaction.name" title="Link to this definition"></a></dt>
+<dd><p>Reaction name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Reaction.compounds">
+<span class="sig-name descname"><span class="pre">compounds</span></span><a class="headerlink" href="#rnets.struct.Reaction.compounds" title="Link to this definition"></a></dt>
+<dd><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Compounds</span></code> of the reaction, with left-&gt;right direction..</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of the form ([<a class="reference internal" href="#rnets.struct.Compound" title="rnets.struct.Compound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code></a>], [<a class="reference internal" href="#rnets.struct.Compound" title="rnets.struct.Compound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code></a>])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Reaction.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><a class="headerlink" href="#rnets.struct.Reaction.energy" title="Link to this definition"></a></dt>
+<dd><p>Energy of the reaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Reaction.idx">
+<span class="sig-name descname"><span class="pre">idx</span></span><a class="headerlink" href="#rnets.struct.Reaction.idx" title="Link to this definition"></a></dt>
+<dd><p>Reaction index, in reading order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.struct.Reaction.opts">
+<span class="sig-name descname"><span class="pre">opts</span></span><a class="headerlink" href="#rnets.struct.Reaction.opts" title="Link to this definition"></a></dt>
+<dd><p>Additional options for the compound. Will be later used by the
+writer to decide additional options. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of str as keys and str as values or None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">visible</span> <span class="pre">(obj</span></span></dt>
+<dd><p><cite>Visible</cite>, optional): Wether the compound will be visible,
+grey or not visible. Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">Visible.TRUE</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.struct.Visibility">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.struct.</span></span><span class="sig-name descname"><span class="pre">Visibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/struct.html#Visibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.struct.Visibility" title="Link to this definition"></a></dt>
+<dd><p>Visibility of the element.</p>
+<p>FALSE -&gt; Not visible.
+TRUE -&gt; Visible.
+GREY -&gt; Greyscale.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rnets.plotter.utils.html" class="btn btn-neutral float-left" title="utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../about/developers.html" class="btn btn-neutral float-right" title="Developers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

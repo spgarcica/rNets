@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Regiospecific CO2 fixation &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="rnets" href="../../api/rnets.html" />
+    <link rel="prev" title="CO2 hydrogenation on Pd(111)" href="CO2_Pd.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../published_article.html">Published article</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="imine_condensation.html">Imine condensation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CO2_Pd.html">CO<sub>2</sub> hydrogenation on Pd(111)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Regiospecific CO<sub>2</sub> fixation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#preliminary-steps">Preliminary steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generation-of-the-network-graph">Generation of the network graph</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/rnets.html">rnets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../published_article.html">Published article</a></li>
+      <li class="breadcrumb-item active">Regiospecific CO<sub>2</sub> fixation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples/published_article/regiospecific_CO2.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="regiospecific-co2-fixation">
+<h1>Regiospecific CO<sub>2</sub> fixation<a class="headerlink" href="#regiospecific-co2-fixation" title="Link to this heading"></a></h1>
+<p>In this example the reaction network of the regiospecific CO<sub>2</sub> fixation
+is shown. This example shows the integration of knowledge graphs and rNets. The files
+required for the generation of the reaction networks can be found in
+<code class="code docutils literal notranslate"><span class="pre">examples/example_KG</span></code> folder. This folder contains the following
+files:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>example_KG
+  -README
+  -CycOct.owl
+  -RNets_KG_Parser.py
+</pre></div>
+</div>
+<p>Here the <code class="code docutils literal notranslate"><span class="pre">owl</span></code> file is a file containing the information of the knowledge
+graph, typically used in non-relational databases for knowledge graphs.
+Specifically, it was generated using
+<a class="reference external" href="https://gitlab.com/dgarayr/ontorxn_tools">ontorxn_tools</a> . The file
+<code class="code docutils literal notranslate"><span class="pre">RNets_KG_Parser.py</span></code> allows the translation of the <code class="code docutils literal notranslate"><span class="pre">owl</span></code> file to
+the input files of <code class="code docutils literal notranslate"><span class="pre">rNets</span></code>.</p>
+<section id="preliminary-steps">
+<h2>Preliminary steps<a class="headerlink" href="#preliminary-steps" title="Link to this heading"></a></h2>
+<p>The file <code class="code docutils literal notranslate"><span class="pre">RNets_KG_Parser.py</span></code> has dependencies to two python libraries:
+<cite>rdflib &lt;https://github.com/RDFLib/rdflib&gt;</cite> and
+<cite>owlready2 &lt;https://owlready2.readthedocs.io&gt;</cite>. The following code will allow
+you to install both of these libraries, but in case of doubt we recommend to
+follow their official documentation to install them.</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>rdflib<span class="w"> </span>owlready2
+</pre></div>
+</div>
+</section>
+<section id="generation-of-the-network-graph">
+<h2>Generation of the network graph<a class="headerlink" href="#generation-of-the-network-graph" title="Link to this heading"></a></h2>
+<p>In order to generate the graph from the <code class="code docutils literal notranslate"><span class="pre">owl</span></code> file we will first use the
+<code class="code docutils literal notranslate"><span class="pre">RNets_KG_Parser.py</span></code> whose contents are shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">rdflib</span>
+<span class="kn">import</span> <span class="nn">owlready2</span> <span class="k">as</span> <span class="nn">owl</span>
+
+
+<span class="n">hartree_to_eV</span> <span class="o">=</span> <span class="mf">27.2114</span>
+<span class="n">hartree_to_kcalmol</span> <span class="o">=</span> <span class="mf">627.509</span>
+
+<span class="k">def</span> <span class="nf">gen_edge</span><span class="p">(</span><span class="n">nd_list</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Generation of a comma-separated string from a list of nodes</span>
+<span class="sd">    Input:</span>
+<span class="sd">    - nd_list. List of strings defining a pair of nodes. If only one (monomolecular reaction)</span>
+<span class="sd">    is present, add a empty string</span>
+<span class="sd">    Output:</span>
+<span class="sd">    Comma-separated string with node pair.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nd_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">nd_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">,&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">nd_list</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">QueryCore</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Basic class to handle SPARQL query generation at the Python level, defining strings and list</span>
+<span class="sd">    of strings for different SPARQL statements&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">select</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">where</span><span class="o">=</span><span class="p">[],</span><span class="n">prefix</span><span class="o">=</span><span class="p">{},</span><span class="n">after</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="c1"># Definition of basic attributes: SELECT (string) and WHERE (list of strings) statement information,</span>
+        <span class="c1"># namespace prefixes (dict mapping prefix to URI) and possible additional clauses after selection (list)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Select</span> <span class="o">=</span> <span class="n">select</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Where</span> <span class="o">=</span> <span class="n">where</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">After</span> <span class="o">=</span> <span class="n">after</span>
+        <span class="c1"># Definition of basic namespaces for OntoRXN and Gainesville Core</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">QueryNamespaces</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rxn&quot;</span><span class="p">:</span><span class="s2">&quot;http://www.semanticweb.com/OntoRxn#&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;gc&quot;</span><span class="p">:</span><span class="s2">&quot;http://purl.org/gc/&quot;</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">set_prefix_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Define the prefix block</span>
+        <span class="n">prefix_block</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">ns</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Prefix</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">ns_string</span> <span class="o">=</span> <span class="s2">&quot;PREFIX </span><span class="si">%s</span><span class="s2">: &lt;</span><span class="si">%s</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">ns</span><span class="p">)</span>
+            <span class="n">prefix_block</span> <span class="o">+=</span> <span class="n">ns_string</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PrefixString</span> <span class="o">=</span> <span class="n">prefix_block</span>
+        <span class="k">return</span> <span class="n">prefix_block</span>
+
+    <span class="k">def</span> <span class="nf">set_where_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Define the WHERE block from a list of statements</span>
+        <span class="n">where_statement</span> <span class="o">=</span> <span class="s2">&quot; .</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Where</span><span class="p">)</span>
+        <span class="n">where_block</span> <span class="o">=</span> <span class="s2">&quot;WHERE {</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s2">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">where_statement</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">WhereString</span> <span class="o">=</span> <span class="n">where_block</span>
+        <span class="k">return</span> <span class="n">where_block</span>
+
+    <span class="k">def</span> <span class="nf">set_select_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Define the SELECT block, including the WHERE part</span>
+        <span class="n">where_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_where_statement</span><span class="p">()</span>
+        <span class="n">select_block</span> <span class="o">=</span> <span class="s2">&quot;SELECT </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Select</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">WhereString</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SelectString</span> <span class="o">=</span> <span class="n">select_block</span>
+        <span class="k">return</span> <span class="n">select_block</span>
+
+    <span class="k">def</span> <span class="nf">set_after_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Define the final block with GROUPBY, ORDERBY or other post-processing clauses</span>
+        <span class="n">after_block</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">After</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">AfterString</span> <span class="o">=</span> <span class="n">after_block</span>
+        <span class="k">return</span> <span class="n">after_block</span>
+    
+    <span class="k">def</span> <span class="nf">string_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Build a string for the SPARQL query from defined attributes. </span>
+        <span class="n">sparql_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Prefix</span><span class="p">):</span>
+            <span class="n">sparql_string</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_prefix_statement</span><span class="p">()</span>
+        <span class="c1"># SELECT and WHERE must be present: do a sanity check before building the structure</span>
+        <span class="c1"># which is SELECT select-clauses WHERE { where_clauses }</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">Select</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">Where</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">sparql_string</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_select_statement</span><span class="p">()</span>
+        <span class="c1"># Add additional statements if present</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">After</span><span class="p">):</span>
+            <span class="n">sparql_string</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_after_statement</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">sparql_string</span>
+
+    <span class="k">def</span> <span class="nf">count_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">arg_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Count the number of optional string arguments in a given string</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">arg_type</span><span class="p">):</span>
+            <span class="n">clause</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">clause</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">arg_type</span><span class="p">)</span>
+        <span class="n">Nargs</span> <span class="o">=</span> <span class="n">clause</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Nargs</span>
+
+    <span class="k">def</span> <span class="nf">pass_args_clause</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">clause</span><span class="p">,</span><span class="n">arglist</span><span class="p">):</span>
+        <span class="c1"># Pass necessary arguments to the clause and remove them from the input list</span>
+        <span class="n">Nargs</span> <span class="o">=</span> <span class="n">clause</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Nargs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">pass_args</span> <span class="o">=</span> <span class="n">arglist</span><span class="p">[:</span><span class="n">Nargs</span><span class="p">]</span>
+            <span class="n">clause</span> <span class="o">=</span> <span class="n">clause</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pass_args</span><span class="p">)</span>
+            <span class="n">arglist</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">arglist</span><span class="p">[</span><span class="n">Nargs</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="n">clause</span>
+    
+    <span class="k">def</span> <span class="nf">pass_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">arg_list</span><span class="p">):</span>
+        <span class="c1"># Convenience function to use command-line arguments to generate SPARQL block</span>
+        <span class="n">Nargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count_args</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Nargs</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg_list</span><span class="p">)):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2"> args passed, required </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arg_list</span><span class="p">),</span><span class="n">Nargs</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="c1"># Check Select, Where and After clauses</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Select</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pass_args_clause</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Select</span><span class="p">,</span><span class="n">arg_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Where</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pass_args_clause</span><span class="p">(</span><span class="n">where_clause</span><span class="p">,</span><span class="n">arg_list</span><span class="p">)</span> <span class="k">for</span> <span class="n">where_clause</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Where</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">After</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pass_args_clause</span><span class="p">(</span><span class="n">after_clause</span><span class="p">,</span><span class="n">arg_list</span><span class="p">)</span> <span class="k">for</span> <span class="n">after_clause</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">After</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">get_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rdf_database</span><span class="p">,</span><span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">subst</span><span class="o">=</span><span class="p">{}):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Get the requested attributes from a query.</span>
+<span class="sd">        Input:</span>
+<span class="sd">        - rdf_database. RDFLib graph to do the query on.</span>
+<span class="sd">        - attributes. List of strings with the labels to be extracted from query results, with the</span>
+<span class="sd">        same name as the variables in SPARQL.</span>
+<span class="sd">        - subst. Dict of tuples for regex-based substitutions on query results, key-ed by</span>
+<span class="sd">        attribute names, with first value element being the pattern to find and the second the substitution</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">qr</span> <span class="o">=</span> <span class="n">rdf_database</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">attributes</span><span class="p">):</span>
+            <span class="c1"># use all by default and assign to a property</span>
+            <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">toPython</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">qr</span><span class="o">.</span><span class="n">vars</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">CurrentAttr</span> <span class="o">=</span> <span class="n">attributes</span>
+            
+        <span class="n">result_table</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">qr</span><span class="p">:</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">]</span>
+            <span class="c1"># Using the .toPython() function to keep typing</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">toPython</span><span class="p">()</span> <span class="k">if</span> <span class="n">entry</span> <span class="k">else</span> <span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="p">]</span>
+            <span class="n">clear_flag</span> <span class="o">=</span> <span class="p">[</span><span class="n">attr</span> <span class="ow">in</span> <span class="n">subst</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">]</span>
+            <span class="n">clean_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="o">*</span><span class="n">subst</span><span class="p">[</span><span class="n">attributes</span><span class="p">[</span><span class="n">ii</span><span class="p">]],</span><span class="n">entry</span><span class="p">)</span> <span class="k">if</span> <span class="n">clear_flag</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="k">else</span> <span class="n">entry</span>
+                          <span class="k">for</span> <span class="n">ii</span><span class="p">,</span><span class="n">entry</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">)]</span>
+            <span class="n">result_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">clean_data</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result_table</span>
+    
+    <span class="k">def</span> <span class="nf">results_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">result_table</span><span class="p">,</span><span class="n">attributes</span><span class="p">):</span>
+        <span class="c1"># Groups results to a list of dicts, mapping attribute names to their values</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">attributes</span><span class="p">):</span>
+            <span class="n">attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CurrentAttr</span>
+        <span class="n">result_dict_table</span> <span class="o">=</span> <span class="p">[</span><span class="n">OrderedDict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span><span class="n">entry</span><span class="p">))</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">result_table</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result_dict_table</span>
+
+    <span class="k">def</span> <span class="nf">get_hierarchical_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rdf_database</span><span class="p">,</span><span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">subst</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="n">result_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">rdf_database</span><span class="p">,</span><span class="n">attributes</span><span class="p">,</span><span class="n">subst</span><span class="p">)</span>
+        <span class="n">result_dict_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_to_dict</span><span class="p">(</span><span class="n">result_table</span><span class="p">,</span><span class="n">attributes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result_dict_table</span>
+        
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Wrapper to call self.string_builder() if the str built-in is used&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">string_builder</span><span class="p">()</span>
+
+
+
+<span class="k">class</span> <span class="nc">SimpleKGManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Base class to manage knowledge graphs and simplify namespace handling and RDFLib-based</span>
+<span class="sd">    World manipulation to enable SPARQL queries.&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">KG_file</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Namespace</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_KG</span><span class="p">(</span><span class="n">KG_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_onto</span><span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">load_KG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">KG_filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Function to load a OntoRXN-based knowledge graph from a local file, handling imports and</span>
+<span class="sd">        the corresponding RDFLib-compatible world.</span>
+<span class="sd">        Input:</span>
+<span class="sd">        - KG_filename. String, name of the file to be read.&#39;&#39;&#39;</span>
+        <span class="n">owl</span><span class="o">.</span><span class="n">onto_path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="c1"># Instantiate a new world</span>
+        <span class="n">onto_world</span> <span class="o">=</span> <span class="n">owl</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+        <span class="n">ontology</span> <span class="o">=</span> <span class="n">onto_world</span><span class="o">.</span><span class="n">get_ontology</span><span class="p">(</span><span class="n">KG_filename</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">only_local</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ontology</span> <span class="o">=</span> <span class="n">ontology</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MainWorld</span> <span class="o">=</span> <span class="n">onto_world</span><span class="o">.</span><span class="n">as_rdflib_graph</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="k">def</span> <span class="nf">process_onto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Basic processing for OntoRXN (clean ontology or instantiated graphs): prepare imports,</span>
+<span class="sd">        namespaces and RDFLib world&#39;&#39;&#39;</span>
+        <span class="n">owl</span><span class="o">.</span><span class="n">set_datatype_iri</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;http://www.w3.org/2001/XMLSchema#float&quot;</span><span class="p">)</span> 
+        <span class="n">occ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ontology</span><span class="o">.</span><span class="n">imported_ontologies</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="c1">#mop = self.Ontology.imported_ontologies[1].load()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">OntoCompChem</span> <span class="o">=</span> <span class="n">occ</span>
+        <span class="c1"># Prepare namespaces</span>
+        <span class="n">namespace_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;gc&quot;</span><span class="p">:</span><span class="n">occ</span><span class="o">.</span><span class="n">get_namespace</span><span class="p">(</span><span class="s2">&quot;http://purl.org/gc/&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;osp&quot;</span><span class="p">:</span><span class="n">occ</span><span class="o">.</span><span class="n">get_namespace</span><span class="p">(</span><span class="s2">&quot;http://theworldavatar.com/ontology/ontospecies/OntoSpecies.owl#&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;pt&quot;</span><span class="p">:</span><span class="n">occ</span><span class="o">.</span><span class="n">get_namespace</span><span class="p">(</span><span class="s2">&quot;http://www.daml.org/2003/01/periodictable/PeriodicTable.owl&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;term&quot;</span><span class="p">:</span><span class="n">occ</span><span class="o">.</span><span class="n">get_namespace</span><span class="p">(</span><span class="s2">&quot;http://purl.org/dc/terms/&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;qudt&quot;</span><span class="p">:</span><span class="n">occ</span><span class="o">.</span><span class="n">get_namespace</span><span class="p">(</span><span class="s2">&quot;http://data.nasa.gov/qudt/owl/qudt#&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;occ&quot;</span><span class="p">:</span><span class="n">occ</span><span class="o">.</span><span class="n">get_namespace</span><span class="p">(</span><span class="s2">&quot;http://theworldavatar.com/ontology/ontocompchem/ontocompchem.owl#&quot;</span><span class="p">),</span>
+            <span class="c1">#&quot;occ&quot;:occ,</span>
+            <span class="s2">&quot;onto&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">Ontology</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Namespace</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">namespace_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<span class="k">class</span> <span class="nc">KinQueryHandler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Class to store and manage the SPARQL queries required to retrieve essential information from the graph:</span>
+<span class="sd">    connectivity (steps), mapping between stages and calculations, and mapping between calculations and their properties&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">KG</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">KG</span> <span class="o">=</span> <span class="n">KG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">StepQuery</span> <span class="o">=</span> <span class="n">QueryCore</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">StageQuery</span> <span class="o">=</span> <span class="n">QueryCore</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CalcQuery</span> <span class="o">=</span> <span class="n">QueryCore</span><span class="p">()</span>
+        <span class="c1"># And automatically define all queries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_step_query</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_stage_query</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_calc_query</span><span class="p">()</span>
+
+        
+    <span class="k">def</span> <span class="nf">set_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">query</span><span class="p">,</span><span class="n">select_clause</span><span class="p">,</span><span class="n">where_clause</span><span class="p">,</span><span class="n">after_clause</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="n">query</span><span class="o">.</span><span class="n">Select</span> <span class="o">=</span> <span class="n">select_clause</span>
+        <span class="n">query</span><span class="o">.</span><span class="n">Where</span> <span class="o">=</span> <span class="n">where_clause</span>
+        <span class="n">query</span><span class="o">.</span><span class="n">After</span> <span class="o">=</span> <span class="n">after_clause</span>
+        <span class="n">query</span><span class="o">.</span><span class="n">Prefix</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">QueryNamespaces</span>
+        <span class="k">return</span> <span class="n">query</span>
+        
+    <span class="k">def</span> <span class="nf">set_step_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 1st query: retrieve all steps, the corresponding TS stage (if present) and the node stages</span>
+        <span class="n">select_clause</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;DISTINCT ?stepX ?stgX</span>
+<span class="s2">                            ?stgTS</span>
+<span class="s2">                            (GROUP_CONCAT(?spcName ; separator=&#39;+&#39;) as ?spcNode)&quot;&quot;&quot;</span> 
+        <span class="n">where_clause</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;?stepX rxn:hasNode ?stgX&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;?stgX rxn:hasSpecies ?spcX&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;?spcX rxn:hasCalculation ?calcX&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;?calcX rxn:hasAnnotation ?noteX&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;BIND(STRBEFORE(?noteX,&#39;;&#39;) AS ?spcName)&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;OPTIONAL{?stepX rxn:hasTS ?stgTS}&quot;</span><span class="p">,</span>
+                        <span class="p">]</span>
+        <span class="n">after_clause</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GROUP BY ?stepX ?stgX ?stgTS&quot;</span><span class="p">,</span><span class="s2">&quot;ORDER BY ?stepX&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">StepQuery</span><span class="p">,</span><span class="n">select_clause</span><span class="p">,</span><span class="n">where_clause</span><span class="p">,</span><span class="n">after_clause</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">StepQuery</span>
+
+    <span class="k">def</span> <span class="nf">set_stage_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">select_clause</span> <span class="o">=</span> <span class="s2">&quot;DISTINCT ?stgX ?nameX (GROUP_CONCAT(?calcX ; separator=&#39;;&#39;) AS ?calcList)&quot;</span>
+        <span class="n">where_clause</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;?stgX rxn:hasSpecies ?spcX&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;?spcX rxn:hasCalculation ?calcX&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;OPTIONAL {?stgX rxn:hasAnnotation ?nameX}&quot;</span>
+                    <span class="p">]</span>
+        <span class="n">after_clause</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GROUP BY ?stgX&quot;</span><span class="p">,</span><span class="s2">&quot;ORDER BY ?stgX&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">StageQuery</span><span class="p">,</span><span class="n">select_clause</span><span class="p">,</span><span class="n">where_clause</span><span class="p">,</span><span class="n">after_clause</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">StageQuery</span>
+
+    <span class="k">def</span> <span class="nf">set_calc_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">select_clause</span> <span class="o">=</span> <span class="s2">&quot;DISTINCT ?calcX ?Eel ?G ?spcName&quot;</span>
+        <span class="n">where_clause</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="s2">&quot;?calcX gc:hasResult / rxn:hasElecEnergy / gc:hasValue ?Eel&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;?calcX gc:hasResult / rxn:hasGibbsFreeEnergy / gc:hasValue ?G&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;?calcX rxn:hasAnnotation ?noteX&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;BIND(STRBEFORE(?noteX,&#39;;&#39;) AS ?spcName)&quot;</span>
+                    <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CalcQuery</span><span class="p">,</span><span class="n">select_clause</span><span class="p">,</span><span class="n">where_clause</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">CalcQuery</span>
+
+    <span class="k">def</span> <span class="nf">run_all_queries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">KG</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;Gets results tables for all queries&#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">StepTable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">StepQuery</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">KG</span><span class="o">.</span><span class="n">MainWorld</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">StageTable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">StageQuery</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">KG</span><span class="o">.</span><span class="n">MainWorld</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CalcTable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CalcQuery</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">KG</span><span class="o">.</span><span class="n">MainWorld</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<span class="k">def</span> <span class="nf">read_kg_and_query</span><span class="p">(</span><span class="n">kg_file</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Directly manages a CRN-KG file and runs the queries expressed in</span>
+<span class="sd">    KinQueryHandler class, returning these results.</span>
+<span class="sd">    Input:</span>
+<span class="sd">    - kg_file. String, name of an OWL file containing a OntoRXN-based knowledge graph</span>
+<span class="sd">    Output:</span>
+<span class="sd">    - query_handler. KinQueryHandler object containing information from calculations.&#39;&#39;&#39;</span>
+    <span class="c1">### Handle the knowledge graph and the queries</span>
+    <span class="n">onto_wrap</span> <span class="o">=</span> <span class="n">SimpleKGManager</span><span class="p">(</span><span class="n">kg_file</span><span class="p">)</span>
+
+    <span class="c1">### Management of SPARQL queries with KinQueryHandler class</span>
+
+    <span class="n">query_handler</span> <span class="o">=</span> <span class="n">KinQueryHandler</span><span class="p">()</span>
+    <span class="n">query_handler</span><span class="o">.</span><span class="n">run_all_queries</span><span class="p">(</span><span class="n">onto_wrap</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">query_handler</span>
+
+<span class="k">def</span> <span class="nf">kin_query_formatter</span><span class="p">(</span><span class="n">query_handler</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Convenience function to format the results in a filled KinQueryHandler object to</span>
+<span class="sd">    dictionaries: mapping stage to a list of calculations, calculations to energies and calculations to names</span>
+<span class="sd">    Input:</span>
+<span class="sd">    - query_handler. KinQueryHandler object containing information from calculations.</span>
+<span class="sd">    Output:</span>
+<span class="sd">    - stage_to_calcs. Dict mapping stage names to list of calculations.</span>
+<span class="sd">    - calc_to_name. Dict mapping calculation ids to simplified names.</span>
+<span class="sd">    - calc_to_gibbs. Dict mapping calculation ids to Gibbs free energies.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">stage_to_calcs</span> <span class="o">=</span> <span class="p">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">entry</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">query_handler</span><span class="o">.</span><span class="n">StageTable</span><span class="p">}</span>
+    <span class="n">calc_to_name</span> <span class="o">=</span> <span class="p">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">entry</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">query_handler</span><span class="o">.</span><span class="n">CalcTable</span><span class="p">}</span>
+    <span class="n">calc_to_gibbs</span> <span class="o">=</span> <span class="p">{</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">entry</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">query_handler</span><span class="o">.</span><span class="n">CalcTable</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">stage_to_calcs</span><span class="p">,</span><span class="n">calc_to_name</span><span class="p">,</span><span class="n">calc_to_gibbs</span>
+
+<span class="k">def</span> <span class="nf">build_rnet_files</span><span class="p">(</span><span class="n">query_handler</span><span class="p">,</span><span class="n">reference</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">hidden_species</span><span class="o">=</span><span class="p">[]):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Builds the compound and reaction files for RNets from the reaction set defined in a</span>
+<span class="sd">    knowledge graph, using a filled KinQueryHandler as input.</span>
+<span class="sd">    Input:</span>
+<span class="sd">    - query_handler. KinQueryHandler object containing information from calculations.</span>
+<span class="sd">    Output:</span>
+<span class="sd">    - compounds_block. String, contents of the COMPOUNDS file for rNets.</span>
+<span class="sd">    - reacs_block. String, contents of the REACTIONS file for rNets.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">stage_to_calcs</span><span class="p">,</span><span class="n">calc_to_name</span><span class="p">,</span><span class="n">calc_to_gibbs</span> <span class="o">=</span> <span class="n">kin_query_formatter</span><span class="p">(</span><span class="n">query_handler</span><span class="p">)</span>
+    <span class="n">name_to_calc</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">calc_to_name</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="c1"># Go through steps, for every stage retrieve the corresponding nodes</span>
+    <span class="n">known_edges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">edge_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">query_handler</span><span class="o">.</span><span class="n">StepTable</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">step</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">known_edges</span><span class="p">:</span>
+            <span class="n">known_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c1"># get the species involved in this stage: recall that there might be several (or None)</span>
+            <span class="n">stg_ts</span> <span class="o">=</span> <span class="n">step</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">stg_ts_calcs</span> <span class="o">=</span> <span class="n">stage_to_calcs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">stg_ts</span><span class="p">,[</span><span class="kc">None</span><span class="p">])</span>
+            <span class="c1"># locate the node</span>
+            <span class="n">stg_nd</span> <span class="o">=</span> <span class="n">step</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">stg_nd_calcs</span> <span class="o">=</span> <span class="n">stage_to_calcs</span><span class="p">[</span><span class="n">stg_nd</span><span class="p">]</span>
+            <span class="n">edge</span> <span class="o">=</span> <span class="p">[</span><span class="n">stg_ts_calcs</span><span class="p">,</span><span class="n">stg_nd_calcs</span><span class="p">]</span>
+            <span class="n">edge_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">known_edges</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">step</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c1"># add the 2nd node</span>
+            <span class="n">stg_nd</span> <span class="o">=</span> <span class="n">step</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">stg_nd_calcs</span> <span class="o">=</span> <span class="n">stage_to_calcs</span><span class="p">[</span><span class="n">stg_nd</span><span class="p">]</span>
+            <span class="n">edge_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stg_nd_calcs</span><span class="p">)</span>
+
+    <span class="c1"># Instead of building a graph, we want to have all species as nodes and the stage-based transition states</span>
+    <span class="c1"># We also want to compute relative energies</span>
+    <span class="n">final_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">final_edges</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check the reference, if present</span>
+    <span class="n">e_ref</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">reference</span><span class="p">:</span>
+        <span class="n">reference_calcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">name_to_calc</span><span class="p">[</span><span class="n">spc</span><span class="p">]</span> <span class="k">for</span> <span class="n">spc</span> <span class="ow">in</span> <span class="n">reference</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">)]</span>
+        <span class="n">e_ref</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">calc_to_gibbs</span><span class="p">[</span><span class="n">calc</span><span class="p">]</span> <span class="k">for</span> <span class="n">calc</span> <span class="ow">in</span> <span class="n">reference_calcs</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edge_list</span><span class="p">:</span>
+        <span class="c1"># Clear up species that are present in both nodes (and possibly the TS) to avoid cluttering the edge</span>
+        <span class="n">rep_species</span> <span class="o">=</span> <span class="p">[</span><span class="n">spc</span> <span class="k">for</span> <span class="n">spc</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">spc</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+        <span class="n">edge_clear</span> <span class="o">=</span> <span class="p">[[</span><span class="n">spc</span> <span class="k">for</span> <span class="n">spc</span> <span class="ow">in</span> <span class="n">ed</span> <span class="k">if</span> <span class="n">spc</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rep_species</span><span class="p">]</span> <span class="k">for</span> <span class="n">ed</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">]</span>
+        <span class="c1"># We need the individual nodes</span>
+        <span class="n">e_nd1</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">calc_to_gibbs</span><span class="p">[</span><span class="n">calc</span><span class="p">]</span> <span class="k">for</span> <span class="n">calc</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="o">-</span> <span class="n">e_ref</span>
+        <span class="n">e_nd2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">calc_to_gibbs</span><span class="p">[</span><span class="n">calc</span><span class="p">]</span> <span class="k">for</span> <span class="n">calc</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span> <span class="o">-</span> <span class="n">e_ref</span>
+        <span class="n">nodes_fmt</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Auxiliary species will be assigned zeros</span>
+        <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">calc</span> <span class="ow">in</span> <span class="n">edge_clear</span><span class="p">[</span><span class="n">jj</span><span class="p">]:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">calc_to_name</span><span class="p">[</span><span class="n">calc</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">hidden_species</span><span class="p">:</span>
+                    <span class="n">nodes_fmt</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">nodes_fmt</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,[</span><span class="n">e_nd1</span><span class="p">,</span><span class="n">e_nd2</span><span class="p">][</span><span class="n">jj</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">hartree_to_kcalmol</span><span class="p">))</span>
+
+        <span class="n">nodes_fmt_nw</span> <span class="o">=</span> <span class="p">[</span><span class="n">nd</span> <span class="k">for</span> <span class="n">nd</span> <span class="ow">in</span> <span class="n">nodes_fmt</span> <span class="k">if</span> <span class="n">nd</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">final_nodes</span><span class="p">]</span>
+        <span class="n">final_nodes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">nodes_fmt_nw</span><span class="p">)</span>
+        <span class="c1"># Process the TS, which will be an unique edge -&gt; also, attempt to handle barrierless</span>
+        <span class="c1"># there might be several nodes in a list: join them by a + symbol for consistency</span>
+        <span class="n">ndname1</span> <span class="o">=</span> <span class="s2">&quot;+&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">calc_to_name</span><span class="p">[</span><span class="n">calc</span><span class="p">]</span> <span class="k">for</span> <span class="n">calc</span> <span class="ow">in</span> <span class="n">edge_clear</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">ndname2</span> <span class="o">=</span> <span class="s2">&quot;+&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">calc_to_name</span><span class="p">[</span><span class="n">calc</span><span class="p">]</span> <span class="k">for</span> <span class="n">calc</span> <span class="ow">in</span> <span class="n">edge_clear</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+        <span class="n">tsname</span> <span class="o">=</span> <span class="n">calc_to_name</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">edge_clear</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tsname</span><span class="p">:</span>
+            <span class="n">tsenergy</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">e_nd1</span><span class="p">,</span><span class="n">e_nd2</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tsenergy</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">calc_to_gibbs</span><span class="p">[</span><span class="n">calc</span><span class="p">]</span> <span class="k">for</span> <span class="n">calc</span> <span class="ow">in</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="o">-</span> <span class="n">e_ref</span>
+
+        <span class="n">edge_fmt</span> <span class="o">=</span> <span class="p">(</span><span class="n">ndname1</span><span class="p">,</span><span class="n">ndname2</span><span class="p">,</span><span class="n">tsname</span><span class="p">,</span><span class="n">tsenergy</span><span class="o">*</span><span class="n">hartree_to_kcalmol</span><span class="p">)</span>
+        <span class="n">final_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge_fmt</span><span class="p">)</span>
+
+    <span class="c1"># And write to files</span>
+    <span class="n">header_compounds</span> <span class="o">=</span> <span class="s2">&quot;name,energy,fflags,visible,opts</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="c1"># Turn off visibility of auxiliary species</span>
+    <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">visibility</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;f&quot;</span> <span class="k">if</span> <span class="n">nd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">hidden_species</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span> <span class="k">for</span> <span class="n">nd</span> <span class="ow">in</span> <span class="n">final_nodes</span><span class="p">]</span>
+    <span class="n">compounds</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%.6f</span><span class="s2">,b,</span><span class="si">%s</span><span class="s2">,&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">vis</span><span class="p">)</span> <span class="k">for</span> <span class="n">nd</span><span class="p">,</span><span class="n">vis</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">final_nodes</span><span class="p">,</span><span class="n">visibility</span><span class="p">)]</span>
+    <span class="n">compounds_block</span> <span class="o">=</span> <span class="n">header_compounds</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">compounds</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="n">header_edges</span> <span class="o">=</span> <span class="s2">&quot;cleft,cleft,cright,cright,energy,direction,name,visible</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">edges_out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ii</span><span class="p">,</span><span class="n">edge</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">final_edges</span><span class="p">):</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="n">gen_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">))</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">gen_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">))</span>
+        <span class="n">edges_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%.6f</span><span class="s2">,&lt;-&gt;,R</span><span class="si">%d</span><span class="s2">,&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">ii</span><span class="p">))</span>
+
+    <span class="n">edges_block</span> <span class="o">=</span> <span class="n">header_edges</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">edges_out</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="n">compounds_block</span><span class="p">,</span><span class="n">edges_block</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1">### CLI-based arguments</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Parse knowledge graphs for visualization&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;outfname_comp&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Provide the name for the compounds output.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;outfname_rx&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Provide the name for the reactions output.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;input_kg&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to knowledge graph file&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--reference&quot;</span><span class="p">,</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Provide the names of the species used as energy reference, separated by +&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--hidden-species&quot;</span><span class="p">,</span> <span class="s1">&#39;-hs&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Provide the names of species that will be hidden in the graph, separated by commas&quot;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">kq_handler</span> <span class="o">=</span> <span class="n">read_kg_and_query</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">input_kg</span><span class="p">)</span>
+    <span class="n">compounds_block</span><span class="p">,</span><span class="n">edges_block</span> <span class="o">=</span> <span class="n">build_rnet_files</span><span class="p">(</span><span class="n">kq_handler</span><span class="p">,</span><span class="n">args</span><span class="o">.</span><span class="n">reference</span><span class="p">,</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_species</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">outfname_comp</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+        <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">compounds_block</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">outfname_rx</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+        <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">edges_block</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To use the script to generate the Compounds and Reactions files needed for rNets
+we will execute the following command:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>RNets_KG_Parser.py<span class="w"> </span>comps.csv<span class="w"> </span>reactions.csv<span class="w"> </span>CycOct.owl<span class="w"> </span>--reference<span class="w"> </span>EpOr+CO2+TMABr<span class="w"> </span>--hidden-species<span class="w"> </span>CO2,TMA,TMABr
+</pre></div>
+</div>
+<p>Here, we will generate the <code class="code docutils literal notranslate"><span class="pre">comps.csv</span></code> and <code class="code docutils literal notranslate"><span class="pre">reactions.csv</span></code> files
+that will have as reference state in energy the <code class="code docutils literal notranslate"><span class="pre">EpOr+CO2+TMABr</span></code> of the
+knowledge graph and will set the species <code class="code docutils literal notranslate"><span class="pre">CO2</span></code>, <code class="code docutils literal notranslate"><span class="pre">TMA</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">TMABr</span></code> as not visible.</p>
+<p>Next we use rNets to generate the <code class="code docutils literal notranslate"><span class="pre">.dot</span></code> file containing the reaction
+network:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>rNets<span class="w"> </span>comps.csv<span class="w"> </span>reactions.csv
+</pre></div>
+</div>
+<p>Finally we proceed to render the figure in our preferred graphical format using
+graphviz. In this case we will use <code class="code docutils literal notranslate"><span class="pre">png</span></code></p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>dot<span class="w"> </span>-Tpng<span class="w"> </span>graph.dot<span class="w"> </span>-o<span class="w"> </span>graph.png
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CO2_Pd.html" class="btn btn-neutral float-left" title="CO2 hydrogenation on Pd(111)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../api/rnets.html" class="btn btn-neutral float-right" title="rnets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

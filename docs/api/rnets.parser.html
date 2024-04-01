@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>parser &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="plotter" href="rnets.plotter.html" />
+    <link rel="prev" title="dot" href="rnets.dot.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/python_api.html">Python API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/published_article.html">Published article</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="rnets.html">rnets</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="rnets.chemistry.html">chemistry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.colors.html">colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.dot.html">dot</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">parser</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.S"><code class="docutils literal notranslate"><span class="pre">S</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.T"><code class="docutils literal notranslate"><span class="pre">T</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.O"><code class="docutils literal notranslate"><span class="pre">O</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.CompoundCol"><code class="docutils literal notranslate"><span class="pre">CompoundCol</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.Direction"><code class="docutils literal notranslate"><span class="pre">Direction</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.ReactionCol"><code class="docutils literal notranslate"><span class="pre">ReactionCol</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.apply_maybe"><code class="docutils literal notranslate"><span class="pre">apply_maybe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.assure_compound"><code class="docutils literal notranslate"><span class="pre">assure_compound()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_compound_line"><code class="docutils literal notranslate"><span class="pre">parse_compound_line()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_compounds"><code class="docutils literal notranslate"><span class="pre">parse_compounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_compounds_from_file"><code class="docutils literal notranslate"><span class="pre">parse_compounds_from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_conc"><code class="docutils literal notranslate"><span class="pre">parse_conc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_fflags"><code class="docutils literal notranslate"><span class="pre">parse_fflags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_lines"><code class="docutils literal notranslate"><span class="pre">parse_lines()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_network"><code class="docutils literal notranslate"><span class="pre">parse_network()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_network_from_file"><code class="docutils literal notranslate"><span class="pre">parse_network_from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_opts"><code class="docutils literal notranslate"><span class="pre">parse_opts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_reaction_line"><code class="docutils literal notranslate"><span class="pre">parse_reaction_line()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_reactions"><code class="docutils literal notranslate"><span class="pre">parse_reactions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_reactions_from_file"><code class="docutils literal notranslate"><span class="pre">parse_reactions_from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.parser.parse_vis"><code class="docutils literal notranslate"><span class="pre">parse_vis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.plotter.html">plotter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.struct.html">struct</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="rnets.html">rnets</a></li>
+      <li class="breadcrumb-item active">parser</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/rnets.parser.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-rnets.parser">
+<span id="parser"></span><h1>parser<a class="headerlink" href="#module-rnets.parser" title="Link to this heading"></a></h1>
+<p>Parse csv files to build compound/reaction/graph objects.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.parser.S">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">S</span></span><a class="headerlink" href="#rnets.parser.S" title="Link to this definition"></a></dt>
+<dd><p>Type constraint for StrEnum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.parser.T">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">T</span></span><a class="headerlink" href="#rnets.parser.T" title="Link to this definition"></a></dt>
+<dd><p>Type variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.parser.O">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">O</span></span><a class="headerlink" href="#rnets.parser.O" title="Link to this definition"></a></dt>
+<dd><p>Type variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.parser.CompoundCol">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">CompoundCol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/parser.html#CompoundCol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.CompoundCol" title="Link to this definition"></a></dt>
+<dd><p>Posible values for the compound columns.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.parser.Direction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">Direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/parser.html#Direction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.Direction" title="Link to this definition"></a></dt>
+<dd><p>Direction of a reaction. Can be Left, Right or Bidirectional.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.parser.ReactionCol">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">ReactionCol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/parser.html#ReactionCol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.ReactionCol" title="Link to this definition"></a></dt>
+<dd><p>Possible values for the reaction columns.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.apply_maybe">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">apply_maybe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">O</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">O</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/rnets/parser.html#apply_maybe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.apply_maybe" title="Link to this definition"></a></dt>
+<dd><p>Given a function fn that takes as an input a value of type T and returns
+a value of type an optional value of type T and O, apply fn only s is not
+None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> (<em>function</em>) -- Function that takes a value of type T as input and
+returns a value of Type O.</p></li>
+<li><p><strong>s</strong> (<em>any value</em><em> or </em><em>None</em>) -- Value to be used as the input value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Either the projected O value or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.assure_compound">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">assure_compound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a></span></span><a class="reference internal" href="../_modules/rnets/parser.html#assure_compound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.assure_compound" title="Link to this definition"></a></dt>
+<dd><p>This function serves a wrapper to raise an error in case that the
+compound is not on the list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cn</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code>) -- Candidate compound name.</p></li>
+<li><p><strong>cs</strong> (sequence of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code>) -- Available candidates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>In case that the compound is in the sequence, return the</dt><dd><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code> with the given name.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound">Compound</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> -- If the name is not present in cs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_compound_line">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_compound_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.parser.CompoundCol" title="rnets.parser.CompoundCol"><span class="pre">CompoundCol</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">tuple(CompoundCol)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_compound_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_compound_line" title="Link to this definition"></a></dt>
+<dd><p>Parse a compound line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx</strong> (<em>int</em>) -- Index of the compound.</p></li>
+<li><p><strong>l</strong> (<em>str</em>) -- Compound line, with values separated by comma.</p></li>
+<li><p><strong>h</strong> (sequence of <a class="reference internal" href="#rnets.parser.CompoundCol" title="rnets.parser.CompoundCol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompoundCol</span></code></a>) -- Order of the columns. Defaults to
+the order of <a class="reference internal" href="#rnets.parser.CompoundCol" title="rnets.parser.CompoundCol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompoundCol</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>with the given values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Check <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code> for possible values and <code class="xref py py-obj docutils literal notranslate"><span class="pre">REQ_COMP_COL</span></code> for</dt><dd><p>required values.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_compounds">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_compounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">req</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.parser.CompoundCol" title="rnets.parser.CompoundCol"><span class="pre">CompoundCol</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">REQ_COMP_COL</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_compounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_compounds" title="Link to this definition"></a></dt>
+<dd><p>Parse compounds in a given string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>str</em>) -- String containing the header and the compounds separated by
+new lines.</p></li>
+<li><p><strong>req</strong> (set of <a class="reference internal" href="#rnets.parser.CompoundCol" title="rnets.parser.CompoundCol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompoundCol</span></code></a>, optional) -- Required header values.
+Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">REQ_COMP_COL</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the parsed compounds.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_compounds_from_file">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_compounds_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_compounds_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_compounds_from_file" title="Link to this definition"></a></dt>
+<dd><p>Wrapper of <a class="reference internal" href="#rnets.parser.parse_compounds" title="rnets.parser.parse_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_compounds</span></code></a> but using a file as input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>f</strong> (str or <code class="xref py py-obj docutils literal notranslate"><span class="pre">Path</span></code>) -- Name of the file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the parsed <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_conc">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_conc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_conc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_conc" title="Link to this definition"></a></dt>
+<dd><p>Parse concentration value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>str</em>) -- String to parse.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>float with the parsed value or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_fflags">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_fflags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.FFlags" title="rnets.struct.FFlags"><span class="pre">FFlags</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_fflags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_fflags" title="Link to this definition"></a></dt>
+<dd><p>Parse format flags.</p>
+<dl class="simple">
+<dt>s (str): String to parse. Should contain the format options separated by</dt><dd><p>colons.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Set containing the parsed format flags.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>set of <code class="xref py py-obj docutils literal notranslate"><span class="pre">FFlags</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>The format flags are: 'i' for italics, 'b' for bold and 'u' for</dt><dd><p>underscore. E.g. i:b.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_lines">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">S</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_lines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_lines" title="Link to this definition"></a></dt>
+<dd><p>Parse a string containing compounds or intermediates in multiple lines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>str</em>) -- String to parse.</p></li>
+<li><p><strong>h</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">StrEnum</span></code>) -- Possible column values.</p></li>
+<li><p><strong>r</strong> (<em>set</em><em> of </em><em>str</em>) -- Required column values.</p></li>
+<li><p><strong>fn</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable[int,</span> <span class="pre">str,</span> <span class="pre">S]</span> <span class="pre">-&gt;</span> <span class="pre">T</span></code>) -- Function to parse a single line.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Where T with the parsed values. Where T is the output type
+of :attr:fn.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of T</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_network">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="rnets.struct.html#rnets.struct.Network" title="rnets.struct.Network"><span class="pre">Network</span></a></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_network" title="Link to this definition"></a></dt>
+<dd><p>Parse two strings, one containing the compounds of the network and a
+second one containing the reactions of the network. To check how they will
+be parsed, the reader is redicted to the <a class="reference internal" href="#rnets.parser.parse_compounds" title="rnets.parser.parse_compounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_compounds</span></code></a> and
+<a class="reference internal" href="#rnets.parser.parse_reactions" title="rnets.parser.parse_reactions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_reactions</span></code></a> functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sc</strong> (<em>str</em>) -- String containing the header and the compounds separated by
+new lines.</p></li>
+<li><p><strong>sr</strong> (<em>str</em>) -- String containing the header and the reactions separated by
+new lines.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>obj:Network: Network with the parsed compounds and reactions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_network_from_file">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_network_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="rnets.struct.html#rnets.struct.Network" title="rnets.struct.Network"><span class="pre">Network</span></a></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_network_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_network_from_file" title="Link to this definition"></a></dt>
+<dd><p>Wrapper of <a class="reference internal" href="#rnets.parser.parse_network" title="rnets.parser.parse_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_network</span></code></a> but using files as input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cf</strong> (str or <code class="xref py py-obj docutils literal notranslate"><span class="pre">Path</span></code>) -- Name of the file containing the compounds.</p></li>
+<li><p><strong>rf</strong> (str or <code class="xref py py-obj docutils literal notranslate"><span class="pre">Path</span></code>) -- Name of the file containing the reactions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>obj:Network: Network with the parsed compounds and reactions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_opts">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_opts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_opts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_opts" title="Link to this definition"></a></dt>
+<dd><p>Parses the opts column associated with additional opt options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>str</em>) -- String containing the pydot options sopearated by ;.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>keys and values with the opts parsed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of [str, str]</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Each option should have a label and a value separated by a '=', and</dt><dd><p>different options should be separated with a ':'.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_reaction_line">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_reaction_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.parser.ReactionCol" title="rnets.parser.ReactionCol"><span class="pre">ReactionCol</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">tuple(ReactionCol)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Reaction" title="rnets.struct.Reaction"><span class="pre">Reaction</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_reaction_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_reaction_line" title="Link to this definition"></a></dt>
+<dd><p>Parse a reaction line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx</strong> (<em>int</em>) -- Index of the reaction</p></li>
+<li><p><strong>l</strong> (<em>str</em>) -- Reaction line.</p></li>
+<li><p><strong>cs</strong> (sequence of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code>) -- Sequence of compounds. It will be
+used to get the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code> (by matching name) and reference in
+the reaction instead of using the name.</p></li>
+<li><p><strong>h</strong> (sequence of <a class="reference internal" href="#rnets.parser.ReactionCol" title="rnets.parser.ReactionCol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReactionCol</span></code></a>) -- Order of the columns. Defaults to the
+order of <a class="reference internal" href="#rnets.parser.ReactionCol" title="rnets.parser.ReactionCol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReactionCol</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>With the parsed values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Reaction</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Check <code class="xref py py-obj docutils literal notranslate"><span class="pre">Reaction</span></code> for possible values and <code class="xref py py-obj docutils literal notranslate"><span class="pre">REQ_REACT_COL</span></code> for</dt><dd><p>required values.</p>
+</dd>
+<dt>Bidirectional reactions will return 2 reactions sharing the same</dt><dd><p>idx. idx is intended to track the order of the reaction in the
+reactions file, and thus, I decided to label both reactions with the
+same number.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_reactions">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_reactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">req</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.parser.ReactionCol" title="rnets.parser.ReactionCol"><span class="pre">ReactionCol</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">REQ_REACT_COL</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Reaction" title="rnets.struct.Reaction"><span class="pre">Reaction</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_reactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_reactions" title="Link to this definition"></a></dt>
+<dd><p>Parse reactions in a given string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>str</em>) -- String containing the header and the reactions separated by new
+lines.</p></li>
+<li><p><strong>req</strong> (set of <a class="reference internal" href="#rnets.parser.ReactionCol" title="rnets.parser.ReactionCol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReactionCol</span></code></a>, optional) -- Required header values.
+Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">REQ_COMP_COL</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Containing the parsed reactions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Reaction</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_reactions_from_file">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_reactions_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Reaction" title="rnets.struct.Reaction"><span class="pre">Reaction</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_reactions_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_reactions_from_file" title="Link to this definition"></a></dt>
+<dd><p>Wrapper of <a class="reference internal" href="#rnets.parser.parse_reactions" title="rnets.parser.parse_reactions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_reactions</span></code></a> but using a file as input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>f</strong> (<em>str</em><em> or </em><em>Path</em>) -- Name of the file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the parsed <code class="xref py py-obj docutils literal notranslate"><span class="pre">Reaction</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.parser.parse_vis">
+<span class="sig-prename descclassname"><span class="pre">rnets.parser.</span></span><span class="sig-name descname"><span class="pre">parse_vis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="rnets.struct.html#rnets.struct.Visibility" title="rnets.struct.Visibility"><span class="pre">Visibility</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Visibility.TRUE</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="rnets.struct.html#rnets.struct.Visibility" title="rnets.struct.Visibility"><span class="pre">Visibility</span></a></span></span><a class="reference internal" href="../_modules/rnets/parser.html#parse_vis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.parser.parse_vis" title="Link to this definition"></a></dt>
+<dd><p>Parses a string representing the visibility of the node. It can be set
+to true, false or grey.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>str</em>) -- String to parse.</p></li>
+<li><p><strong>default</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Visibility</span></code> or None, optional) -- Default value to return
+if parsing fails. Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">Visibility.TRUE</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Value corresponding to the parsed statement.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Visibility</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>The value is lowercased and compared before parsing. t and true and</dt><dd><p>parsed as <code class="xref py py-obj docutils literal notranslate"><span class="pre">Visibility.TRUE</span></code>, f and false are parsed as
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">Visibility.FALSE</span></code> and g and grey are parsed as
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">Visibility.GREY</span></code>.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rnets.dot.html" class="btn btn-neutral float-left" title="dot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rnets.plotter.html" class="btn btn-neutral float-right" title="plotter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

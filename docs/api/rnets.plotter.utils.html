@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>utils &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="struct" href="rnets.struct.html" />
+    <link rel="prev" title="thermo" href="rnets.plotter.thermo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/python_api.html">Python API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/published_article.html">Published article</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="rnets.html">rnets</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="rnets.chemistry.html">chemistry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.colors.html">colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.dot.html">dot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.parser.html">parser</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="rnets.plotter.html">plotter</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="rnets.plotter.kinetic.html">kinetic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rnets.plotter.thermo.html">thermo</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">utils</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.C_WHITE"><code class="docutils literal notranslate"><span class="pre">C_WHITE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.C_BLACK"><code class="docutils literal notranslate"><span class="pre">C_BLACK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.COLORSCH"><code class="docutils literal notranslate"><span class="pre">COLORSCH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.GRAPH_ATTR_DEF"><code class="docutils literal notranslate"><span class="pre">GRAPH_ATTR_DEF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.NODE_ATTR_DEF"><code class="docutils literal notranslate"><span class="pre">NODE_ATTR_DEF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.EDCE_ATTR_DEF"><code class="docutils literal notranslate"><span class="pre">EDCE_ATTR_DEF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.BOX_TMP"><code class="docutils literal notranslate"><span class="pre">BOX_TMP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.LABEL_TMP"><code class="docutils literal notranslate"><span class="pre">LABEL_TMP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.EdgeArgs"><code class="docutils literal notranslate"><span class="pre">EdgeArgs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.EdgeCfg"><code class="docutils literal notranslate"><span class="pre">EdgeCfg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.GraphCfg"><code class="docutils literal notranslate"><span class="pre">GraphCfg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.HTMLFormat"><code class="docutils literal notranslate"><span class="pre">HTMLFormat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.NodeCfg"><code class="docutils literal notranslate"><span class="pre">NodeCfg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.apply_html_format"><code class="docutils literal notranslate"><span class="pre">apply_html_format()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.build_dotedge"><code class="docutils literal notranslate"><span class="pre">build_dotedge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.build_dotedges"><code class="docutils literal notranslate"><span class="pre">build_dotedges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.build_dotnode"><code class="docutils literal notranslate"><span class="pre">build_dotnode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.build_glob_opt"><code class="docutils literal notranslate"><span class="pre">build_glob_opt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.build_node_box"><code class="docutils literal notranslate"><span class="pre">build_node_box()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.color_interp"><code class="docutils literal notranslate"><span class="pre">color_interp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.fformat_to_html"><code class="docutils literal notranslate"><span class="pre">fformat_to_html()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.gen_react_arrows"><code class="docutils literal notranslate"><span class="pre">gen_react_arrows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.plotter.utils.nodecolor_sel"><code class="docutils literal notranslate"><span class="pre">nodecolor_sel()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.struct.html">struct</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="rnets.html">rnets</a></li>
+          <li class="breadcrumb-item"><a href="rnets.plotter.html">plotter</a></li>
+      <li class="breadcrumb-item active">utils</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/rnets.plotter.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-rnets.plotter.utils">
+<span id="utils"></span><h1>utils<a class="headerlink" href="#module-rnets.plotter.utils" title="Link to this heading"></a></h1>
+<p>Utility module for plotting reactions/compounds/networks dotfiles.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.C_WHITE">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">C_WHITE</span></span><a class="headerlink" href="#rnets.plotter.utils.C_WHITE" title="Link to this definition"></a></dt>
+<dd><p>Default white color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.C_BLACK">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">C_BLACK</span></span><a class="headerlink" href="#rnets.plotter.utils.C_BLACK" title="Link to this definition"></a></dt>
+<dd><p>Default black color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.COLORSCH">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">COLORSCH</span></span><a class="headerlink" href="#rnets.plotter.utils.COLORSCH" title="Link to this definition"></a></dt>
+<dd><p>Default colorscheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sequence of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.GRAPH_ATTR_DEF">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">GRAPH_ATTR_DEF</span></span><a class="headerlink" href="#rnets.plotter.utils.GRAPH_ATTR_DEF" title="Link to this definition"></a></dt>
+<dd><p>Default graph global attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.NODE_ATTR_DEF">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">NODE_ATTR_DEF</span></span><a class="headerlink" href="#rnets.plotter.utils.NODE_ATTR_DEF" title="Link to this definition"></a></dt>
+<dd><p>Default node global attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.EDCE_ATTR_DEF">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">EDCE_ATTR_DEF</span></span><a class="headerlink" href="#rnets.plotter.utils.EDCE_ATTR_DEF" title="Link to this definition"></a></dt>
+<dd><p>Default edge global attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.BOX_TMP">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">BOX_TMP</span></span><a class="headerlink" href="#rnets.plotter.utils.BOX_TMP" title="Link to this definition"></a></dt>
+<dd><p>HTML box template.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.LABEL_TMP">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">LABEL_TMP</span></span><a class="headerlink" href="#rnets.plotter.utils.LABEL_TMP" title="Link to this definition"></a></dt>
+<dd><p>HTML label template.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.plotter.utils.EdgeArgs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">EdgeArgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">react</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="rnets.struct.html#rnets.struct.Reaction" title="rnets.struct.Reaction"><span class="pre">Reaction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reversed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#EdgeArgs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.EdgeArgs" title="Link to this definition"></a></dt>
+<dd><p>Situational tuple to store the filter arguments for the filter function.</p>
+<p class="rubric">Notes</p>
+<p>Internal use to avoid type checker complaints.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.plotter.utils.EdgeCfg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">EdgeCfg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Opts</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'weight':</span> <span class="pre">'2.'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solid_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#EdgeCfg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.EdgeCfg" title="Link to this definition"></a></dt>
+<dd><p>Dot edge general configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.EdgeCfg.opts">
+<span class="sig-name descname"><span class="pre">opts</span></span><a class="headerlink" href="#rnets.plotter.utils.EdgeCfg.opts" title="Link to this definition"></a></dt>
+<dd><p>Dot
+additional global edge options. Defauts to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of str as keys and str as values or None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.EdgeCfg.solid_color">
+<span class="sig-name descname"><span class="pre">solid_color</span></span><a class="headerlink" href="#rnets.plotter.utils.EdgeCfg.solid_color" title="Link to this definition"></a></dt>
+<dd><p>If set, all lines will be
+draw with that color, else, the color will be decided based on the
+reaction energy. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code> or None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.EdgeCfg.width">
+<span class="sig-name descname"><span class="pre">width</span></span><a class="headerlink" href="#rnets.plotter.utils.EdgeCfg.width" title="Link to this definition"></a></dt>
+<dd><p>Minimum width of the edges. Defaults to 1..</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.EdgeCfg.max_width">
+<span class="sig-name descname"><span class="pre">max_width</span></span><a class="headerlink" href="#rnets.plotter.utils.EdgeCfg.max_width" title="Link to this definition"></a></dt>
+<dd><p>If set, the width or the arrows
+will be decided based on their kinetic constant (k, see
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_pseudo_k_constant</span></code>), using width as the minimum width
+and this max_width as the maximum width, if None, all the arrows
+will be draw with constant width.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.plotter.utils.GraphCfg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">GraphCfg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Opts</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'nodesep':</span> <span class="pre">'0.25',</span> <span class="pre">'rankdir':</span> <span class="pre">'TB',</span> <span class="pre">'ranksep':</span> <span class="pre">'0.5'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'digraph'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorscheme</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Colorscheme</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">((0.267004,</span> <span class="pre">0.004874,</span> <span class="pre">0.329415),</span> <span class="pre">(0.26851,</span> <span class="pre">0.009605,</span> <span class="pre">0.335427),</span> <span class="pre">(0.269944,</span> <span class="pre">0.014625,</span> <span class="pre">0.341379),</span> <span class="pre">(0.271305,</span> <span class="pre">0.019942,</span> <span class="pre">0.347269),</span> <span class="pre">(0.272594,</span> <span class="pre">0.025563,</span> <span class="pre">0.353093),</span> <span class="pre">(0.273809,</span> <span class="pre">0.031497,</span> <span class="pre">0.358853),</span> <span class="pre">(0.274952,</span> <span class="pre">0.037752,</span> <span class="pre">0.364543),</span> <span class="pre">(0.276022,</span> <span class="pre">0.044167,</span> <span class="pre">0.370164),</span> <span class="pre">(0.277018,</span> <span class="pre">0.050344,</span> <span class="pre">0.375715),</span> <span class="pre">(0.277941,</span> <span class="pre">0.056324,</span> <span class="pre">0.381191),</span> <span class="pre">(0.278791,</span> <span class="pre">0.062145,</span> <span class="pre">0.386592),</span> <span class="pre">(0.279566,</span> <span class="pre">0.067836,</span> <span class="pre">0.391917),</span> <span class="pre">(0.280267,</span> <span class="pre">0.073417,</span> <span class="pre">0.397163),</span> <span class="pre">(0.280894,</span> <span class="pre">0.078907,</span> <span class="pre">0.402329),</span> <span class="pre">(0.281446,</span> <span class="pre">0.08432,</span> <span class="pre">0.407414),</span> <span class="pre">(0.281924,</span> <span class="pre">0.089666,</span> <span class="pre">0.412415),</span> <span class="pre">(0.282327,</span> <span class="pre">0.094955,</span> <span class="pre">0.417331),</span> <span class="pre">(0.282656,</span> <span class="pre">0.100196,</span> <span class="pre">0.42216),</span> <span class="pre">(0.28291,</span> <span class="pre">0.105393,</span> <span class="pre">0.426902),</span> <span class="pre">(0.283091,</span> <span class="pre">0.110553,</span> <span class="pre">0.431554),</span> <span class="pre">(0.283197,</span> <span class="pre">0.11568,</span> <span class="pre">0.436115),</span> <span class="pre">(0.283229,</span> <span class="pre">0.120777,</span> <span class="pre">0.440584),</span> <span class="pre">(0.283187,</span> <span class="pre">0.125848,</span> <span class="pre">0.44496),</span> <span class="pre">(0.283072,</span> <span class="pre">0.130895,</span> <span class="pre">0.449241),</span> <span class="pre">(0.282884,</span> <span class="pre">0.13592,</span> <span class="pre">0.453427),</span> <span class="pre">(0.282623,</span> <span class="pre">0.140926,</span> <span class="pre">0.457517),</span> <span class="pre">(0.28229,</span> <span class="pre">0.145912,</span> <span class="pre">0.46151),</span> <span class="pre">(0.281887,</span> <span class="pre">0.150881,</span> <span class="pre">0.465405),</span> <span class="pre">(0.281412,</span> <span class="pre">0.155834,</span> <span class="pre">0.469201),</span> <span class="pre">(0.280868,</span> <span class="pre">0.160771,</span> <span class="pre">0.472899),</span> <span class="pre">(0.280255,</span> <span class="pre">0.165693,</span> <span class="pre">0.476498),</span> <span class="pre">(0.279574,</span> <span class="pre">0.170599,</span> <span class="pre">0.479997),</span> <span class="pre">(0.278826,</span> <span class="pre">0.17549,</span> <span class="pre">0.483397),</span> <span class="pre">(0.278012,</span> <span class="pre">0.180367,</span> <span class="pre">0.486697),</span> <span class="pre">(0.277134,</span> <span class="pre">0.185228,</span> <span class="pre">0.489898),</span> <span class="pre">(0.276194,</span> <span class="pre">0.190074,</span> <span class="pre">0.493001),</span> <span class="pre">(0.275191,</span> <span class="pre">0.194905,</span> <span class="pre">0.496005),</span> <span class="pre">(0.274128,</span> <span class="pre">0.199721,</span> <span class="pre">0.498911),</span> <span class="pre">(0.273006,</span> <span class="pre">0.20452,</span> <span class="pre">0.501721),</span> <span class="pre">(0.271828,</span> <span class="pre">0.209303,</span> <span class="pre">0.504434),</span> <span class="pre">(0.270595,</span> <span class="pre">0.214069,</span> <span class="pre">0.507052),</span> <span class="pre">(0.269308,</span> <span class="pre">0.218818,</span> <span class="pre">0.509577),</span> <span class="pre">(0.267968,</span> <span class="pre">0.223549,</span> <span class="pre">0.512008),</span> <span class="pre">(0.26658,</span> <span class="pre">0.228262,</span> <span class="pre">0.514349),</span> <span class="pre">(0.265145,</span> <span class="pre">0.232956,</span> <span class="pre">0.516599),</span> <span class="pre">(0.263663,</span> <span class="pre">0.237631,</span> <span class="pre">0.518762),</span> <span class="pre">(0.262138,</span> <span class="pre">0.242286,</span> <span class="pre">0.520837),</span> <span class="pre">(0.260571,</span> <span class="pre">0.246922,</span> <span class="pre">0.522828),</span> <span class="pre">(0.258965,</span> <span class="pre">0.251537,</span> <span class="pre">0.524736),</span> <span class="pre">(0.257322,</span> <span class="pre">0.25613,</span> <span class="pre">0.526563),</span> <span class="pre">(0.255645,</span> <span class="pre">0.260703,</span> <span class="pre">0.528312),</span> <span class="pre">(0.253935,</span> <span class="pre">0.265254,</span> <span class="pre">0.529983),</span> <span class="pre">(0.252194,</span> <span class="pre">0.269783,</span> <span class="pre">0.531579),</span> <span class="pre">(0.250425,</span> <span class="pre">0.27429,</span> <span class="pre">0.533103),</span> <span class="pre">(0.248629,</span> <span class="pre">0.278775,</span> <span class="pre">0.534556),</span> <span class="pre">(0.246811,</span> <span class="pre">0.283237,</span> <span class="pre">0.535941),</span> <span class="pre">(0.244972,</span> <span class="pre">0.287675,</span> <span class="pre">0.53726),</span> <span class="pre">(0.243113,</span> <span class="pre">0.292092,</span> <span class="pre">0.538516),</span> <span class="pre">(0.241237,</span> <span class="pre">0.296485,</span> <span class="pre">0.539709),</span> <span class="pre">(0.239346,</span> <span class="pre">0.300855,</span> <span class="pre">0.540844),</span> <span class="pre">(0.237441,</span> <span class="pre">0.305202,</span> <span class="pre">0.541921),</span> <span class="pre">(0.235526,</span> <span class="pre">0.309527,</span> <span class="pre">0.542944),</span> <span class="pre">(0.233603,</span> <span class="pre">0.313828,</span> <span class="pre">0.543914),</span> <span class="pre">(0.231674,</span> <span class="pre">0.318106,</span> <span class="pre">0.544834),</span> <span class="pre">(0.229739,</span> <span class="pre">0.322361,</span> <span class="pre">0.545706),</span> <span class="pre">(0.227802,</span> <span class="pre">0.326594,</span> <span class="pre">0.546532),</span> <span class="pre">(0.225863,</span> <span class="pre">0.330805,</span> <span class="pre">0.547314),</span> <span class="pre">(0.223925,</span> <span class="pre">0.334994,</span> <span class="pre">0.548053),</span> <span class="pre">(0.221989,</span> <span class="pre">0.339161,</span> <span class="pre">0.548752),</span> <span class="pre">(0.220057,</span> <span class="pre">0.343307,</span> <span class="pre">0.549413),</span> <span class="pre">(0.21813,</span> <span class="pre">0.347432,</span> <span class="pre">0.550038),</span> <span class="pre">(0.21621,</span> <span class="pre">0.351535,</span> <span class="pre">0.550627),</span> <span class="pre">(0.214298,</span> <span class="pre">0.355619,</span> <span class="pre">0.551184),</span> <span class="pre">(0.212395,</span> <span class="pre">0.359683,</span> <span class="pre">0.55171),</span> <span class="pre">(0.210503,</span> <span class="pre">0.363727,</span> <span class="pre">0.552206),</span> <span class="pre">(0.208623,</span> <span class="pre">0.367752,</span> <span class="pre">0.552675),</span> <span class="pre">(0.206756,</span> <span class="pre">0.371758,</span> <span class="pre">0.553117),</span> <span class="pre">(0.204903,</span> <span class="pre">0.375746,</span> <span class="pre">0.553533),</span> <span class="pre">(0.203063,</span> <span class="pre">0.379716,</span> <span class="pre">0.553925),</span> <span class="pre">(0.201239,</span> <span class="pre">0.38367,</span> <span class="pre">0.554294),</span> <span class="pre">(0.19943,</span> <span class="pre">0.387607,</span> <span class="pre">0.554642),</span> <span class="pre">(0.197636,</span> <span class="pre">0.391528,</span> <span class="pre">0.554969),</span> <span class="pre">(0.19586,</span> <span class="pre">0.395433,</span> <span class="pre">0.555276),</span> <span class="pre">(0.1941,</span> <span class="pre">0.399323,</span> <span class="pre">0.555565),</span> <span class="pre">(0.192357,</span> <span class="pre">0.403199,</span> <span class="pre">0.555836),</span> <span class="pre">(0.190631,</span> <span class="pre">0.407061,</span> <span class="pre">0.556089),</span> <span class="pre">(0.188923,</span> <span class="pre">0.41091,</span> <span class="pre">0.556326),</span> <span class="pre">(0.187231,</span> <span class="pre">0.414746,</span> <span class="pre">0.556547),</span> <span class="pre">(0.185556,</span> <span class="pre">0.41857,</span> <span class="pre">0.556753),</span> <span class="pre">(0.183898,</span> <span class="pre">0.422383,</span> <span class="pre">0.556944),</span> <span class="pre">(0.182256,</span> <span class="pre">0.426184,</span> <span class="pre">0.55712),</span> <span class="pre">(0.180629,</span> <span class="pre">0.429975,</span> <span class="pre">0.557282),</span> <span class="pre">(0.179019,</span> <span class="pre">0.433756,</span> <span class="pre">0.55743),</span> <span class="pre">(0.177423,</span> <span class="pre">0.437527,</span> <span class="pre">0.557565),</span> <span class="pre">(0.175841,</span> <span class="pre">0.44129,</span> <span class="pre">0.557685),</span> <span class="pre">(0.174274,</span> <span class="pre">0.445044,</span> <span class="pre">0.557792),</span> <span class="pre">(0.172719,</span> <span class="pre">0.448791,</span> <span class="pre">0.557885),</span> <span class="pre">(0.171176,</span> <span class="pre">0.45253,</span> <span class="pre">0.557965),</span> <span class="pre">(0.169646,</span> <span class="pre">0.456262,</span> <span class="pre">0.55803),</span> <span class="pre">(0.168126,</span> <span class="pre">0.459988,</span> <span class="pre">0.558082),</span> <span class="pre">(0.166617,</span> <span class="pre">0.463708,</span> <span class="pre">0.558119),</span> <span class="pre">(0.165117,</span> <span class="pre">0.467423,</span> <span class="pre">0.558141),</span> <span class="pre">(0.163625,</span> <span class="pre">0.471133,</span> <span class="pre">0.558148),</span> <span class="pre">(0.162142,</span> <span class="pre">0.474838,</span> <span class="pre">0.55814),</span> <span class="pre">(0.160665,</span> <span class="pre">0.47854,</span> <span class="pre">0.558115),</span> <span class="pre">(0.159194,</span> <span class="pre">0.482237,</span> <span class="pre">0.558073),</span> <span class="pre">(0.157729,</span> <span class="pre">0.485932,</span> <span class="pre">0.558013),</span> <span class="pre">(0.15627,</span> <span class="pre">0.489624,</span> <span class="pre">0.557936),</span> <span class="pre">(0.154815,</span> <span class="pre">0.493313,</span> <span class="pre">0.55784),</span> <span class="pre">(0.153364,</span> <span class="pre">0.497,</span> <span class="pre">0.557724),</span> <span class="pre">(0.151918,</span> <span class="pre">0.500685,</span> <span class="pre">0.557587),</span> <span class="pre">(0.150476,</span> <span class="pre">0.504369,</span> <span class="pre">0.55743),</span> <span class="pre">(0.149039,</span> <span class="pre">0.508051,</span> <span class="pre">0.55725),</span> <span class="pre">(0.147607,</span> <span class="pre">0.511733,</span> <span class="pre">0.557049),</span> <span class="pre">(0.14618,</span> <span class="pre">0.515413,</span> <span class="pre">0.556823),</span> <span class="pre">(0.144759,</span> <span class="pre">0.519093,</span> <span class="pre">0.556572),</span> <span class="pre">(0.143343,</span> <span class="pre">0.522773,</span> <span class="pre">0.556295),</span> <span class="pre">(0.141935,</span> <span class="pre">0.526453,</span> <span class="pre">0.555991),</span> <span class="pre">(0.140536,</span> <span class="pre">0.530132,</span> <span class="pre">0.555659),</span> <span class="pre">(0.139147,</span> <span class="pre">0.533812,</span> <span class="pre">0.555298),</span> <span class="pre">(0.13777,</span> <span class="pre">0.537492,</span> <span class="pre">0.554906),</span> <span class="pre">(0.136408,</span> <span class="pre">0.541173,</span> <span class="pre">0.554483),</span> <span class="pre">(0.135066,</span> <span class="pre">0.544853,</span> <span class="pre">0.554029),</span> <span class="pre">(0.133743,</span> <span class="pre">0.548535,</span> <span class="pre">0.553541),</span> <span class="pre">(0.132444,</span> <span class="pre">0.552216,</span> <span class="pre">0.553018),</span> <span class="pre">(0.131172,</span> <span class="pre">0.555899,</span> <span class="pre">0.552459),</span> <span class="pre">(0.129933,</span> <span class="pre">0.559582,</span> <span class="pre">0.551864),</span> <span class="pre">(0.128729,</span> <span class="pre">0.563265,</span> <span class="pre">0.551229),</span> <span class="pre">(0.127568,</span> <span class="pre">0.566949,</span> <span class="pre">0.550556),</span> <span class="pre">(0.126453,</span> <span class="pre">0.570633,</span> <span class="pre">0.549841),</span> <span class="pre">(0.125394,</span> <span class="pre">0.574318,</span> <span class="pre">0.549086),</span> <span class="pre">(0.124395,</span> <span class="pre">0.578002,</span> <span class="pre">0.548287),</span> <span class="pre">(0.123463,</span> <span class="pre">0.581687,</span> <span class="pre">0.547445),</span> <span class="pre">(0.122606,</span> <span class="pre">0.585371,</span> <span class="pre">0.546557),</span> <span class="pre">(0.121831,</span> <span class="pre">0.589055,</span> <span class="pre">0.545623),</span> <span class="pre">(0.121148,</span> <span class="pre">0.592739,</span> <span class="pre">0.544641),</span> <span class="pre">(0.120565,</span> <span class="pre">0.596422,</span> <span class="pre">0.543611),</span> <span class="pre">(0.120092,</span> <span class="pre">0.600104,</span> <span class="pre">0.54253),</span> <span class="pre">(0.119738,</span> <span class="pre">0.603785,</span> <span class="pre">0.5414),</span> <span class="pre">(0.119512,</span> <span class="pre">0.607464,</span> <span class="pre">0.540218),</span> <span class="pre">(0.119423,</span> <span class="pre">0.611141,</span> <span class="pre">0.538982),</span> <span class="pre">(0.119483,</span> <span class="pre">0.614817,</span> <span class="pre">0.537692),</span> <span class="pre">(0.119699,</span> <span class="pre">0.61849,</span> <span class="pre">0.536347),</span> <span class="pre">(0.120081,</span> <span class="pre">0.622161,</span> <span class="pre">0.534946),</span> <span class="pre">(0.120638,</span> <span class="pre">0.625828,</span> <span class="pre">0.533488),</span> <span class="pre">(0.12138,</span> <span class="pre">0.629492,</span> <span class="pre">0.531973),</span> <span class="pre">(0.122312,</span> <span class="pre">0.633153,</span> <span class="pre">0.530398),</span> <span class="pre">(0.123444,</span> <span class="pre">0.636809,</span> <span class="pre">0.528763),</span> <span class="pre">(0.12478,</span> <span class="pre">0.640461,</span> <span class="pre">0.527068),</span> <span class="pre">(0.126326,</span> <span class="pre">0.644107,</span> <span class="pre">0.525311),</span> <span class="pre">(0.128087,</span> <span class="pre">0.647749,</span> <span class="pre">0.523491),</span> <span class="pre">(0.130067,</span> <span class="pre">0.651384,</span> <span class="pre">0.521608),</span> <span class="pre">(0.132268,</span> <span class="pre">0.655014,</span> <span class="pre">0.519661),</span> <span class="pre">(0.134692,</span> <span class="pre">0.658636,</span> <span class="pre">0.517649),</span> <span class="pre">(0.137339,</span> <span class="pre">0.662252,</span> <span class="pre">0.515571),</span> <span class="pre">(0.14021,</span> <span class="pre">0.665859,</span> <span class="pre">0.513427),</span> <span class="pre">(0.143303,</span> <span class="pre">0.669459,</span> <span class="pre">0.511215),</span> <span class="pre">(0.146616,</span> <span class="pre">0.67305,</span> <span class="pre">0.508936),</span> <span class="pre">(0.150148,</span> <span class="pre">0.676631,</span> <span class="pre">0.506589),</span> <span class="pre">(0.153894,</span> <span class="pre">0.680203,</span> <span class="pre">0.504172),</span> <span class="pre">(0.157851,</span> <span class="pre">0.683765,</span> <span class="pre">0.501686),</span> <span class="pre">(0.162016,</span> <span class="pre">0.687316,</span> <span class="pre">0.499129),</span> <span class="pre">(0.166383,</span> <span class="pre">0.690856,</span> <span class="pre">0.496502),</span> <span class="pre">(0.170948,</span> <span class="pre">0.694384,</span> <span class="pre">0.493803),</span> <span class="pre">(0.175707,</span> <span class="pre">0.6979,</span> <span class="pre">0.491033),</span> <span class="pre">(0.180653,</span> <span class="pre">0.701402,</span> <span class="pre">0.488189),</span> <span class="pre">(0.185783,</span> <span class="pre">0.704891,</span> <span class="pre">0.485273),</span> <span class="pre">(0.19109,</span> <span class="pre">0.708366,</span> <span class="pre">0.482284),</span> <span class="pre">(0.196571,</span> <span class="pre">0.711827,</span> <span class="pre">0.479221),</span> <span class="pre">(0.202219,</span> <span class="pre">0.715272,</span> <span class="pre">0.476084),</span> <span class="pre">(0.20803,</span> <span class="pre">0.718701,</span> <span class="pre">0.472873),</span> <span class="pre">(0.214,</span> <span class="pre">0.722114,</span> <span class="pre">0.469588),</span> <span class="pre">(0.220124,</span> <span class="pre">0.725509,</span> <span class="pre">0.466226),</span> <span class="pre">(0.226397,</span> <span class="pre">0.728888,</span> <span class="pre">0.462789),</span> <span class="pre">(0.232815,</span> <span class="pre">0.732247,</span> <span class="pre">0.459277),</span> <span class="pre">(0.239374,</span> <span class="pre">0.735588,</span> <span class="pre">0.455688),</span> <span class="pre">(0.24607,</span> <span class="pre">0.73891,</span> <span class="pre">0.452024),</span> <span class="pre">(0.252899,</span> <span class="pre">0.742211,</span> <span class="pre">0.448284),</span> <span class="pre">(0.259857,</span> <span class="pre">0.745492,</span> <span class="pre">0.444467),</span> <span class="pre">(0.266941,</span> <span class="pre">0.748751,</span> <span class="pre">0.440573),</span> <span class="pre">(0.274149,</span> <span class="pre">0.751988,</span> <span class="pre">0.436601),</span> <span class="pre">(0.281477,</span> <span class="pre">0.755203,</span> <span class="pre">0.432552),</span> <span class="pre">(0.288921,</span> <span class="pre">0.758394,</span> <span class="pre">0.428426),</span> <span class="pre">(0.296479,</span> <span class="pre">0.761561,</span> <span class="pre">0.424223),</span> <span class="pre">(0.304148,</span> <span class="pre">0.764704,</span> <span class="pre">0.419943),</span> <span class="pre">(0.311925,</span> <span class="pre">0.767822,</span> <span class="pre">0.415586),</span> <span class="pre">(0.319809,</span> <span class="pre">0.770914,</span> <span class="pre">0.411152),</span> <span class="pre">(0.327796,</span> <span class="pre">0.77398,</span> <span class="pre">0.40664),</span> <span class="pre">(0.335885,</span> <span class="pre">0.777018,</span> <span class="pre">0.402049),</span> <span class="pre">(0.344074,</span> <span class="pre">0.780029,</span> <span class="pre">0.397381),</span> <span class="pre">(0.35236,</span> <span class="pre">0.783011,</span> <span class="pre">0.392636),</span> <span class="pre">(0.360741,</span> <span class="pre">0.785964,</span> <span class="pre">0.387814),</span> <span class="pre">(0.369214,</span> <span class="pre">0.788888,</span> <span class="pre">0.382914),</span> <span class="pre">(0.377779,</span> <span class="pre">0.791781,</span> <span class="pre">0.377939),</span> <span class="pre">(0.386433,</span> <span class="pre">0.794644,</span> <span class="pre">0.372886),</span> <span class="pre">(0.395174,</span> <span class="pre">0.797475,</span> <span class="pre">0.367757),</span> <span class="pre">(0.404001,</span> <span class="pre">0.800275,</span> <span class="pre">0.362552),</span> <span class="pre">(0.412913,</span> <span class="pre">0.803041,</span> <span class="pre">0.357269),</span> <span class="pre">(0.421908,</span> <span class="pre">0.805774,</span> <span class="pre">0.35191),</span> <span class="pre">(0.430983,</span> <span class="pre">0.808473,</span> <span class="pre">0.346476),</span> <span class="pre">(0.440137,</span> <span class="pre">0.811138,</span> <span class="pre">0.340967),</span> <span class="pre">(0.449368,</span> <span class="pre">0.813768,</span> <span class="pre">0.335384),</span> <span class="pre">(0.458674,</span> <span class="pre">0.816363,</span> <span class="pre">0.329727),</span> <span class="pre">(0.468053,</span> <span class="pre">0.818921,</span> <span class="pre">0.323998),</span> <span class="pre">(0.477504,</span> <span class="pre">0.821444,</span> <span class="pre">0.318195),</span> <span class="pre">(0.487026,</span> <span class="pre">0.823929,</span> <span class="pre">0.312321),</span> <span class="pre">(0.496615,</span> <span class="pre">0.826376,</span> <span class="pre">0.306377),</span> <span class="pre">(0.506271,</span> <span class="pre">0.828786,</span> <span class="pre">0.300362),</span> <span class="pre">(0.515992,</span> <span class="pre">0.831158,</span> <span class="pre">0.294279),</span> <span class="pre">(0.525776,</span> <span class="pre">0.833491,</span> <span class="pre">0.288127),</span> <span class="pre">(0.535621,</span> <span class="pre">0.835785,</span> <span class="pre">0.281908),</span> <span class="pre">(0.545524,</span> <span class="pre">0.838039,</span> <span class="pre">0.275626),</span> <span class="pre">(0.555484,</span> <span class="pre">0.840254,</span> <span class="pre">0.269281),</span> <span class="pre">(0.565498,</span> <span class="pre">0.84243,</span> <span class="pre">0.262877),</span> <span class="pre">(0.575563,</span> <span class="pre">0.844566,</span> <span class="pre">0.256415),</span> <span class="pre">(0.585678,</span> <span class="pre">0.846661,</span> <span class="pre">0.249897),</span> <span class="pre">(0.595839,</span> <span class="pre">0.848717,</span> <span class="pre">0.243329),</span> <span class="pre">(0.606045,</span> <span class="pre">0.850733,</span> <span class="pre">0.236712),</span> <span class="pre">(0.616293,</span> <span class="pre">0.852709,</span> <span class="pre">0.230052),</span> <span class="pre">(0.626579,</span> <span class="pre">0.854645,</span> <span class="pre">0.223353),</span> <span class="pre">(0.636902,</span> <span class="pre">0.856542,</span> <span class="pre">0.21662),</span> <span class="pre">(0.647257,</span> <span class="pre">0.8584,</span> <span class="pre">0.209861),</span> <span class="pre">(0.657642,</span> <span class="pre">0.860219,</span> <span class="pre">0.203082),</span> <span class="pre">(0.668054,</span> <span class="pre">0.861999,</span> <span class="pre">0.196293),</span> <span class="pre">(0.678489,</span> <span class="pre">0.863742,</span> <span class="pre">0.189503),</span> <span class="pre">(0.688944,</span> <span class="pre">0.865448,</span> <span class="pre">0.182725),</span> <span class="pre">(0.699415,</span> <span class="pre">0.867117,</span> <span class="pre">0.175971),</span> <span class="pre">(0.709898,</span> <span class="pre">0.868751,</span> <span class="pre">0.169257),</span> <span class="pre">(0.720391,</span> <span class="pre">0.87035,</span> <span class="pre">0.162603),</span> <span class="pre">(0.730889,</span> <span class="pre">0.871916,</span> <span class="pre">0.156029),</span> <span class="pre">(0.741388,</span> <span class="pre">0.873449,</span> <span class="pre">0.149561),</span> <span class="pre">(0.751884,</span> <span class="pre">0.874951,</span> <span class="pre">0.143228),</span> <span class="pre">(0.762373,</span> <span class="pre">0.876424,</span> <span class="pre">0.137064),</span> <span class="pre">(0.772852,</span> <span class="pre">0.877868,</span> <span class="pre">0.131109),</span> <span class="pre">(0.783315,</span> <span class="pre">0.879285,</span> <span class="pre">0.125405),</span> <span class="pre">(0.79376,</span> <span class="pre">0.880678,</span> <span class="pre">0.120005),</span> <span class="pre">(0.804182,</span> <span class="pre">0.882046,</span> <span class="pre">0.114965),</span> <span class="pre">(0.814576,</span> <span class="pre">0.883393,</span> <span class="pre">0.110347),</span> <span class="pre">(0.82494,</span> <span class="pre">0.88472,</span> <span class="pre">0.106217),</span> <span class="pre">(0.83527,</span> <span class="pre">0.886029,</span> <span class="pre">0.102646),</span> <span class="pre">(0.845561,</span> <span class="pre">0.887322,</span> <span class="pre">0.099702),</span> <span class="pre">(0.85581,</span> <span class="pre">0.888601,</span> <span class="pre">0.097452),</span> <span class="pre">(0.866013,</span> <span class="pre">0.889868,</span> <span class="pre">0.095953),</span> <span class="pre">(0.876168,</span> <span class="pre">0.891125,</span> <span class="pre">0.09525),</span> <span class="pre">(0.886271,</span> <span class="pre">0.892374,</span> <span class="pre">0.095374),</span> <span class="pre">(0.89632,</span> <span class="pre">0.893616,</span> <span class="pre">0.096335),</span> <span class="pre">(0.906311,</span> <span class="pre">0.894855,</span> <span class="pre">0.098125),</span> <span class="pre">(0.916242,</span> <span class="pre">0.896091,</span> <span class="pre">0.100717),</span> <span class="pre">(0.926106,</span> <span class="pre">0.89733,</span> <span class="pre">0.104071),</span> <span class="pre">(0.935904,</span> <span class="pre">0.89857,</span> <span class="pre">0.108131),</span> <span class="pre">(0.945636,</span> <span class="pre">0.899815,</span> <span class="pre">0.112838),</span> <span class="pre">(0.9553,</span> <span class="pre">0.901065,</span> <span class="pre">0.118128),</span> <span class="pre">(0.964894,</span> <span class="pre">0.902323,</span> <span class="pre">0.123941),</span> <span class="pre">(0.974417,</span> <span class="pre">0.90359,</span> <span class="pre">0.130215),</span> <span class="pre">(0.983868,</span> <span class="pre">0.904867,</span> <span class="pre">0.136897),</span> <span class="pre">(0.993248,</span> <span class="pre">0.906157,</span> <span class="pre">0.143936))</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#rnets.plotter.utils.NodeCfg" title="rnets.plotter.utils.NodeCfg"><span class="pre">NodeCfg</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">({'shape':</span> <span class="pre">'plaintext',</span> <span class="pre">'style':</span> <span class="pre">'filled'},</span> <span class="pre">'&lt;\n&lt;TABLE</span> <span class="pre">BORDER=&quot;0&quot;</span> <span class="pre">CELLBORDER=&quot;0&quot;</span> <span class="pre">CELLSPACING=&quot;0&quot;</span> <span class="pre">CELLPADDING=&quot;0&quot;&gt;\n</span>&#160; <span class="pre">&lt;TR&gt;\n</span>&#160;&#160;&#160; <span class="pre">&lt;TD&gt;{0}&lt;/TD&gt;\n</span>&#160; <span class="pre">&lt;/TR&gt;\n&lt;/TABLE&gt;\n&gt;\n',</span> <span class="pre">(0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0),</span> <span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1.0),</span> <span class="pre">None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#rnets.plotter.utils.EdgeCfg" title="rnets.plotter.utils.EdgeCfg"><span class="pre">EdgeCfg</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">({'weight':</span> <span class="pre">'2.'},</span> <span class="pre">None,</span> <span class="pre">1.0,</span> <span class="pre">5.0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#GraphCfg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.GraphCfg" title="Link to this definition"></a></dt>
+<dd><p>Dot graph general configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.GraphCfg.opts">
+<span class="sig-name descname"><span class="pre">opts</span></span><a class="headerlink" href="#rnets.plotter.utils.GraphCfg.opts" title="Link to this definition"></a></dt>
+<dd><p>Dot
+additional global graph options. Defauts to None. Defaults to
+<a class="reference internal" href="#rnets.plotter.utils.GRAPH_ATTR_DEF" title="rnets.plotter.utils.GRAPH_ATTR_DEF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GRAPH_ATTR_DEF</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of str as keys and str as values or None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.GraphCfg.kind">
+<span class="sig-name descname"><span class="pre">kind</span></span><a class="headerlink" href="#rnets.plotter.utils.GraphCfg.kind" title="Link to this definition"></a></dt>
+<dd><p>Kind of the dotgraph. Defaults to digraph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.GraphCfg.colorscheme">
+<span class="sig-name descname"><span class="pre">colorscheme</span></span><a class="headerlink" href="#rnets.plotter.utils.GraphCfg.colorscheme" title="Link to this definition"></a></dt>
+<dd><p>Sequence of colors that will be
+interpolate to set the colors of the graph. See
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">interp_cs</span></code>. Defaults to <a class="reference internal" href="#rnets.plotter.utils.COLORSCH" title="rnets.plotter.utils.COLORSCH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">COLORSCH</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sequence of floats</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.GraphCfg.color_offset">
+<span class="sig-name descname"><span class="pre">color_offset</span></span><a class="headerlink" href="#rnets.plotter.utils.GraphCfg.color_offset" title="Link to this definition"></a></dt>
+<dd><p>When using the energy of
+a node to decide its color, the offset to apply to norm. Should be
+a value between 0. and 1. Useful to avoid falling on the extremes
+of a predefined colorscheme. Defaults to (0., 0.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of two floats, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.plotter.utils.HTMLFormat">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">HTMLFormat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#HTMLFormat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.HTMLFormat" title="Link to this definition"></a></dt>
+<dd><p>HTML format for strings.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.plotter.utils.NodeCfg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">NodeCfg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Opts</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'shape':</span> <span class="pre">'plaintext',</span> <span class="pre">'style':</span> <span class="pre">'filled'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box_tmp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'&lt;\n&lt;TABLE</span> <span class="pre">BORDER=&quot;0&quot;</span> <span class="pre">CELLBORDER=&quot;0&quot;</span> <span class="pre">CELLSPACING=&quot;0&quot;</span> <span class="pre">CELLPADDING=&quot;0&quot;&gt;\n</span>&#160; <span class="pre">&lt;TR&gt;\n</span>&#160;&#160;&#160; <span class="pre">&lt;TD&gt;{0}&lt;/TD&gt;\n</span>&#160; <span class="pre">&lt;/TR&gt;\n&lt;/TABLE&gt;\n&gt;\n'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_color_alt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(1.0,</span> <span class="pre">1.0,</span> <span class="pre">1.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_lum_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#NodeCfg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.NodeCfg" title="Link to this definition"></a></dt>
+<dd><p>Dot node general configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.NodeCfg.opts">
+<span class="sig-name descname"><span class="pre">opts</span></span><a class="headerlink" href="#rnets.plotter.utils.NodeCfg.opts" title="Link to this definition"></a></dt>
+<dd><p>Dot
+additional global node options. Defauts to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of str as keys and str as values or None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.NodeCfg.box_tmp">
+<span class="sig-name descname"><span class="pre">box_tmp</span></span><a class="headerlink" href="#rnets.plotter.utils.NodeCfg.box_tmp" title="Link to this definition"></a></dt>
+<dd><p>Box template. Should have two format
+modificators, the first consisting on the label and the second
+consisting on the background color. Defaults to <a class="reference internal" href="#rnets.plotter.utils.BOX_TMP" title="rnets.plotter.utils.BOX_TMP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BOX_TMP</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.NodeCfg.font_color">
+<span class="sig-name descname"><span class="pre">font_color</span></span><a class="headerlink" href="#rnets.plotter.utils.NodeCfg.font_color" title="Link to this definition"></a></dt>
+<dd><p>Font color of the node. Defaults
+to <a class="reference internal" href="#rnets.plotter.utils.C_BLACK" title="rnets.plotter.utils.C_BLACK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">C_BLACK</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.NodeCfg.font_color_alt">
+<span class="sig-name descname"><span class="pre">font_color_alt</span></span><a class="headerlink" href="#rnets.plotter.utils.NodeCfg.font_color_alt" title="Link to this definition"></a></dt>
+<dd><p>Alternative font
+color. If not None, would be used as the font color for dark background
+colors (see <code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_relative_luminance</span></code>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code> or None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.plotter.utils.NodeCfg.font_lum_threshold">
+<span class="sig-name descname"><span class="pre">font_lum_threshold</span></span><a class="headerlink" href="#rnets.plotter.utils.NodeCfg.font_lum_threshold" title="Link to this definition"></a></dt>
+<dd><p>If <a class="reference internal" href="#rnets.plotter.utils.NodeCfg.font_color_alt" title="rnets.plotter.utils.NodeCfg.font_color_alt"><code class="xref py py-attr docutils literal notranslate"><span class="pre">font_color_alt</span></code></a>
+is defined, the luminance threshold to use it instead of
+<a class="reference internal" href="#rnets.plotter.utils.NodeCfg.font_color" title="rnets.plotter.utils.NodeCfg.font_color"><code class="xref py py-attr docutils literal notranslate"><span class="pre">font_color</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float on None, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.plotter.utils.apply_html_format">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">apply_html_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.FFlags" title="rnets.struct.FFlags"><span class="pre">FFlags</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#apply_html_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.apply_html_format" title="Link to this definition"></a></dt>
+<dd><p>Given a set of <code class="xref py py-obj docutils literal notranslate"><span class="pre">FFlags</span></code> apply it as HTML format labels to a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>str</em>) -- String to apply the format.</p></li>
+<li><p><strong>fs</strong> (set of <code class="xref py py-obj docutils literal notranslate"><span class="pre">FFlags</span></code>) -- Set with the formats to apply.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>with the applied HTML formats.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.plotter.utils.build_dotedge">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">build_dotedge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Opts</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="rnets.dot.html#rnets.dot.Edge" title="rnets.dot.Edge"><span class="pre">Edge</span></a></span></span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#build_dotedge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.build_dotedge" title="Link to this definition"></a></dt>
+<dd><p>Build a dot <code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>o</strong> (<em>str</em>) -- Origin node.</p></li>
+<li><p><strong>t</strong> (<em>str</em>) -- Target node.</p></li>
+<li><p><strong>opts</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code> or None, optional) -- Graphviz attributes of the
+edge. Defaults to None.</p></li>
+<li><p><strong>c</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code> or None, optional) -- Color of edge. Defaults to None.</p></li>
+<li><p><strong>w</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) -- Edge width. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>None values will not be defined in the generated file and default
+Graphviz values will be used. Opts overrides color and width
+definitions.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.plotter.utils.build_dotedges">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">build_dotedges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="rnets.struct.html#rnets.struct.Reaction" title="rnets.struct.Reaction"><span class="pre">Reaction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">C_BLACK</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.dot.html#rnets.dot.Edge" title="rnets.dot.Edge"><span class="pre">Edge</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#build_dotedges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.build_dotedges" title="Link to this definition"></a></dt>
+<dd><p>Converts a <cite>Reaction</cite> into one or more dot <code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Reaction</span></code>) -- Reaction to convert.</p></li>
+<li><p><strong>width</strong> (<em>float</em>) -- Width of the reaction arrow.</p></li>
+<li><p><strong>color</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code>, optional) -- Color of the arrow. Defaults to
+<a class="reference internal" href="#rnets.plotter.utils.C_BLACK" title="rnets.plotter.utils.C_BLACK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">C_BLACK</span></code></a>.</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) -- If True, invert the order of the reactants
+and the products.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Iterator with the generated dot <code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code> corresponding to the
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">Reaction</span></code> with the given width and color.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Iterator[Edge]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.plotter.utils.build_dotnode">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">build_dotnode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">C_WHITE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">C_BLACK</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="rnets.dot.html#rnets.dot.Node" title="rnets.dot.Node"><span class="pre">Node</span></a></span></span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#build_dotnode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.build_dotnode" title="Link to this definition"></a></dt>
+<dd><p>Creates a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code> from a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code>) -- Compound to be coverted.</p></li>
+<li><p><strong>bc</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code>, optional) -- RGB color of the background. Defaults to
+white.</p></li>
+<li><p><strong>fc</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code>, optional) -- RGB color of the text. Defaults to black
+(<a class="reference internal" href="#rnets.plotter.utils.C_BLACK" title="rnets.plotter.utils.C_BLACK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">C_BLACK</span></code></a>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dot node with the given font and background colors.
+Inherits applies the format flags and the dot opts in
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>To allow custom labels, this function will check for &quot;label&quot; in</dt><dd><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">Compound.opts</span></code>, if found, it will use it instead of the
+layer.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.plotter.utils.build_glob_opt">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">build_glob_opt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#rnets.plotter.utils.GraphCfg" title="rnets.plotter.utils.GraphCfg"><span class="pre">GraphCfg</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">OptsGlob</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#build_glob_opt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.build_glob_opt" title="Link to this definition"></a></dt>
+<dd><p>Given a certain <a class="reference internal" href="#rnets.plotter.utils.GraphCfg" title="rnets.plotter.utils.GraphCfg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GraphCfg</span></code></a>, build a dictionary containing the dot
+options for the graph, the node and the edges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cfg</strong> (<a class="reference internal" href="#rnets.plotter.utils.GraphCfg" title="rnets.plotter.utils.GraphCfg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GraphCfg</span></code></a>) -- Configuration to use to generate the dictionary.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>With the given dictionary. Using graph, node and edge
+as keys and their corresponding <code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code> as values.
+None: If no Opts are found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptsGlob</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.plotter.utils.build_node_box">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">build_node_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">C_BLACK</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box_tmp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">BOX_TMP</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#build_node_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.build_node_box" title="Link to this definition"></a></dt>
+<dd><p>Creates an string describing a colored-background HTML with a text label
+in the middle. This is the typical node representation of this code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>str</em>) -- String that will be used as a label.</p></li>
+<li><p><strong>fc</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code>, optional) -- Text color for the label. Defaults to black
+(<a class="reference internal" href="#rnets.plotter.utils.C_BLACK" title="rnets.plotter.utils.C_BLACK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">C_BLACK</span></code></a>).</p></li>
+<li><p><strong>box_tmp</strong> (<em>str</em><em>, </em><em>optional</em>) -- Box template. Should have a format modificator
+for the text label. Defaults to <a class="reference internal" href="#rnets.plotter.utils.BOX_TMP" title="rnets.plotter.utils.BOX_TMP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BOX_TMP</span></code></a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>HTML table with the given label, background color and text color.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Note that <code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code> follows the colorsys representation, meaning</dt><dd><p>that it consists of 3 float values ranging from [0, 1].</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.plotter.utils.color_interp">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">color_interp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">norm_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.,</span> <span class="pre">0.)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cspace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ColorSpace</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'lab'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#color_interp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.color_interp" title="Link to this definition"></a></dt>
+<dd><p>Given a reaction network and a sequence of colors, build a color
+interpolation function that converts the energy of a component inside the
+network to the corresponding color in the color sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Network</span></code>) -- Reaction network.</p></li>
+<li><p><strong>cs</strong> (sequence of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code>) -- Sequence of colors to interpolate.</p></li>
+<li><p><strong>offset</strong> (<em>tuple</em><em> of </em><em>2 float</em><em>, </em><em>optional</em>) -- Minimum and maximum energy offsets
+to add to the minimum and maximum detected energies.</p></li>
+<li><p><strong>c_space</strong> (<em>str</em>) -- Colorspace in which the interpolation will be
+perform. Check <code class="xref py py-obj docutils literal notranslate"><span class="pre">ColorSpace</span></code> for available values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function that takes a float as input an returns a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code>
+as output.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable[[float],</span> <span class="pre">Color]</span></code></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt>The normalizer is set for the input network and thus, if an energy</dt><dd><p>value that it is out of range is used as input, the normalization
+will follow the (under)overflow rules of <code class="xref py py-obj docutils literal notranslate"><span class="pre">normalizer</span></code>.</p>
+</dd>
+<dt>I found that the offset is extremely useful to avoid very dark and very</dt><dd><p>bright zones of certain colorschemes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.plotter.utils.fformat_to_html">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">fformat_to_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="rnets.struct.html#rnets.struct.FFlags" title="rnets.struct.FFlags"><span class="pre">FFlags</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#rnets.plotter.utils.HTMLFormat" title="rnets.plotter.utils.HTMLFormat"><span class="pre">HTMLFormat</span></a></span></span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#fformat_to_html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.fformat_to_html" title="Link to this definition"></a></dt>
+<dd><p>Convert <code class="xref py py-obj docutils literal notranslate"><span class="pre">FFlags</span></code> to <a class="reference internal" href="#rnets.plotter.utils.HTMLFormat" title="rnets.plotter.utils.HTMLFormat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HTMLFormat</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>f</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">FFlags</span></code>) -- FFlags to convert.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>HTML format conversion.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.plotter.utils.HTMLFormat" title="rnets.plotter.utils.HTMLFormat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HTMLFormat</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.plotter.utils.gen_react_arrows">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">gen_react_arrows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="rnets.struct.html#rnets.struct.Compound" title="rnets.struct.Compound"><span class="pre">Compound</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#gen_react_arrows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.gen_react_arrows" title="Link to this definition"></a></dt>
+<dd><p>Given a set of reactants and a set of products, generate an iterator
+that returns every react-&gt;product combination, skipping the ones containing
+a not visible <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rt</strong> (sequence of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code>) -- Compounds acting as reactants.</p></li>
+<li><p><strong>pt</strong> (sequence of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code>) -- Compounds acting as products.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A consumable iterator with all the (react, product) combinations
+excluding the ones with non visible compounds.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Iterator[tuple[Compound,</span> <span class="pre">Compound]]</span></code></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To avoid duplicated edges due to duplicated compounds, e.g. 2H + 2O -&gt;
+2H2O ((H,H,O,O), (H2O,H2O)), only the unique reactants and products
+will be taken into account.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.plotter.utils.nodecolor_sel">
+<span class="sig-prename descclassname"><span class="pre">rnets.plotter.utils.</span></span><span class="sig-name descname"><span class="pre">nodecolor_sel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c_norm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fg_c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">C_BLACK</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fg_alt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lum_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="rnets.struct.html#rnets.struct.Visibility" title="rnets.struct.Visibility"><span class="pre">Visibility</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Color</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/plotter/utils.html#nodecolor_sel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.plotter.utils.nodecolor_sel" title="Link to this definition"></a></dt>
+<dd><p>Creates a function that takes an energy as input and returns the
+assigned color for the background of the node and the foreground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c_norm</strong> (Function taking a float as input and returns a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code>) -- Color normalizer that will be used to compute the color of the
+node background. See <code class="xref py py-obj docutils literal notranslate"><span class="pre">network_color_enery_interp</span></code>.</p></li>
+<li><p><strong>fg_c</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code>, optional) -- Color of the text. Defaults to
+<a class="reference internal" href="#rnets.plotter.utils.C_BLACK" title="rnets.plotter.utils.C_BLACK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">C_BLACK</span></code></a>.</p></li>
+<li><p><strong>fg_alt</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code>, optional) -- If set, alternative <code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code> for
+the text if the luminance is below the a certain
+threshold. Defaults to None.</p></li>
+<li><p><strong>lum_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) -- If set, threshold of the luminance. If
+None, the default value in <code class="xref py py-obj docutils literal notranslate"><span class="pre">color_sel_lum</span></code> will be used. This
+argument has no effect if <code class="xref py py-attr docutils literal notranslate"><span class="pre">fg_alt</span></code> is not defined. Ideally,
+a value between 0. and 1. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function that given a <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compound</span></code> returns a tuple of two
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code> s, the first being the background color and the second
+one being the color of the font.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Callable(Compound)</span> <span class="pre">-&gt;</span> <span class="pre">tuple[Color,</span> <span class="pre">Color]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rnets.plotter.thermo.html" class="btn btn-neutral float-left" title="thermo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rnets.struct.html" class="btn btn-neutral float-right" title="struct" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

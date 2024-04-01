@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>colors &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="dot" href="rnets.dot.html" />
+    <link rel="prev" title="chemistry" href="rnets.chemistry.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/python_api.html">Python API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/published_article.html">Published article</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="rnets.html">rnets</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="rnets.chemistry.html">chemistry</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">colors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-rnets.colors.colorschemes">colorschemes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.colorschemes.Colorscheme"><code class="docutils literal notranslate"><span class="pre">Colorscheme</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.colorschemes.VIRIDIS"><code class="docutils literal notranslate"><span class="pre">VIRIDIS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.colorschemes.INFERNO"><code class="docutils literal notranslate"><span class="pre">INFERNO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.colorschemes.MAGMA"><code class="docutils literal notranslate"><span class="pre">MAGMA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.colorschemes.PLASMA"><code class="docutils literal notranslate"><span class="pre">PLASMA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.colorschemes.CIVIDIS"><code class="docutils literal notranslate"><span class="pre">CIVIDIS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-rnets.colors.palettes">palettes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-rnets.colors.utils">utils</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.Color"><code class="docutils literal notranslate"><span class="pre">Color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.adjust_range"><code class="docutils literal notranslate"><span class="pre">adjust_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.apply_gamma"><code class="docutils literal notranslate"><span class="pre">apply_gamma()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.calc_relative_luminance"><code class="docutils literal notranslate"><span class="pre">calc_relative_luminance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.color_sel_lum"><code class="docutils literal notranslate"><span class="pre">color_sel_lum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.cyclic_conditions"><code class="docutils literal notranslate"><span class="pre">cyclic_conditions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.ensure_color"><code class="docutils literal notranslate"><span class="pre">ensure_color()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.hexstr_to_rgb"><code class="docutils literal notranslate"><span class="pre">hexstr_to_rgb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.interp_c_seq"><code class="docutils literal notranslate"><span class="pre">interp_c_seq()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.interp_cs"><code class="docutils literal notranslate"><span class="pre">interp_cs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.interp_fn"><code class="docutils literal notranslate"><span class="pre">interp_fn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.interp_fn_cspace"><code class="docutils literal notranslate"><span class="pre">interp_fn_cspace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.interp_fn_rgb_hls"><code class="docutils literal notranslate"><span class="pre">interp_fn_rgb_hls()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.interp_fn_rgb_lab"><code class="docutils literal notranslate"><span class="pre">interp_fn_rgb_lab()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.lab_to_xyz"><code class="docutils literal notranslate"><span class="pre">lab_to_xyz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.rgb_achromatize"><code class="docutils literal notranslate"><span class="pre">rgb_achromatize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.rgb_to_hexstr"><code class="docutils literal notranslate"><span class="pre">rgb_to_hexstr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.rgb_to_xyz"><code class="docutils literal notranslate"><span class="pre">rgb_to_xyz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.unapply_gamma"><code class="docutils literal notranslate"><span class="pre">unapply_gamma()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.xyz_to_lab"><code class="docutils literal notranslate"><span class="pre">xyz_to_lab()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.colors.utils.xyz_to_rgb"><code class="docutils literal notranslate"><span class="pre">xyz_to_rgb()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.dot.html">dot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.parser.html">parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.plotter.html">plotter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.struct.html">struct</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="rnets.html">rnets</a></li>
+      <li class="breadcrumb-item active">colors</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/rnets.colors.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="colors">
+<h1>colors<a class="headerlink" href="#colors" title="Link to this heading"></a></h1>
+<section id="module-rnets.colors.colorschemes">
+<span id="colorschemes"></span><h2>colorschemes<a class="headerlink" href="#module-rnets.colors.colorschemes" title="Link to this heading"></a></h2>
+<p>Colorschemes defined by different points of it used to interpolate the
+continious colorscheme.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.colors.colorschemes.Colorscheme">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.colorschemes.</span></span><span class="sig-name descname"><span class="pre">Colorscheme</span></span><a class="headerlink" href="#rnets.colors.colorschemes.Colorscheme" title="Link to this definition"></a></dt>
+<dd><p>Type synonym to define a colorscheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.colors.colorschemes.VIRIDIS">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.colorschemes.</span></span><span class="sig-name descname"><span class="pre">VIRIDIS</span></span><a class="headerlink" href="#rnets.colors.colorschemes.VIRIDIS" title="Link to this definition"></a></dt>
+<dd><p>Viridis colorscheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.colors.colorschemes.Colorscheme" title="rnets.colors.colorschemes.Colorscheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Colorscheme</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.colors.colorschemes.INFERNO">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.colorschemes.</span></span><span class="sig-name descname"><span class="pre">INFERNO</span></span><a class="headerlink" href="#rnets.colors.colorschemes.INFERNO" title="Link to this definition"></a></dt>
+<dd><p>Inferno colorscheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.colors.colorschemes.Colorscheme" title="rnets.colors.colorschemes.Colorscheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Colorscheme</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.colors.colorschemes.MAGMA">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.colorschemes.</span></span><span class="sig-name descname"><span class="pre">MAGMA</span></span><a class="headerlink" href="#rnets.colors.colorschemes.MAGMA" title="Link to this definition"></a></dt>
+<dd><p>Magma colorscheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.colors.colorschemes.Colorscheme" title="rnets.colors.colorschemes.Colorscheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Colorscheme</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.colors.colorschemes.PLASMA">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.colorschemes.</span></span><span class="sig-name descname"><span class="pre">PLASMA</span></span><a class="headerlink" href="#rnets.colors.colorschemes.PLASMA" title="Link to this definition"></a></dt>
+<dd><p>Plasma colorscheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.colors.colorschemes.Colorscheme" title="rnets.colors.colorschemes.Colorscheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Colorscheme</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.colors.colorschemes.CIVIDIS">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.colorschemes.</span></span><span class="sig-name descname"><span class="pre">CIVIDIS</span></span><a class="headerlink" href="#rnets.colors.colorschemes.CIVIDIS" title="Link to this definition"></a></dt>
+<dd><p>Cividis colorscheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.colors.colorschemes.Colorscheme" title="rnets.colors.colorschemes.Colorscheme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Colorscheme</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-rnets.colors.palettes">
+<span id="palettes"></span><h2>palettes<a class="headerlink" href="#module-rnets.colors.palettes" title="Link to this heading"></a></h2>
+<p>Color palettes. In the form of dict of obj:<cite>Color</cite></p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">css</span> <span class="pre">(dict</span> <span class="pre">of</span> <span class="pre">str</span> <span class="pre">as</span> <span class="pre">keys</span> <span class="pre">and</span> <span class="pre">obj</span></span></dt>
+<dd><p><cite>Color</cite> as values): CSS4 colorscheme. More
+information in <a class="reference external" href="https://drafts.csswg.org/css-color/">https://drafts.csswg.org/css-color/</a>.</p>
+</dd></dl>
+
+</section>
+<section id="module-rnets.colors.utils">
+<span id="utils"></span><h2>utils<a class="headerlink" href="#module-rnets.colors.utils" title="Link to this heading"></a></h2>
+<p>Utils for Color parsing, writing and interpolation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.colors.utils.Color">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">Color</span></span><a class="headerlink" href="#rnets.colors.utils.Color" title="Link to this definition"></a></dt>
+<dd><p>Type synonym to define a color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This library only works with 3-D colorspaces. Its extension N-D colorspaces
+should be straightforward, however, it has been decided not to include it
+in benefit of a strict definition of Color.</p>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.adjust_range">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">adjust_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#adjust_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.adjust_range" title="Link to this definition"></a></dt>
+<dd><p>Given an float, adjust it to the [0., 1.] interval, making underflow
+values 0 and overflow values 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) -- Value to adjust.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Adjusted float value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.apply_gamma">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">apply_gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#apply_gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.apply_gamma" title="Link to this definition"></a></dt>
+<dd><p>Apply gamma to color component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) -- Component to which the Gamma will be applied.</p></li>
+<li><p><strong>g</strong> (<em>float</em><em>, </em><em>optional</em>) -- Gamma value to apply. If None, assume sRGB
+gamma. Defaults to None.</p></li>
+<li><p><strong>A</strong> (<em>float</em><em>, </em><em>optional</em>) -- A value for the gamma function. In most cases 1. Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Component with the new Gamma value.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input and the output value are assumed to be a float within the
+[0, 1] interval.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.calc_relative_luminance">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">calc_relative_luminance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#calc_relative_luminance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.calc_relative_luminance" title="Link to this definition"></a></dt>
+<dd><p>Calculate the relative luminance of a <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> in the RGB space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>c</strong> (<a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>) -- Color in the RGB colorspace to compute its luminance.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Computed luminance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://www.w3.org/WAI/GL/wiki/Relative_luminance">https://www.w3.org/WAI/GL/wiki/Relative_luminance</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.color_sel_lum">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">color_sel_lum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Color</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#color_sel_lum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.color_sel_lum" title="Link to this definition"></a></dt>
+<dd><p>Given a pair of colors, select a color from it based on the relative
+luminance of a third one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c1</strong> (<a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>) -- Color to select if the luminance is below the
+threshold.</p></li>
+<li><p><strong>c2</strong> (<a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>) -- Color to select if the luminance is above the
+threshold.</p></li>
+<li><p><strong>dc</strong> (<a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>) -- Color to use to compute the relative luminance.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em><em>, </em><em>optional</em>) -- Threshold to make the decision. Ideally, a
+value between 0. and 1. Defaults to 0.5.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>c1 or c2.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.cyclic_conditions">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">cyclic_conditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#cyclic_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.cyclic_conditions" title="Link to this definition"></a></dt>
+<dd><p>Assuming that the range [0, 1] represent a periodic one-dimensional
+space, find the representation of the values that minimizes the distance
+between them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) -- First value.</p></li>
+<li><p><strong>y</strong> (<em>float</em>) -- Second value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple of the form (x, y) containing the new representation of the
+values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.ensure_color">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">ensure_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#ensure_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.ensure_color" title="Link to this definition"></a></dt>
+<dd><p>Tests wether a <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> is valid or not.</p>
+<dl class="simple">
+<dt>Arg:</dt><dd><p>c (<a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>): Color to be tested.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>wether the color is valid or not.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> follows the colorsys representation, meaning that it</dt><dd><p>consists of 3 float values ranging from [0, 1].</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.hexstr_to_rgb">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">hexstr_to_rgb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Color</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#hexstr_to_rgb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.hexstr_to_rgb" title="Link to this definition"></a></dt>
+<dd><p>Parses a color string of the form #RRGGBB into a <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<em>str</em>) -- Color string to be parsed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>With the values of the parsed string
+None: If the conversion fails.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Note that <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> follows the <code class="xref py py-obj docutils literal notranslate"><span class="pre">colorsys</span></code> representation,</dt><dd><p>meaning that it consists of 3 float values ranging from [0, 1].</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.interp_c_seq">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">interp_c_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(False,</span> <span class="pre">False,</span> <span class="pre">False)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Color</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#interp_c_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.interp_c_seq" title="Link to this definition"></a></dt>
+<dd><p>Given a value float x in the range [0., 1.] and a sequence of colors,
+interpolate a color being represented by x, being 0 the first color in the
+list and 1. the last.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) -- Floating point number in the range of [0., 1.] representing
+the position in the color sequence.</p></li>
+<li><p><strong>cs</strong> (Sequence of <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>) -- Sequence of colors to be interpolated.</p></li>
+<li><p><strong>cyclic</strong> (<em>bool</em><em>, </em><em>optional</em>) -- Index of the components of the color that are
+cyclic. In a cyclic component, the 0 and 1 values are connected, and
+thus the algorithm will consider the shortest path.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Interpolation using the :obj:colorsys implementation (3</dt><dd><p>float values in [0. ,1.])</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Note that this function will perform the interpolation withing the</dt><dd><p>color space provided. i. e. if RGB is used, the interpolation will
+be done within the RGB colorspace. If x overflows on the roof, the
+last color of the sequence is returned while if x overflows on the
+floor, the first color of the sequence is returned.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.interp_cs">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">interp_cs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ColorSpace</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'lab'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#interp_cs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.interp_cs" title="Link to this definition"></a></dt>
+<dd><p>Given a sequence of <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> in an arbitrary colorspace, convert
+them to another space and create an interpolation function. The value
+returned by the interpolation function will be converted again to the
+original colorspace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cs</strong> (Sequence of <cite>Color</cite>) -- Sequence of colors in the RGB to be converted
+HSL and interpolated.</p></li>
+<li><p><strong>(</strong><strong>Literal</strong> (<em>interp</em>) -- rgb, lab or hsl, optional): The colorspace in which
+the interpolation will be perform.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>obj:Callable[[float], <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>]: A function that takes a float in</dt><dd><p>the range [0., 1.] as an argument and returns the interpolated
+color from the given Sequence of <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> using the specified
+colorspaces.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Wrapper for <a class="reference internal" href="#rnets.colors.utils.interp_fn_cspace" title="rnets.colors.utils.interp_fn_cspace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interp_fn_cspace</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.interp_fn">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">interp_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#interp_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.interp_fn" title="Link to this definition"></a></dt>
+<dd><p>Given a sequence of <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>, returns an interpolated function based
+on it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cs</strong> (Sequence of <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>) -- Sequence of colors to be interpolated.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>obj:Callable[[float], <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>]: A function that takes a float in</dt><dd><p>the range [0., 1.] as an argument and returns the interpolated
+color from the given Sequence of <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function acts as a wrapper of <code class="xref py py-obj docutils literal notranslate"><span class="pre">interp</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.interp_fn_cspace">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">interp_fn_cspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">lambda</span> <span class="pre">a,</span> <span class="pre">b,</span> <span class="pre">c:</span> <span class="pre">...</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">lambda</span> <span class="pre">a,</span> <span class="pre">b,</span> <span class="pre">c:</span> <span class="pre">...</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(False,</span> <span class="pre">False,</span> <span class="pre">False)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#interp_fn_cspace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.interp_fn_cspace" title="Link to this definition"></a></dt>
+<dd><p>Given a sequence of <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> in an arbitrary colorspace, convert
+them to another space and create an interpolation function. The value
+returned by the interpolation function will be converted again to the
+original colorspace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cs</strong> (Sequence of <cite>Color</cite>) -- Sequence of colors in the RGB to be converted
+HSL and interpolated.</p></li>
+<li><p><strong>a</strong> (<em>origin</em><em> (</em><em>function</em><em> of </em><em>taking three floats as input and returning</em>) -- <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>, optional): Function that projects the given color
+components to the colorspace in which the interpolation will be
+performed. Defaults to the identity function.</p></li>
+<li><p><strong>a</strong> -- <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>, optional): Function that returns the interpolated
+color to the original colorspace. Defaults to the identity
+function.</p></li>
+<li><p><strong>cyclic</strong> (<em>tuple</em><em> of </em><em>three bools</em><em>, </em><em>optional</em>) -- During the interpolation,
+treat the dimension marked as True as cyclic. Defaults to (False,
+False, False)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>obj:Callable[[float], <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>]: A function that takes a float in</dt><dd><p>the range [0., 1.] as an argument and returns the interpolated
+color from the given Sequence of <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> using the specified
+colorspaces.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">origin</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">target</span></code> take 3 floats as input for
+to ease the integration with the colorsys library.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.interp_fn_rgb_hls">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">interp_fn_rgb_hls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#interp_fn_rgb_hls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.interp_fn_rgb_hls" title="Link to this definition"></a></dt>
+<dd><p>Given a sequence of <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> representing the RGB colorspace,
+convert them to the CIEL*ab space and create an interpolation function. The
+value returned by the interpolation function will be converted again to
+RGB.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cs</strong> (Sequence of <cite>Color</cite>) -- Sequence of colors in the RGB to be converted
+CIEL*ab and interpolated.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>obj:Callable[[float], :obj:Color]: A function that takes a float in</dt><dd><p>the range [0., 1.] as an argument and returns the CIEL*ab interpolated
+color from the given Sequence of RGB <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.interp_fn_rgb_lab">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">interp_fn_rgb_lab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Color</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#interp_fn_rgb_lab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.interp_fn_rgb_lab" title="Link to this definition"></a></dt>
+<dd><p>Given a sequence of <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> representing the RGB colorspace,
+convert them to the HSL space and create an interpolation function. The
+value returned by the interpolation function will be converted again to
+rgb.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cs</strong> (Sequence of <cite>Color</cite>) -- Sequence of colors in the RGB to be converted
+HSL and interpolated.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>obj:Callable[[float], :obj:Color]: A function that takes a float in</dt><dd><p>the range [0., 1.] as an argument and returns the HSL interpolated
+color from the given Sequence of RGB <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>D65 illuminant. Gamma correction assuming sRGB.
+Sometimes the obtained color components are negative numbers near to
+0. To assure that the colors are within the [0., 1.] interval,
+<a class="reference internal" href="#rnets.colors.utils.adjust_range" title="rnets.colors.utils.adjust_range"><code class="xref py py-func docutils literal notranslate"><span class="pre">adjust_range()</span></code></a> is applied to the output values.</p>
+</div>
+<p class="rubric">References</p>
+<p>CIE Colorimetry 15 (Third ed.). CIE. 2004. ISBN 3-901-906-33-9.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.lab_to_xyz">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">lab_to_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Color</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#lab_to_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.lab_to_xyz" title="Link to this definition"></a></dt>
+<dd><p>Projects the given L*a*b <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> value to the XYZ colorspace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>l</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the L, a, b components respectively.</p></li>
+<li><p><strong>a</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the L, a, b components respectively.</p></li>
+<li><p><strong>b</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the L, a, b components respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Projected <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Smith, Thomas; Guild, John (1931–32). &quot;The C.I.E. colorimetric
+standards and their use&quot;. Transactions of the Optical Society. 33 (3):
+73–134. DOI 10.1088/1475-4878/33/3/301</p>
+<p>CIE Colorimetry 15 (Third ed.). CIE. 2004. ISBN 3-901-906-33-9.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Adapted from OpenCV.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.rgb_achromatize">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">rgb_achromatize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Color</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#rgb_achromatize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.rgb_achromatize" title="Link to this definition"></a></dt>
+<dd><p>Achromatize the given RGB color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>c</strong> (<a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>) -- Color that will be achromatized.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> Achromatized color.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Formula taken from the pillow library:
+<a class="reference external" href="https://pillow.readthedocs.io/en/stable/reference/Image.html#PIL.Image.Image.convert">https://pillow.readthedocs.io/en/stable/reference/Image.html#PIL.Image.Image.convert</a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.rgb_to_hexstr">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">rgb_to_hexstr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc_hash</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#rgb_to_hexstr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.rgb_to_hexstr" title="Link to this definition"></a></dt>
+<dd><p>Returns the given color as an hexadecimal string of the form #RRGGBB
+where R, G and B are represented from a number from 0 to 9 and a letter
+from a (10) to f (15).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c</strong> (<a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>) -- <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> to transform into string.</p></li>
+<li><p><strong>inc_hash</strong> (<em>bool</em><em>, </em><em>optional</em>) -- If True, include the hash character at the
+beggining of the color string. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Color string with the RRGGBB form.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Note that <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> follows the <code class="xref py py-obj docutils literal notranslate"><span class="pre">colorsys</span></code> representation,</dt><dd><p>meaning that it consists of 3 float values ranging from [0, 1].</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.rgb_to_xyz">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">rgb_to_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Color</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#rgb_to_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.rgb_to_xyz" title="Link to this definition"></a></dt>
+<dd><p>Projects the given RGB <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> value to the L*a*b* colorspace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the red, green and blue components respectively.</p></li>
+<li><p><strong>g</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the red, green and blue components respectively.</p></li>
+<li><p><strong>b</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the red, green and blue components respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Projected <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Obeserver. = 2, Illuminant = D65</p>
+</div>
+<p class="rubric">References</p>
+<p>Smith, Thomas; Guild, John (1931–32). &quot;The C.I.E. colorimetric
+standards and their use&quot;. Transactions of the Optical Society. 33 (3):
+73–134. DOI 10.1088/1475-4878/33/3/301</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.unapply_gamma">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">unapply_gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#unapply_gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.unapply_gamma" title="Link to this definition"></a></dt>
+<dd><p>Unapply gamma to color component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) -- Component to which the Gamma will be unaapplied.</p></li>
+<li><p><strong>g</strong> (<em>float</em><em>, </em><em>optional</em>) -- Gamma value to apply. If None, assume sRGB
+gamma. Defaults to None.</p></li>
+<li><p><strong>A</strong> (<em>float</em><em>, </em><em>optional</em>) -- A value for the gamma function. In most cases 1. Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Ungamma component.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input and the output value are assumed to be a float within the
+[0, 1] interval.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.xyz_to_lab">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">xyz_to_lab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Color</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#xyz_to_lab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.xyz_to_lab" title="Link to this definition"></a></dt>
+<dd><p>Projects the given XYZ <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> value to the L*a*b* colorspace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the X, Y, Z components respectively.</p></li>
+<li><p><strong>y</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the X, Y, Z components respectively.</p></li>
+<li><p><strong>z</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the X, Y, Z components respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Projected <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Smith, Thomas; Guild, John (1931–32). &quot;The C.I.E. colorimetric
+standards and their use&quot;. Transactions of the Optical Society. 33 (3):
+73–134. DOI 10.1088/1475-4878/33/3/301</p>
+<p>CIE Colorimetry 15 (Third ed.). CIE. 2004. ISBN 3-901-906-33-9.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Adapted from OpenCV.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.colors.utils.xyz_to_rgb">
+<span class="sig-prename descclassname"><span class="pre">rnets.colors.utils.</span></span><span class="sig-name descname"><span class="pre">xyz_to_rgb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Color</span></span></span><a class="reference internal" href="../_modules/rnets/colors/utils.html#xyz_to_rgb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.colors.utils.xyz_to_rgb" title="Link to this definition"></a></dt>
+<dd><p>Projects the given xyz <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a> value to the rgb colorspace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the X, Y and Z components respectively.</p></li>
+<li><p><strong>y</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the X, Y and Z components respectively.</p></li>
+<li><p><strong>z</strong> (<em>float</em>) -- Floating point number in the interval [0, 1]
+representing the X, Y and Z components respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Projected <a class="reference internal" href="#rnets.colors.utils.Color" title="rnets.colors.utils.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a>.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Obeserver. = 2, Illuminant = D65</p>
+</div>
+<p class="rubric">References</p>
+<p>Smith, Thomas; Guild, John (1931–32). &quot;The C.I.E. colorimetric
+standards and their use&quot;. Transactions of the Optical Society. 33 (3):
+73–134. DOI 10.1088/1475-4878/33/3/301</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rnets.chemistry.html" class="btn btn-neutral float-left" title="chemistry" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rnets.dot.html" class="btn btn-neutral float-right" title="dot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

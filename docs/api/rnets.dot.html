@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dot &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="parser" href="rnets.parser.html" />
+    <link rel="prev" title="colors" href="rnets.colors.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/python_api.html">Python API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/published_article.html">Published article</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="rnets.html">rnets</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="rnets.chemistry.html">chemistry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.colors.html">colors</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">dot</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.Opts"><code class="docutils literal notranslate"><span class="pre">Opts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.OptsGlob"><code class="docutils literal notranslate"><span class="pre">OptsGlob</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.IDENT"><code class="docutils literal notranslate"><span class="pre">IDENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.SEP_S_LV"><code class="docutils literal notranslate"><span class="pre">SEP_S_LV</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.SEP_D_LV"><code class="docutils literal notranslate"><span class="pre">SEP_D_LV</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.Edge"><code class="docutils literal notranslate"><span class="pre">Edge</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.dot.Edge.start"><code class="docutils literal notranslate"><span class="pre">Edge.start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.dot.Edge.target"><code class="docutils literal notranslate"><span class="pre">Edge.target</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.dot.Edge.direction"><code class="docutils literal notranslate"><span class="pre">Edge.direction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.dot.Edge.options"><code class="docutils literal notranslate"><span class="pre">Edge.options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.dot.Graph.kind"><code class="docutils literal notranslate"><span class="pre">Graph.kind</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.dot.Graph.nodes"><code class="docutils literal notranslate"><span class="pre">Graph.nodes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.dot.Graph.edges"><code class="docutils literal notranslate"><span class="pre">Graph.edges</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.dot.Graph.options"><code class="docutils literal notranslate"><span class="pre">Graph.options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.dot.Node.name"><code class="docutils literal notranslate"><span class="pre">Node.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rnets.dot.Node.options"><code class="docutils literal notranslate"><span class="pre">Node.options</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.OptKind"><code class="docutils literal notranslate"><span class="pre">OptKind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.edge_to_str"><code class="docutils literal notranslate"><span class="pre">edge_to_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.graph_to_str"><code class="docutils literal notranslate"><span class="pre">graph_to_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.ident"><code class="docutils literal notranslate"><span class="pre">ident()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.ident_if"><code class="docutils literal notranslate"><span class="pre">ident_if()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.node_to_str"><code class="docutils literal notranslate"><span class="pre">node_to_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.opt_glob_to_str"><code class="docutils literal notranslate"><span class="pre">opt_glob_to_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.opts_glob_to_str"><code class="docutils literal notranslate"><span class="pre">opts_glob_to_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rnets.dot.opts_to_str"><code class="docutils literal notranslate"><span class="pre">opts_to_str()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.parser.html">parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.plotter.html">plotter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rnets.struct.html">struct</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="rnets.html">rnets</a></li>
+      <li class="breadcrumb-item active">dot</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/rnets.dot.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-rnets.dot">
+<span id="dot"></span><h1>dot<a class="headerlink" href="#module-rnets.dot" title="Link to this heading"></a></h1>
+<p>This module is a minimal implementation of a writer for the dot language. It
+does contain the minimum functionality to allow the writing of the reaction
+networks in dot format.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Opts">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">Opts</span></span><a class="headerlink" href="#rnets.dot.Opts" title="Link to this definition"></a></dt>
+<dd><p>Type synonym to define options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.OptsGlob">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">OptsGlob</span></span><a class="headerlink" href="#rnets.dot.OptsGlob" title="Link to this definition"></a></dt>
+<dd><p>Type synonym defining global options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.IDENT">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">IDENT</span></span><a class="headerlink" href="#rnets.dot.IDENT" title="Link to this definition"></a></dt>
+<dd><p>Identation level when writing the dot file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.SEP_S_LV">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">SEP_S_LV</span></span><a class="headerlink" href="#rnets.dot.SEP_S_LV" title="Link to this definition"></a></dt>
+<dd><p>Single level separation, e.g: between two node definition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.SEP_D_LV">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">SEP_D_LV</span></span><a class="headerlink" href="#rnets.dot.SEP_D_LV" title="Link to this definition"></a></dt>
+<dd><p>Double level separation, e.g: between node and edge
+definition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.dot.Edge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">Edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'-&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Opts</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/dot.html#Edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.Edge" title="Link to this definition"></a></dt>
+<dd><p>Structure representing a dot edge between two nodes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Edge.start">
+<span class="sig-name descname"><span class="pre">start</span></span><a class="headerlink" href="#rnets.dot.Edge.start" title="Link to this definition"></a></dt>
+<dd><p>Starting node name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Edge.target">
+<span class="sig-name descname"><span class="pre">target</span></span><a class="headerlink" href="#rnets.dot.Edge.target" title="Link to this definition"></a></dt>
+<dd><p>Target node name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Edge.direction">
+<span class="sig-name descname"><span class="pre">direction</span></span><a class="headerlink" href="#rnets.dot.Edge.direction" title="Link to this definition"></a></dt>
+<dd><p>Symbol to use to connect both nodes.
+See dot manual for possible values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Edge.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#rnets.dot.Edge.options" title="Link to this definition"></a></dt>
+<dd><p>Options of the edge.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.dot.Opts" title="rnets.dot.Opts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.dot.Graph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">Graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.dot.Node" title="rnets.dot.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rnets.dot.Edge" title="rnets.dot.Edge"><span class="pre">Edge</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">OptsGlob</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/dot.html#Graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.Graph" title="Link to this definition"></a></dt>
+<dd><p>Structure representing a dot graph.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Graph.kind">
+<span class="sig-name descname"><span class="pre">kind</span></span><a class="headerlink" href="#rnets.dot.Graph.kind" title="Link to this definition"></a></dt>
+<dd><p>Graph type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Graph.nodes">
+<span class="sig-name descname"><span class="pre">nodes</span></span><a class="headerlink" href="#rnets.dot.Graph.nodes" title="Link to this definition"></a></dt>
+<dd><p>Nodes in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sequence of <a class="reference internal" href="#rnets.dot.Node" title="rnets.dot.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Graph.edges">
+<span class="sig-name descname"><span class="pre">edges</span></span><a class="headerlink" href="#rnets.dot.Graph.edges" title="Link to this definition"></a></dt>
+<dd><p>Edges in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sequence of <a class="reference internal" href="#rnets.dot.Edge" title="rnets.dot.Edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Graph.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#rnets.dot.Graph.options" title="Link to this definition"></a></dt>
+<dd><p>Dictionary containing multiple global options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of str as keys and <a class="reference internal" href="#rnets.dot.Opts" title="rnets.dot.Opts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></a> as values</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.dot.Node">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Opts</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/dot.html#Node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.Node" title="Link to this definition"></a></dt>
+<dd><p>Structure representing a dot graph node.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Node.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#rnets.dot.Node.name" title="Link to this definition"></a></dt>
+<dd><p>Name of the node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rnets.dot.Node.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#rnets.dot.Node.options" title="Link to this definition"></a></dt>
+<dd><p>dot options for the node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#rnets.dot.Opts" title="rnets.dot.Opts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rnets.dot.OptKind">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">OptKind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rnets/dot.html#OptKind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.OptKind" title="Link to this definition"></a></dt>
+<dd><p>Enum representing the possible kind of global <a class="reference internal" href="#rnets.dot.Opts" title="rnets.dot.Opts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></a> values</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.dot.edge_to_str">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">edge_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#rnets.dot.Edge" title="rnets.dot.Edge"><span class="pre">Edge</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/dot.html#edge_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.edge_to_str" title="Link to this definition"></a></dt>
+<dd><p>Converts a <a class="reference internal" href="#rnets.dot.Edge" title="rnets.dot.Edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code></a> into a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> (<a class="reference internal" href="#rnets.dot.Edge" title="rnets.dot.Edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Edge</span></code></a>) -- Edge that will be converted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Edge in dot format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.dot.graph_to_str">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">graph_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#rnets.dot.Graph" title="rnets.dot.Graph"><span class="pre">Graph</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/dot.html#graph_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.graph_to_str" title="Link to this definition"></a></dt>
+<dd><p>Converts a <a class="reference internal" href="#rnets.dot.Graph" title="rnets.dot.Graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Graph</span></code></a> into a dot string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>g</strong> (<a class="reference internal" href="#rnets.dot.Graph" title="rnets.dot.Graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Graph</span></code></a>) -- Graph that will be converted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Graph in dot format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.dot.ident">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">ident</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/dot.html#ident"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.ident" title="Link to this definition"></a></dt>
+<dd><p>Ident the given string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>str</em>) -- String that will be idented.</p></li>
+<li><p><strong>i</strong> (<em>int</em>) -- Identation level.</p></li>
+<li><p><strong>first</strong> (<em>bool</em><em>, </em><em>optional</em>) -- Wether or not ident the first line.
+defaults to True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Idented string.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>This is not the optimal way to perform the identation as we should</dt><dd><p>build new string every time that we ident. However, I think that it
+is more useful than to put the identation during the writing.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.dot.ident_if">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">ident_if</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/dot.html#ident_if"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.ident_if" title="Link to this definition"></a></dt>
+<dd><p>Same as <cite>ident</cite> but returns an empty string if the input string is
+empty or None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>str</em><em> or </em><em>None</em>) -- String that will be idented.</p></li>
+<li><p><strong>i</strong> (<em>int</em>) -- Identation level.</p></li>
+<li><p><strong>first</strong> (<em>bool</em><em>, </em><em>optional</em>) -- Wether or not ident the first line.
+defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Either the idented string or an empty string.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.dot.node_to_str">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">node_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#rnets.dot.Node" title="rnets.dot.Node"><span class="pre">Node</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/dot.html#node_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.node_to_str" title="Link to this definition"></a></dt>
+<dd><p>Converts a <a class="reference internal" href="#rnets.dot.Node" title="rnets.dot.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a> into a string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> (<a class="reference internal" href="#rnets.dot.Node" title="rnets.dot.Node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code></a>) -- Node that will be converted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Node in the dot format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.dot.opt_glob_to_str">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">opt_glob_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">o</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Opts</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/dot.html#opt_glob_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.opt_glob_to_str" title="Link to this definition"></a></dt>
+<dd><p>Format a name followed by <a class="reference internal" href="#rnets.dot.Opts" title="rnets.dot.Opts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></a>. Used to define global variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>str</em>) -- <a class="reference internal" href="#rnets.dot.OptKind" title="rnets.dot.OptKind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptKind</span></code></a> for which the global options will be decided.</p></li>
+<li><p><strong>o</strong> (<a class="reference internal" href="#rnets.dot.Opts" title="rnets.dot.Opts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></a>) -- Global options to define.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Options in dot format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.dot.opts_glob_to_str">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">opts_glob_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">os</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">OptsGlob</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/dot.html#opts_glob_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.opts_glob_to_str" title="Link to this definition"></a></dt>
+<dd><p>Format a <a class="reference internal" href="#rnets.dot.OptsGlob" title="rnets.dot.OptsGlob"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptsGlob</span></code></a> in dot format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>os</strong> (<a class="reference internal" href="#rnets.dot.OptsGlob" title="rnets.dot.OptsGlob"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptsGlob</span></code></a>) -- To convert to dot format.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Global options in dot format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rnets.dot.opts_to_str">
+<span class="sig-prename descclassname"><span class="pre">rnets.dot.</span></span><span class="sig-name descname"><span class="pre">opts_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Opts</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/rnets/dot.html#opts_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rnets.dot.opts_to_str" title="Link to this definition"></a></dt>
+<dd><p>Converts a <a class="reference internal" href="#rnets.dot.Opts" title="rnets.dot.Opts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></a> into a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> (<a class="reference internal" href="#rnets.dot.Opts" title="rnets.dot.Opts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Opts</span></code></a>) -- Options that will be converted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>of the dot format</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rnets.colors.html" class="btn btn-neutral float-left" title="colors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rnets.parser.html" class="btn btn-neutral float-right" title="parser" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

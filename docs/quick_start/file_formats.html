@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File Formats &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Command-line Examples" href="../examples/command_line.html" />
+    <link rel="prev" title="Basic Usage" href="basic_usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">File Formats</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#compounds-file">Compounds File</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#required-columns">Required columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optional-columns">Optional columns</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reactions-file">Reactions File</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Required columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Optional columns</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/python_api.html">Python API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/published_article.html">Published article</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/rnets.html">rnets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">File Formats</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/quick_start/file_formats.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="file-formats">
+<h1>File Formats<a class="headerlink" href="#file-formats" title="Link to this heading"></a></h1>
+<p>To simplify the creation of the reaction network rNets relies on the CSV format
+which is a tabular format that can be easily created using your preferred
+spreadsheet software or even a plain text editor. There are two types of files
+that are required, namely the &quot;Compounds&quot; file and the &quot;Reactions&quot; file. These
+files have multiple columns, where the column name may be repeated, and only a
+subset of all possible columns is required.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>CSV stands for Comma Separated Values, and rNets assumes that convention.
+Some spreadsheet sofware may provide the option of using a different
+character for separating the values. Please note that providing a non-comma
+separated file as input for rNets may lead to errors or bad results.</p>
+</div>
+<section id="compounds-file">
+<h2>Compounds File<a class="headerlink" href="#compounds-file" title="Link to this heading"></a></h2>
+<p>The compounds file contains the individual entries of each species in the
+reaction network. Each entry must consist at least of a name, a text
+representation of the compound, and an energy. Below we have an example of how
+the compounds file may look like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>name,energy
+reactant,0
+intermediate,0
+product,0
+</pre></div>
+</div>
+<p>Here we have three species <code class="code docutils literal notranslate"><span class="pre">reactant</span></code>, <code class="code docutils literal notranslate"><span class="pre">intermediate</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">product</span></code>. In this case the energy of all of them is <code class="code docutils literal notranslate"><span class="pre">0</span></code></p>
+<section id="required-columns">
+<h3>Required columns<a class="headerlink" href="#required-columns" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">name</span></code> Corresponds to the text label to uniquely identify the species.
+It is the text that will show in the generated graph to represent the compound.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">energy</span></code> Corresponds to the absolute or relative energy of the species.
+Typically the free energy.</p></li>
+</ul>
+</section>
+<section id="optional-columns">
+<h3>Optional columns<a class="headerlink" href="#optional-columns" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">fflags</span></code> The format of the text for name, there are four possible options:
+<code class="code docutils literal notranslate"><span class="pre">b</span></code> ( Bold ), <code class="code docutils literal notranslate"><span class="pre">i`(</span> <span class="pre">italics</span> <span class="pre">),</span> <span class="pre">:code:`u</span></code> ( underlined ) or if it
+is not specified it will be without any format.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">visible</span></code> This column allows to hide certain compounds to simplify the
+final graph, however these hidden compounds are still considered when the
+normalization is carried out. To hide a compound add <code class="code docutils literal notranslate"><span class="pre">f</span></code>, to reduce
+its visibility but still show it <code class="code docutils literal notranslate"><span class="pre">grey</span></code> and to show the node use
+<code class="code docutils literal notranslate"><span class="pre">v</span></code> (although it is the default behavior so not specifying any other
+value will default to this option).</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">opts</span></code> This allows to add more specific graphviz node attributes.
+these can be found in graphviz <a class="reference external" href="https://graphviz.org/docs/nodes/">docs</a>
+typically they are specified as <code class="code docutils literal notranslate"><span class="pre">&quot;key=value&quot;</span></code> where <code class="code docutils literal notranslate"><span class="pre">key</span></code> is the
+attribute, i.e. image, and the <code class="code docutils literal notranslate"><span class="pre">value</span></code> is the value that the attribute
+will take for that node, i.e. path/to/my/beautiful.png.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Hidden compounds (entries with an <code class="code docutils literal notranslate"><span class="pre">f</span></code> value in the <code class="code docutils literal notranslate"><span class="pre">visibility</span></code>
+column) are considered in for normalizing the color scale but are not shown
+in the graph.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Although <code class="code docutils literal notranslate"><span class="pre">opts</span></code> allows a large degree of customization through graphviz
+please note that the default format of the nodes is specified with html, thus
+it is discouraged for beginner-level users to use this option.</p>
+</div>
+</section>
+</section>
+<section id="reactions-file">
+<h2>Reactions File<a class="headerlink" href="#reactions-file" title="Link to this heading"></a></h2>
+<p>The reactions file contains one reaction entry per row. The reaction may be
+unidirectional or bidirectional. The reactions are defined by the compounds that
+are involved, thus the same <code class="code docutils literal notranslate"><span class="pre">name</span></code> values defined in the compounds file
+should be used. Below we have an example of how the reactions file may look like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cleft,cright,direction,name,visible
+reactant,,intermediate,,0.5,&lt;-&gt;,R0,
+intermediate,,product,,0.4,&lt;-&gt;,R1,
+</pre></div>
+</div>
+<section id="id1">
+<h3>Required columns<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">cleft</span></code> Text label of the first reactant.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">cright</span></code> Text label of the first product.</p></li>
+</ul>
+<p>At least 1 <code class="code docutils literal notranslate"><span class="pre">cleft</span></code> and 1 <code class="code docutils literal notranslate"><span class="pre">cright</span></code> must be specified. A second column
+<code class="code docutils literal notranslate"><span class="pre">cleft</span></code> or <code class="code docutils literal notranslate"><span class="pre">cright</span></code> is also accepted, which allows specifying
+bimolecular reactions, but this second column is optional. An example of
+a reactions file containing a bimolecular reaction is shown below:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cleft,cright,cright,direction,name,visible
+reactant,,intermediate,,0.5,&lt;-&gt;,R0,
+intermediate,,product1,product2,0.4,&lt;-&gt;,R1,
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3>Optional columns<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">energy</span></code> Absolute energy of the TS connecting reactants and products.
+Used to compute the energy barrier.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">direction</span></code> Direction of the reaction. <code class="code docutils literal notranslate"><span class="pre">&lt;-&gt;</span></code> for reversible
+reactions and <code class="code docutils literal notranslate"><span class="pre">-&gt;</span></code> for irreversible reactions.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">name</span></code> Text identifier of the reaction, typically R0,R1,R2 ... It does
+not have any effect in the produced graph, but may be used as a guide by the
+user when preparing/editing the files for complex reaction networks.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">visible</span></code> This column allows to hide certain reactions with a similar
+effect as hiding compounds. To hide a reaction add <code class="code docutils literal notranslate"><span class="pre">f</span></code>, to reduce
+its visibility but still show it <code class="code docutils literal notranslate"><span class="pre">grey</span></code> and to show the node use
+<code class="code docutils literal notranslate"><span class="pre">v</span></code> (although it is the default behavior so not specifying any other
+value will default to this option).</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">opts</span></code> This allows to add more specific graphviz edge attributes.
+these can be found in graphviz <a class="reference external" href="https://graphviz.org/docs/edges/">docs</a>
+typically they are specified as <code class="code docutils literal notranslate"><span class="pre">&quot;key=value&quot;</span></code> where <code class="code docutils literal notranslate"><span class="pre">key</span></code> is the
+attribute and the <code class="code docutils literal notranslate"><span class="pre">value</span></code> is the value that the attribute
+will take for that edge.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>rNets does not allow the inclusion of tri-molecular reactions, as such the
+maximum number of reactants is 2 and the same for the number of products is 2.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="basic_usage.html" class="btn btn-neutral float-left" title="Basic Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../examples/command_line.html" class="btn btn-neutral float-right" title="Command-line Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

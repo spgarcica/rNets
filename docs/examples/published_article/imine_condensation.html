@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imine condensation &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CO2 hydrogenation on Pd(111)" href="CO2_Pd.html" />
+    <link rel="prev" title="Published article" href="../published_article.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../published_article.html">Published article</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Imine condensation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#thermodynamic-representations">Thermodynamic representations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#preliminary-steps">Preliminary steps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#generation-of-the-network-graphs">Generation of the network graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#kinetic-representations">Kinetic representations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Preliminary steps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Generation of the network graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#an-animation-of-the-kinetic-evolution">An animation of the kinetic evolution</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Preliminary steps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gif-generation">GIF generation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CO2_Pd.html">CO<sub>2</sub> hydrogenation on Pd(111)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="regiospecific_CO2.html">Regiospecific CO<sub>2</sub> fixation</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/rnets.html">rnets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../published_article.html">Published article</a></li>
+      <li class="breadcrumb-item active">Imine condensation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples/published_article/imine_condensation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="imine-condensation">
+<h1>Imine condensation<a class="headerlink" href="#imine-condensation" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#thermodynamic-representations" id="id6">Thermodynamic representations</a></p>
+<ul>
+<li><p><a class="reference internal" href="#preliminary-steps" id="id7">Preliminary steps</a></p></li>
+<li><p><a class="reference internal" href="#generation-of-the-network-graphs" id="id8">Generation of the network graphs</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#kinetic-representations" id="id9">Kinetic representations</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id10">Preliminary steps</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id11">Generation of the network graphs</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#an-animation-of-the-kinetic-evolution" id="id12">An animation of the kinetic evolution</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id4" id="id13">Preliminary steps</a></p></li>
+<li><p><a class="reference internal" href="#gif-generation" id="id14">GIF generation</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="thermodynamic-representations">
+<h2>Thermodynamic representations<a class="headerlink" href="#thermodynamic-representations" title="Link to this heading"></a></h2>
+<p>The files required for the generation of the reaction networks of the imine
+condensation example of the rNets' article can be found in the
+<code class="code docutils literal notranslate"><span class="pre">examples/example_imine_thermo</span></code> folder. This folder contains the following
+files:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>example_imine_thermo
+  -README.txt
+  -comps_paper.csv
+  -reactions_paper.csv
+  -comps_paper_simple.csv
+  -reactions_paper_simple.csv
+  -comps_32.csv
+  -reactions_32.csv
+  -comps_32_simple.csv
+  -reactions_32_simple.csv
+  -generate_dotfile.py
+  -figure_3b.dot
+  -figure_3a.dot
+  -figure_S3.dot
+  -figure_S4.dot
+</pre></div>
+</div>
+<p>Here we have 4 different compound-reaction file pairs:</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">comps_paper_simple.csv</span></code> and <code class="code docutils literal notranslate"><span class="pre">reactions_paper_simple.csv</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">comps_32_simple.csv</span></code> and <code class="code docutils literal notranslate"><span class="pre">reactions_32_simple.csv</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">comps_paper.csv</span></code> and <code class="code docutils literal notranslate"><span class="pre">reactions_paper.csv</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">comps_32.csv</span></code> and <code class="code docutils literal notranslate"><span class="pre">reactions_32.csv</span></code></p></li>
+</ol>
+</div></blockquote>
+<p>The files with the termination <code class="code docutils literal notranslate"><span class="pre">simple.csv</span></code> include the ones required to
+generate the figures as presented in the manuscript. The files without the
+termination <code class="code docutils literal notranslate"><span class="pre">simple.csv</span></code> correspond to the full reaction network. All the
+numerical values included in these files come from the original publication
+(DOI: <a class="reference external" href="https://www.dx.doi.org/10.1021/acs.orglett.0c00367">10.1021/acs.orglett.0c00367</a>).
+Specifically, the files in <code class="code docutils literal notranslate"><span class="pre">a</span></code> are used to generate a simplified reaction
+network with the uncorrected DFT energies, hiding some compounds and species.
+The files in <code class="code docutils literal notranslate"><span class="pre">b</span></code> are used to generate the same representation of the network
+but with a corrected set of energies. The files in <code class="code docutils literal notranslate"><span class="pre">c</span></code> are the uncorrected
+full reaction network and the files in <code class="code docutils literal notranslate"><span class="pre">d</span></code> are used for the corrected full
+reaction network.</p>
+<p>The procedure for the generation of all images is the same one, only needing to
+change the compounds and reactions files. We will use the files in <code class="code docutils literal notranslate"><span class="pre">a</span></code> (
+uncorrected and simplified reaction network ) to illustrate the procedure.</p>
+<section id="preliminary-steps">
+<h3>Preliminary steps<a class="headerlink" href="#preliminary-steps" title="Link to this heading"></a></h3>
+<p>For the present example the only required software is rNets and graphviz. Please
+follow the installation instructions of rNets.</p>
+</section>
+<section id="generation-of-the-network-graphs">
+<h3>Generation of the network graphs<a class="headerlink" href="#generation-of-the-network-graphs" title="Link to this heading"></a></h3>
+<p>First we will generate the .dot file containing the reaction network from
+the compounds and reactions files. To do so we execute the following line:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>generate_dotfile.py<span class="w"> </span>comps_paper_simple.csv<span class="w"> </span>reactions_paper_simple.csv<span class="w"> </span>figure_3a.dot
+</pre></div>
+</div>
+<p>his will generate a file named figure_3a.dot in the current directory. Next we
+will render the figure with graphviz. We will generate a .png file, but other
+formats such as svg are also possible. To do so, we will execute the following
+command:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>dot<span class="w"> </span>-Tpng<span class="w"> </span>figure_3a.dot<span class="w"> </span>-o<span class="w"> </span>figure_3a.png
+</pre></div>
+</div>
+<p>With this we have generated the image of the reaction network.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please note that within generate_dotfile.py, a custom treatment for the
+<code class="code docutils literal notranslate"><span class="pre">simple.csv</span></code> files is included. This is not necessary to generate a
+reaction network graph, but it was used to add some control over the final
+layout to guarantee that the resulting figure would fit in the manuscript. It
+has also been added to the examples to ensure the reproducibility of the figures
+in the article.</p>
+</div>
+</section>
+</section>
+<section id="kinetic-representations">
+<h2>Kinetic representations<a class="headerlink" href="#kinetic-representations" title="Link to this heading"></a></h2>
+<p>The files required for the generation of the reaction networks of the imine
+condensation example of the rNets' article can be found in the
+<code class="code docutils literal notranslate"><span class="pre">examples/example_imine_kinetic</span></code> folder. This folder contains the following
+files:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>example_imine_kinetic
+ -README.txt
+ -comps_draco_42.csv
+ -reactions_draco_42.csv
+ -comps_draco_42_simple.csv
+ -reactions_draco_42_simple.csv
+ -kinetic_model.py
+ -kinetic_model.index
+ -generate_kinetic_snapshots.py
+ -generate_kinetic_gif.py
+</pre></div>
+</div>
+<p>Here we have 4 different types of files:</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">comps_draco_42_simple.csv</span></code> , <code class="code docutils literal notranslate"><span class="pre">reactions_draco_42_simple.csv</span></code>,
+<code class="code docutils literal notranslate"><span class="pre">comps_draco_42.csv</span></code>, <code class="code docutils literal notranslate"><span class="pre">reactions_draco_42.csv</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">kinetic_model.py</span></code> , <code class="code docutils literal notranslate"><span class="pre">kinetic_model.index</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">generate_kinetic_snapshots.py</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">generate_kinetic_gif.py</span></code></p></li>
+</ol>
+</div></blockquote>
+<p>Files in <code class="code docutils literal notranslate"><span class="pre">a</span></code> are used to create the reaction network and provide the energetics
+needed to compute the kinetic constants and thus the net rates of the
+reactions. Files in <code class="code docutils literal notranslate"><span class="pre">b</span></code> are files generated using the <strong>pykinetic</strong>
+software, the <code class="code docutils literal notranslate"><span class="pre">.index</span></code> file contains similar information to the rNets
+compounds and reaction files, to simplify re-creating the input needed for <strong>pykinetic</strong>.
+The <code class="code docutils literal notranslate"><span class="pre">kinetic_model.py</span></code> contains how to carry out the actual microkinetic
+simulation, and will generate a <code class="code docutils literal notranslate"><span class="pre">.data</span></code> file containing the concentrations
+at each time of all species. The file in <code class="code docutils literal notranslate"><span class="pre">c</span></code> is a script to generate the
+<code class="code docutils literal notranslate"><span class="pre">.dot</span></code> files at different times, which are used in the generation the
+static graph figures which are the focus of the present section. The file in
+<code class="code docutils literal notranslate"><span class="pre">d</span></code> is a script to generate all the <code class="code docutils literal notranslate"><span class="pre">.dot</span></code> files required to
+generate the <code class="code docutils literal notranslate"><span class="pre">.gif</span></code> file which is the focus of the following section.</p>
+<p>The files with the termination <code class="code docutils literal notranslate"><span class="pre">simple.csv</span></code> are used to draw a simplified
+version of the reaction network. The files without the termination
+<code class="code docutils literal notranslate"><span class="pre">simple.csv</span></code> correspond to the full reaction network. The <code class="code docutils literal notranslate"><span class="pre">42</span></code>
+makes reference to the systematic bias included into the DFT computed energies,
+specifically <code class="code docutils literal notranslate"><span class="pre">4.2</span> <span class="pre">kcal/mol</span></code> which in kJ is <code class="code docutils literal notranslate"><span class="pre">17.56</span> <span class="pre">kJ/mol</span></code>.</p>
+<section id="id1">
+<h3>Preliminary steps<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>The first step is to run the microkinetic simulation. For this task we only
+require to have installed the python libraries <code class="code docutils literal notranslate"><span class="pre">numpy</span></code> and <code class="code docutils literal notranslate"><span class="pre">scipy</span></code>,
+(one of the main design features of <strong>pykinetic</strong> is the generation of
+standalone scripts that do not require the pykinetic to run).</p>
+<p>After ensuring that we have numpy and scipy installed, we now proceed to run the
+simulation:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>kinetic_model.py
+</pre></div>
+</div>
+<p>This will generate a <code class="code docutils literal notranslate"><span class="pre">kinetic_model.data</span></code> file in 2-6 mins depending on the
+CPU performance of the computer.</p>
+</section>
+<section id="id2">
+<h3>Generation of the network graphs<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>Next, we proceed to generate the reaction network, colored by concentration of
+the different species at different times during the simulation. For the example
+the <code class="code docutils literal notranslate"><span class="pre">simple.csv</span></code> files will be used but the files for the full network can
+also be used.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">rnets</span> <span class="kn">import</span> <span class="n">parser</span>
+<span class="kn">from</span> <span class="nn">rnets.struct</span> <span class="kn">import</span> <span class="n">Network</span><span class="p">,</span> <span class="n">Compound</span><span class="p">,</span> <span class="n">Reaction</span>
+<span class="kn">from</span> <span class="nn">rnets.plotter.kinetic</span> <span class="kn">import</span> <span class="n">build_dotgraph</span> <span class="k">as</span> <span class="n">build_kin_dotgraph</span> 
+
+<span class="k">def</span> <span class="nf">updated_compound</span><span class="p">(</span><span class="n">c</span><span class="p">:</span><span class="n">Compound</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="n">name</span><span class="p">,</span><span class="n">energy</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">visible</span><span class="p">,</span><span class="n">fflags</span><span class="p">,</span><span class="n">conc</span><span class="p">,</span><span class="n">opts</span> <span class="o">=</span> <span class="n">c</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span>  <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;energy&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">energy</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;energy&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;idx&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;idx&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;visible&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">visible</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;visible&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fflags&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">fflags</span><span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fflags&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;conc&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">conc</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;conc&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;opts&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">opts</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;opts&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">Compound</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">energy</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">visible</span><span class="p">,</span><span class="n">fflags</span><span class="p">,</span><span class="n">conc</span><span class="p">,</span><span class="n">opts</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">update_reaction</span><span class="p">(</span><span class="n">reaction</span><span class="p">:</span><span class="n">Reaction</span><span class="p">,</span><span class="n">idx2compound</span><span class="p">):</span> 
+    <span class="n">name</span><span class="p">,</span><span class="n">compounds</span><span class="p">,</span><span class="n">energy</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">opts</span><span class="p">,</span><span class="n">visible</span> <span class="o">=</span> <span class="n">reaction</span>
+    <span class="n">reactants</span><span class="p">,</span><span class="n">products</span> <span class="o">=</span> <span class="n">compounds</span>
+    <span class="n">reactants</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">idx2compound</span><span class="p">[</span><span class="n">reactant</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">reactant</span> <span class="ow">in</span> <span class="n">reactants</span><span class="p">)</span>
+    <span class="n">products</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">idx2compound</span><span class="p">[</span><span class="n">product</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">product</span> <span class="ow">in</span> <span class="n">products</span><span class="p">)</span>
+    <span class="n">compounds</span> <span class="o">=</span> <span class="p">(</span><span class="n">reactants</span><span class="p">,</span><span class="n">products</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Reaction</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">compounds</span><span class="p">,</span><span class="n">energy</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">opts</span><span class="p">,</span><span class="n">visible</span><span class="p">)</span>
+
+<span class="n">compounds_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">reactions_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">data_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="n">nw_base</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_network_from_file</span><span class="p">(</span><span class="n">compounds_file</span><span class="p">,</span> <span class="n">reactions_file</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># time in s </span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span> <span class="c1"># Concentrations in M</span>
+
+<span class="n">snapshot_indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6000</span><span class="p">,</span><span class="mi">24000</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span> 
+    <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">snapshot_indices</span><span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;generating snapshot of t=</span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">s&#39;</span><span class="p">)</span>
+        <span class="n">new_compounds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">compound</span> <span class="ow">in</span> <span class="n">nw_base</span><span class="o">.</span><span class="n">compounds</span><span class="p">:</span>
+            <span class="n">conc</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">compound</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">new_compounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">updated_compound</span><span class="p">(</span><span class="n">compound</span><span class="p">,</span><span class="n">conc</span><span class="o">=</span><span class="n">conc</span><span class="p">))</span>
+        <span class="n">idx2compound</span> <span class="o">=</span> <span class="p">{</span><span class="n">compound</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span><span class="n">compound</span> <span class="k">for</span> <span class="n">compound</span> <span class="ow">in</span> <span class="n">new_compounds</span><span class="p">}</span>
+        <span class="n">new_reactions</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">update_reaction</span><span class="p">(</span><span class="n">reaction</span><span class="p">,</span><span class="n">idx2compound</span><span class="p">)</span> <span class="k">for</span> <span class="n">reaction</span> <span class="ow">in</span> <span class="n">nw_base</span><span class="o">.</span><span class="n">reactions</span><span class="p">)</span>
+        <span class="n">nw</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">compounds</span><span class="o">=</span><span class="n">new_compounds</span><span class="p">,</span><span class="n">reactions</span><span class="o">=</span><span class="n">new_reactions</span><span class="p">)</span>
+        <span class="n">nw_snapshot</span> <span class="o">=</span> <span class="n">build_kin_dotgraph</span><span class="p">(</span><span class="n">nw</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;snapshot_</span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">05.0f</span><span class="si">}</span><span class="s2">.dot&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">of</span><span class="p">:</span>
+            <span class="n">of</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">nw_snapshot</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>generate_kinetic_snapshots.py<span class="w"> </span>comps_draco_42_simple.csv<span class="w"> </span>reactions_draco_42_simple.csv<span class="w"> </span>kinetic_model.data
+</pre></div>
+</div>
+<p>This will generate 2 <code class="code docutils literal notranslate"><span class="pre">.dot</span></code> files, <code class="code docutils literal notranslate"><span class="pre">snapshot_00600.dot</span></code> and
+:code.`snapshot_02400.dot`. The following step is to use graphviz to render the images:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>dot<span class="w"> </span>-Tpng<span class="w"> </span>snapshot_00600.dot<span class="w"> </span>-o<span class="w"> </span>figure_7a.png
+<span class="gp">$ </span>dot<span class="w"> </span>-Tpng<span class="w"> </span>snapshot_02400.dot<span class="w"> </span>-o<span class="w"> </span>figure_7b.png
+</pre></div>
+</div>
+</section>
+</section>
+<section id="an-animation-of-the-kinetic-evolution">
+<h2>An animation of the kinetic evolution<a class="headerlink" href="#an-animation-of-the-kinetic-evolution" title="Link to this heading"></a></h2>
+<p>The files required for the generation of the reaction networks of the imine
+condensation example of the rNets' article can be found in the
+<code class="code docutils literal notranslate"><span class="pre">examples/example_imine_kinetic</span></code> folder. This folder contains the following
+files:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>example_imine_kinetic
+ -README.txt
+ -comps_draco_42.csv
+ -reactions_draco_42.csv
+ -comps_draco_42_simple.csv
+ -reactions_draco_42_simple.csv
+ -kinetic_model.py
+ -kinetic_model.index
+ -generate_kinetic_snapshots.py
+ -generate_kinetic_gif.py
+</pre></div>
+</div>
+<p>For a detailed explanation of the purpose of each of this files please look at
+the previous section. The focus of this section is to generate a gif changing
+the color of the species as the kinetic simulation progresses.</p>
+<section id="id4">
+<h3>Preliminary steps<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>The first step is to run the microkinetic simulation. For this task we only
+require to have installed the python libraries <code class="code docutils literal notranslate"><span class="pre">numpy</span></code> and <code class="code docutils literal notranslate"><span class="pre">scipy</span></code>,
+(one of the main design features of <strong>pykinetic</strong> is the generation of
+standalone scripts that do not require the pykinetic to run). Finally to
+generate the final <code class="code docutils literal notranslate"><span class="pre">.gif</span></code> we will require a software to merge together
+all the frames, for this example <strong>GIMP</strong> or <strong>imagemagick</strong> are recommended.</p>
+<p>After ensuring that we have numpy and scipy installed, we now proceed to run the
+simulation:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>kinetic_model.py
+</pre></div>
+</div>
+<p>This will generate a <code class="code docutils literal notranslate"><span class="pre">kinetic_model.data</span></code> file in 2-6 mins depending on the
+CPU performance of the computer.</p>
+</section>
+<section id="gif-generation">
+<h3>GIF generation<a class="headerlink" href="#gif-generation" title="Link to this heading"></a></h3>
+<p>To generate a GIF file showing the evolution of the species over time we will
+start by generating a <code class="code docutils literal notranslate"><span class="pre">.dot</span></code> file for every 10s of simulation into a
+folder named <code class="code docutils literal notranslate"><span class="pre">gif_folder</span></code>. To preform this task the python script
+<code class="code docutils literal notranslate"><span class="pre">generate_kinetic_gif.py</span></code> is included.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">rnets</span> <span class="kn">import</span> <span class="n">parser</span>
+<span class="kn">from</span> <span class="nn">rnets.struct</span> <span class="kn">import</span> <span class="n">Network</span><span class="p">,</span> <span class="n">Compound</span><span class="p">,</span> <span class="n">Reaction</span>
+<span class="kn">from</span> <span class="nn">rnets.plotter.kinetic</span> <span class="kn">import</span> <span class="n">build_dotgraph</span> <span class="k">as</span> <span class="n">build_kin_dotgraph</span> 
+
+<span class="k">def</span> <span class="nf">updated_compound</span><span class="p">(</span><span class="n">c</span><span class="p">:</span><span class="n">Compound</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> 
+    <span class="n">name</span><span class="p">,</span><span class="n">energy</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">visible</span><span class="p">,</span><span class="n">fflags</span><span class="p">,</span><span class="n">conc</span><span class="p">,</span><span class="n">opts</span> <span class="o">=</span> <span class="n">c</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span>  <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;energy&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">energy</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;energy&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;idx&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;idx&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;visible&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">visible</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;visible&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fflags&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">fflags</span><span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fflags&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;conc&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">conc</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;conc&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;opts&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">opts</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;opts&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">Compound</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">energy</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">visible</span><span class="p">,</span><span class="n">fflags</span><span class="p">,</span><span class="n">conc</span><span class="p">,</span><span class="n">opts</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">update_reaction</span><span class="p">(</span><span class="n">reaction</span><span class="p">:</span><span class="n">Reaction</span><span class="p">,</span><span class="n">idx2compound</span><span class="p">):</span> 
+    <span class="n">name</span><span class="p">,</span><span class="n">compounds</span><span class="p">,</span><span class="n">energy</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">opts</span><span class="p">,</span><span class="n">visible</span> <span class="o">=</span> <span class="n">reaction</span>
+    <span class="n">reactants</span><span class="p">,</span><span class="n">products</span> <span class="o">=</span> <span class="n">compounds</span>
+    <span class="n">reactants</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">idx2compound</span><span class="p">[</span><span class="n">reactant</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">reactant</span> <span class="ow">in</span> <span class="n">reactants</span><span class="p">)</span>
+    <span class="n">products</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">idx2compound</span><span class="p">[</span><span class="n">product</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">product</span> <span class="ow">in</span> <span class="n">products</span><span class="p">)</span>
+    <span class="n">compounds</span> <span class="o">=</span> <span class="p">(</span><span class="n">reactants</span><span class="p">,</span><span class="n">products</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Reaction</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">compounds</span><span class="p">,</span><span class="n">energy</span><span class="p">,</span><span class="n">idx</span><span class="p">,</span><span class="n">opts</span><span class="p">,</span><span class="n">visible</span><span class="p">)</span>
+
+<span class="n">compounds_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">reactions_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">data_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="n">nw_base</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_network_from_file</span><span class="p">(</span><span class="n">compounds_file</span><span class="p">,</span> <span class="n">reactions_file</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># time in s </span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span> <span class="c1"># Concentrations in M</span>
+
+<span class="n">dot_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;gif_folder&#39;</span><span class="p">)</span>
+<span class="n">dot_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)):</span> 
+    <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">%</span><span class="mi">50</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> 
+        <span class="n">new_compounds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">compound</span> <span class="ow">in</span> <span class="n">nw_base</span><span class="o">.</span><span class="n">compounds</span><span class="p">:</span>
+            <span class="n">conc</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">compound</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">new_compounds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">updated_compound</span><span class="p">(</span><span class="n">compound</span><span class="p">,</span><span class="n">conc</span><span class="o">=</span><span class="n">conc</span><span class="p">))</span>
+        <span class="n">idx2compound</span> <span class="o">=</span> <span class="p">{</span><span class="n">compound</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span><span class="n">compound</span> <span class="k">for</span> <span class="n">compound</span> <span class="ow">in</span> <span class="n">new_compounds</span><span class="p">}</span>
+        <span class="n">new_reactions</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">update_reaction</span><span class="p">(</span><span class="n">reaction</span><span class="p">,</span><span class="n">idx2compound</span><span class="p">)</span> <span class="k">for</span> <span class="n">reaction</span> <span class="ow">in</span> <span class="n">nw_base</span><span class="o">.</span><span class="n">reactions</span><span class="p">)</span>
+        <span class="n">nw</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">compounds</span><span class="o">=</span><span class="n">new_compounds</span><span class="p">,</span><span class="n">reactions</span><span class="o">=</span><span class="n">new_reactions</span><span class="p">)</span>
+        <span class="n">nw_snapshot</span> <span class="o">=</span> <span class="n">build_kin_dotgraph</span><span class="p">(</span><span class="n">nw</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dot_dir</span><span class="o">/</span><span class="sa">f</span><span class="s2">&quot;snapshot_</span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">05.0f</span><span class="si">}</span><span class="s2">.dot&quot;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">of</span><span class="p">:</span>
+            <span class="n">of</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">nw_snapshot</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>To use it we need to provide the compounds and reactions files and the data from the
+kinetic simulation:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>generate_kinetic_gif.py<span class="w"> </span>comps_draco_42.csv<span class="w"> </span>reactions_draco_42.csv<span class="w"> </span>kinetic_model.data
+</pre></div>
+</div>
+<p>Our next step is to transform all the generated <code class="code docutils literal notranslate"><span class="pre">dot</span></code> files into
+<code class="code docutils literal notranslate"><span class="pre">png</span></code> format. We can do that manually or we can use some bash scripting.
+The following command will work in a bash shell:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="k">for</span><span class="w"> </span>dotfile<span class="w"> </span><span class="k">in</span><span class="w"> </span>gif_folder/*.dot<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>dot<span class="w"> </span>-Tpng<span class="w"> </span><span class="nv">$dotfile</span><span class="w"> </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">dotfile</span><span class="p">%.*</span><span class="si">}</span>.png<span class="p">;</span><span class="w"> </span><span class="k">done</span>
+</pre></div>
+</div>
+<p>Finally we need to convert all the <code class="code docutils literal notranslate"><span class="pre">.png</span></code> files into an animated gif. Specifically
+for the manuscript, the <cite>GIMP &lt;https://www.gimp.org/&gt;</cite> software was used for this task.
+An alternative through command line is imagemagick which can provide a
+decent-quality gif using the following command:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>convert<span class="w"> </span>-delay<span class="w"> </span><span class="m">0</span><span class="w"> </span>-loop<span class="w"> </span><span class="m">1</span><span class="w"> </span>gif_folder/*.png<span class="w"> </span>imine_graph_animation.gif
+</pre></div>
+</div>
+<p>Upon successfull completion of the '.png' to '.gif' the imine_graph_animation.gif will
+contain the desired gif file.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../published_article.html" class="btn btn-neutral float-left" title="Published article" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CO2_Pd.html" class="btn btn-neutral float-right" title="CO2 hydrogenation on Pd(111)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
