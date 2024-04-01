@@ -1,0 +1,82 @@
+strict digraph {
+
+    graph [
+        rankdir=TB,
+        ranksep=0.5,
+        nodesep=0.25
+    ];
+    
+    node [
+        shape=plaintext,
+        style=filled
+    ];
+    
+    edge [
+        weight=2.
+    ];
+
+
+    "A" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">A</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#482172"
+    ];
+    
+    "B" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">B</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#462f7d"
+    ];
+    
+    "C" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">C</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#482172"
+    ];
+    
+    "D" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">D</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#430153"
+    ];
+
+
+    "A" -> "B"[
+        color="#fde624",
+        penwidth=1.0
+    ];
+    
+    "C" -> "D"[
+        color="#69cc5a",
+        penwidth=5.0
+    ];
+    
+    "B" -> "D"[
+        color="#69cc5a",
+        penwidth=5.0
+    ];
+}

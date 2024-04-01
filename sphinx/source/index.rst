@@ -2,7 +2,9 @@
 Welcome to rNets' Documentation!
 =====================================
 
-Summary of the project
+.. include:: ../../README.rst
+   :start-after: project-description-start
+   :end-before: project-description-end
 
 
 .. toctree::
@@ -17,8 +19,9 @@ Summary of the project
    :maxdepth: 3
    :caption: Examples
 
-   examples/my_first_reaction_graph
-   examples/coloring_by_data
+   examples/command_line
+   examples/python_api
+   examples/published_article
 
 .. toctree::
    :maxdepth: 2
@@ -37,7 +40,9 @@ Summary of the project
 License
 -------
 
-License type
+.. include:: ../../README.rst
+   :start-after: project-license-start
+   :end-before: project-license-end
 
 Indices and tables
 ------------------

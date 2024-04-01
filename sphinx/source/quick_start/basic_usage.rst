@@ -2,8 +2,8 @@
 Basic Usage
 ============
 
-Aside from the python library, rNets comes with a :code:`rnets.py` command line 
-executable. In order to generate a reaction network with rnets we will require 
+Aside from the python library, rNets comes with a command line executable. In 
+order to generate a reaction network with rnets we will require 
 2 files (one containing the species and another containing the reactions), and to
 visualize it we will also require to have graphviz or any other 
 software capable of rendering image files from :code:`.dot` files.
