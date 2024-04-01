@@ -215,7 +215,7 @@ def cli_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-cf",
         "--compfile",
-        type=argparse.FileType("r"),
+        type=Path,
         help="Compounds file",
         dest="comp_file",
         default=argparse.SUPPRESS,
@@ -223,7 +223,7 @@ def cli_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-rf",
         "--reacfile",
-        type=argparse.FileType("r"),
+        type=Path,
         help="Reactions file",
         dest="reac_file",
         default=argparse.SUPPRESS,
@@ -338,7 +338,7 @@ def run() -> None:
             conf.resolve_type(Opts, type_modifiers={}).check, opts_transform
         ),
         Path: conf.NamedTupleMemberModifier(
-            lambda x, **kwargs: isinstance(x, str), lambda x, **kwargs: Path(x)
+            lambda x, **kwargs: isinstance(x, (str, Path)), lambda x, **kwargs: Path(x)
         ),
         tuple: conf.NamedTupleMemberModifier(
             lambda x, **kwargs: isinstance(x, Iterable), lambda x, **kwargs: tuple(x)
@@ -353,11 +353,16 @@ def run() -> None:
     }
 
     cli_dict = parse_cli_args()
-    config = cli_dict.pop("config", None) or "./config.toml"  # TODO: make it constant
+    cfg_path = cli_dict.pop("config", None) or Path(
+        "./config.toml"  # TODO: make it constant
+    )
     cli_dict = unflatten_args(cli_dict)
 
-    with open(config, mode="rb") as f:
-        config_dict = tomllib.load(f)
+    if cfg_path.exists():
+        with open(cfg_path, mode="rb") as f:
+            config_dict = tomllib.load(f)
+    else:
+        config_dict = {}
 
     config_info = conf.named_tuple_info(GeneralCfg, type_modifiers=type_modifiers)
     config = conf.recreate_named_tuple(
