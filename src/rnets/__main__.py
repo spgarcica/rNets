@@ -61,21 +61,169 @@ class OptsAction(argparse.Action):
         setattr(namespace, self.dest, parse_opts(values))
 
 
+def chem_group(parser: argparse.ArgumentParser) -> None:
+    chem = parser.add_argument_group(
+        "Chemistry",  # description=""
+    )
+    chem.add_argument(
+        "-T",
+        "--temperature",
+        type=float,
+        help="Temperature value",
+        dest="chem.T",
+        default=argparse.SUPPRESS,
+    )
+    chem.add_argument(
+        "-u",
+        "--units",
+        type=str,
+        help="Energy units. Used to select kb and A if not provided",
+        dest="chem.e_units",
+        default=argparse.SUPPRESS,
+    )
+    chem.add_argument(
+        "-kb",
+        "--boltzmann",
+        type=float,
+        help="Boltzmann constant. Overrides the default",
+        dest="chem.kb",
+        default=argparse.SUPPRESS,
+    )
+    chem.add_argument(
+        "-A",
+        "--preexp",
+        type=float,
+        help="Eyring equation pre-exponetial factor. Overrides the default",
+        dest="chem.A",
+        default=argparse.SUPPRESS,
+    )
+
+
+def graph_group(parser: argparse.ArgumentParser) -> None:
+    graph = parser.add_argument_group(
+        "Graph configuration",  # description=""
+    )
+    graph.add_argument(
+        "-k",
+        "--kind",
+        type=str,
+        help="Graph kind",
+        dest="graph.kind",
+        default=argparse.SUPPRESS,
+    )
+    graph.add_argument(
+        "-c",
+        "--colorscheme",
+        type=str,
+        help="Color scheme",
+        dest="graph.colorscheme",
+        default=argparse.SUPPRESS,
+    )
+    graph.add_argument(
+        "-off",
+        "--offset",
+        nargs=2,
+        type=float,
+        help="Colorscheme offset",
+        dest="graph.color_offset",
+        default=argparse.SUPPRESS,
+    )
+    graph.add_argument(
+        "-go",
+        "--graph_opts",
+        nargs="+",
+        help="Graphviz options for graph in dictionary format",
+        dest="graph.opts",
+        action=OptsAction,
+        default=argparse.SUPPRESS,
+    )
+
+
+def edge_group(parser: argparse.ArgumentParser) -> None:
+    edge = parser.add_argument_group(
+        "Edge configuration",  # description=
+    )
+    edge.add_argument(
+        "-w",
+        "--width",
+        type=int,
+        help="Edge constant/minimum width",
+        dest="graph.edge.width",
+        default=argparse.SUPPRESS,
+    )
+    edge.add_argument(
+        "-mw",
+        "--maxwidth",
+        type=int,
+        help="Edge maximum width",
+        dest="graph.edge.max_width",
+        default=argparse.SUPPRESS,
+    )
+    edge.add_argument(
+        "-eo",
+        "--edge-opts",
+        nargs="+",
+        help="Graphviz options for edges in dictionary format",
+        dest="graph.edge.opts",
+        action=OptsAction,
+        default=argparse.SUPPRESS,
+    )
+
+
+def node_group(parser: argparse.ArgumentParser) -> None:
+    node = parser.add_argument_group(
+        "Node configuration",  # description=
+    )
+    node.add_argument(
+        "-f",
+        "--fontcolor",
+        type=str,
+        help="Font color of the nodes",
+        dest="graph.node.font_color",
+        default=argparse.SUPPRESS,
+    )
+    node.add_argument(
+        "-a",
+        "--fontcoloralt",
+        type=str,
+        help="Alternate font color of the nodes",
+        dest="graph.node.font_color_alt",
+        default=argparse.SUPPRESS,
+    )
+    node.add_argument(
+        "-l",
+        "--lumthreshold",
+        type=float,
+        help="Luminance threshold for the nodes",
+        dest="graph.node.font_lum_threshold",
+        default=argparse.SUPPRESS,
+    )
+    node.add_argument(
+        "-no",
+        "--node-opts",
+        nargs="+",
+        help="Graphviz options for nodes in dictionary format",
+        dest="graph.node.opts",
+        action=OptsAction,
+        default=argparse.SUPPRESS,
+    )
+
+
 def cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="rNets, create a dotfile.")
 
     parser.add_argument(
+        "-cf",
         "--compfile",
-        type=Path,
-        nargs="?",
+        type=argparse.FileType("r"),
         help="Compounds file",
         dest="comp_file",
         default=argparse.SUPPRESS,
     )
     parser.add_argument(
+        "-rf",
         "--reacfile",
-        type=Path,
-        nargs="?",
+        type=argparse.FileType("r"),
         help="Reactions file",
         dest="reac_file",
         default=argparse.SUPPRESS,
@@ -96,137 +244,10 @@ def cli_parser() -> argparse.ArgumentParser:
         default=argparse.SUPPRESS,
     )
 
-    # Chemical arguments
-    parser.add_argument(
-        "-T",
-        "--temperature",
-        type=float,
-        help="Temperature value",
-        dest="chem.T",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-u",
-        "--units",
-        type=str,
-        help="Energy units. Used to select kb and A if not provided",
-        dest="chem.e_units",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-kb",
-        "--boltzmann",
-        type=float,
-        help="Boltzmann constant. Overrides the default",
-        dest="chem.kb",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-A",
-        "--preexp",
-        type=float,
-        help="Eyring equation pre-exponetial factor. Overrides the default",
-        dest="chem.A",
-        default=argparse.SUPPRESS,
-    )
-
-    # Graph configuration
-    parser.add_argument(
-        "-k",
-        "--kind",
-        type=str,
-        help="Graph kind",
-        dest="graph.kind",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-c",
-        "--colorscheme",
-        type=str,
-        help="Color scheme",
-        dest="graph.colorscheme",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-off",
-        "--offset",
-        nargs=2,
-        type=float,
-        help="Colorscheme offset",
-        dest="graph.color_offset",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-go",
-        "--graph_opts",
-        nargs="+",
-        help="Graphviz options for graph in dictionary format",
-        dest="graph.opts",
-        action=OptsAction,
-        default=argparse.SUPPRESS,
-    )
-
-    # Edge configuration
-    parser.add_argument(
-        "-w",
-        "--width",
-        type=int,
-        help="Edge constant/minimum width",
-        dest="graph.edge.width",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-mw",
-        "--maxwidth",
-        type=int,
-        help="Edge maximum width",
-        dest="graph.edge.max_width",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-eo",
-        "--edge-opts",
-        nargs="+",
-        help="Graphviz options for edges in dictionary format",
-        dest="graph.edge.opts",
-        action=OptsAction,
-        default=argparse.SUPPRESS,
-    )
-
-    # Node configuration
-    parser.add_argument(
-        "-f",
-        "--fontcolor",
-        type=str,
-        help="Font color of the nodes",
-        dest="graph.node.font_color",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-a",
-        "--fontcoloralt",
-        type=str,
-        help="Alternate font color of the nodes",
-        dest="graph.node.font_color_alt",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-l",
-        "--lumthreshold",
-        type=float,
-        help="Luminance threshold for the nodes",
-        dest="graph.node.font_lum_threshold",
-        default=argparse.SUPPRESS,
-    )
-    parser.add_argument(
-        "-no",
-        "--node-opts",
-        nargs="+",
-        help="Graphviz options for nodes in dictionary format",
-        dest="graph.node.opts",
-        action=OptsAction,
-        default=argparse.SUPPRESS,
-    )
+    chem_group(parser)
+    graph_group(parser)
+    edge_group(parser)
+    node_group(parser)
 
     return parser
 
@@ -342,11 +363,6 @@ def run() -> None:
     config = conf.recreate_named_tuple(
         config_info, merge_configs(cli_dict, config_dict)
     )
-
-    config_info = conf.named_tuple_info(GeneralCfg, type_modifiers=type_modifiers)
-    with open("config.toml", mode="rb") as f:
-        config_dict = tomllib.load(f)
-    config = conf.recreate_named_tuple(config_info, config_dict)
 
     network = parser.parse_network_from_file(config.comp_file, config.reac_file)
     # TODO: Extract it to GeneralCfg instead
