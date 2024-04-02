@@ -70,6 +70,11 @@ hosted at the Python Package Index (PyPI):
 
    $ python -m pip install rNets
 
+.. warning:: 
+
+   Warning: The rNets code is not available at the Python Package Index, but 
+   will soon be available, please use the other installation options.
+
 However, if the user does prefer it, it can also be easily installed from the 
 source code. For that we will start by downloading the source code using git. 
 
