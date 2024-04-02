@@ -6,7 +6,7 @@ For the most basic usage of rNets through its command-line interface we recommen
 checking first the :doc:`../quick_start/basic_usage`. In this section, more 
 detailed examples covering more detailed graph customization will be included. 
 
-My first reaction Graph
+My first reaction graph
 -----------------------
 
 .. note::
@@ -14,16 +14,16 @@ My first reaction Graph
    Currently under construction:
    In this example we will cover the generation of a graph with arbitrary energies
 
-A thermodynamic Graph
----------------------
+Drawing a thermodynamic graph
+-----------------------------
 
 .. note::
    
    Currently under construction:
    Here we will cover the generation of a graph colored by thermodynamic data
 
-A kinetic Graph
----------------
+Drawing a kinetic graph
+-----------------------
 
 .. note::
    
