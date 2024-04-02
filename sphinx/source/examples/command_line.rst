@@ -9,27 +9,43 @@ detailed examples covering more detailed graph customization will be included.
 My first reaction Graph
 -----------------------
 
-In this example we will cover the generation of a graph with arbitrary energies
+.. note::
+   
+   Currently under construction:
+   In this example we will cover the generation of a graph with arbitrary energies
 
 A thermodynamic Graph
 ---------------------
 
-Here we will cover the generation of a graph colored by thermodynamic data
+.. note::
+   
+   Currently under construction:
+   Here we will cover the generation of a graph colored by thermodynamic data
 
 A kinetic Graph
 ---------------
 
-Here we will cover the generation of a graph colored by concentrations and 
-reaction rates. 
+.. note::
+   
+   Currently under construction:
+   Here we will cover the generation of a graph colored by concentrations and 
+   reaction rates. 
 
 Using different energy units
 ----------------------------
 
-Here we will cover how to prepare a chemical configuration different from the 
-default one and how to use it.
+.. note::
+   
+   Currently under construction:
+
+   Here we will cover how to prepare a chemical configuration different from the 
+   default one and how to use it.
 
 Formatting our graph
 --------------------
 
-Here we will cover how to prepare a graph configuration different from the 
-default one and how to use it.
+.. note::
+   
+   Currently under construction:
+   Here we will cover how to prepare a graph configuration different from the 
+   default one and how to use it.

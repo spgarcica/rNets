@@ -42,32 +42,50 @@ a very simple reaction network, which is shown below:
 A thermodynamic Graph
 ---------------------
 
-Here we will cover the generation of a graph colored by thermodynamic data
+.. note::
+   
+   Currently under construction:
+   Here we will cover the generation of a graph colored by thermodynamic data
 
 A kinetic Graph
 ---------------
 
-Here we will cover the generation of a graph colored by concentrations and 
-reaction rates. 
+.. note::
+   
+   Currently under construction:
+   Here we will cover the generation of a graph colored by concentrations and 
+   reaction rates. 
 
 Using different energy units
 ----------------------------
 
-Here we will cover how to prepare a chemical configuration different from the 
-default one and how to use it.
+.. note::
+   
+   Currently under construction:
+   Here we will cover how to prepare a chemical configuration different from the 
+   default one and how to use it.
 
 Formatting our graph
 --------------------
 
-Here we will cover how to prepare a graph configuration different from the 
-default one and how to use it.
+.. note::
+   
+   Currently under construction:
+   Here we will cover how to prepare a graph configuration different from the 
+   default one and how to use it.
 
 Integration with other software: Pykinetic (thermo)
 ---------------------------------------------------
 
-An example of how to adapt pykinetics classes to generate a thermodynamic graph
+.. note::
+   
+   Currently under construction:
+   An example of how to adapt pykinetics classes to generate a thermodynamic graph
 
 Integration with other software: Pykinetic (kinetic)
 ----------------------------------------------------
 
-An example of how to adapt pykinetics classes to generate a kinetic graph
+.. note::
+   
+   Currently under construction:
+   An example of how to adapt pykinetics classes to generate a kinetic graph
