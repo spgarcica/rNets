@@ -119,12 +119,16 @@ Developed with
 - python 3.12
 
 
-Examples
---------
+Examples and Docs
+-----------------
 
 The examples folders contains with corresponding readme files the instructions 
 and necessary data to generate a variety of different reaction networks and 
 animations.  
+
+The documentation of rNets can be accessed at `<https://spgarcica.github.io/rNets/>`_ .
+Here a more detailed description of the examples can also be found. 
+
 
 Authors
 -------
