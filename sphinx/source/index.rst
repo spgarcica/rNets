@@ -13,6 +13,7 @@ Welcome to rNets' Documentation!
 
    quick_start/installation
    quick_start/basic_usage
+   quick_start/command_line_help
    quick_start/file_formats
 
 .. toctree::
