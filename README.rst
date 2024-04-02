@@ -146,6 +146,7 @@ List of main developers and contact emails:
    `ORCID <https://orcid.org/0000-0003-0744-0562>`__ ,
    `Github <https://github.com/maserasgroup-repo>`__ ] 
 *  Vladyslav Nosylevskyi [
+   `ORCID <https://orcid.org/0009-0003-1544-7745>`__ 
    `Github <https://github.com/wvlab>`__ ] 
 *  Nuria Lopez [
    `ORCID <https://orcid.org/0000-0001-9150-5941>`__ ] 
