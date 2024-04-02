@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command-line help &mdash; rNets  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=d048f138"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="File Formats" href="file_formats.html" />
+    <link rel="prev" title="Basic Usage" href="basic_usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            rNets
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quick Start</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Command-line help</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#named-arguments">Named Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chemistry">Chemistry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-configuration">Graph configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#edge-configuration">Edge configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#node-configuration">Node configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="file_formats.html">File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/command_line.html">Command-line Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/python_api.html">Python API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/published_article.html">Published article</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/rnets.html">rnets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/developers.html">Developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/contribution.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">rNets</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Command-line help</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/quick_start/command_line_help.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="command-line-help">
+<h1>Command-line help<a class="headerlink" href="#command-line-help" title="Link to this heading"></a></h1>
+<p>rNets was designed mainly with its command-line utility in mind. By enabling the
+flag <code class="code docutils literal notranslate"><span class="pre">--help</span></code> or <code class="code docutils literal notranslate"><span class="pre">-h</span></code> the following information will be displayed:</p>
+<p><p>rNets, create a dotfile.</p>
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rnets</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">cf</span> <span class="n">COMP_FILE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">rf</span> <span class="n">REAC_FILE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">o</span> <span class="n">OUT_FILE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">cfg</span> <span class="n">CONFIG</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">T</span> <span class="n">CHEM</span><span class="o">.</span><span class="n">T</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="n">CHEM</span><span class="o">.</span><span class="n">E_UNITS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">kb</span> <span class="n">CHEM</span><span class="o">.</span><span class="n">KB</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">A</span> <span class="n">CHEM</span><span class="o">.</span><span class="n">A</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">k</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">KIND</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">COLORSCHEME</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">off</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">COLOR_OFFSET</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">COLOR_OFFSET</span><span class="p">]</span>
+             <span class="p">[</span><span class="o">-</span><span class="n">go</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">OPTS</span> <span class="p">[</span><span class="n">GRAPH</span><span class="o">.</span><span class="n">OPTS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">w</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">EDGE</span><span class="o">.</span><span class="n">WIDTH</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">mw</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">EDGE</span><span class="o">.</span><span class="n">MAX_WIDTH</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">eo</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">EDGE</span><span class="o">.</span><span class="n">OPTS</span> <span class="p">[</span><span class="n">GRAPH</span><span class="o">.</span><span class="n">EDGE</span><span class="o">.</span><span class="n">OPTS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">f</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">NODE</span><span class="o">.</span><span class="n">FONT_COLOR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">NODE</span><span class="o">.</span><span class="n">FONT_COLOR_ALT</span><span class="p">]</span>
+             <span class="p">[</span><span class="o">-</span><span class="n">l</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">NODE</span><span class="o">.</span><span class="n">FONT_LUM_THRESHOLD</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">no</span> <span class="n">GRAPH</span><span class="o">.</span><span class="n">NODE</span><span class="o">.</span><span class="n">OPTS</span> <span class="p">[</span><span class="n">GRAPH</span><span class="o">.</span><span class="n">NODE</span><span class="o">.</span><span class="n">OPTS</span> <span class="o">...</span><span class="p">]]</span>
+</pre></div>
+</div>
+<section id="named-arguments">
+<h2>Named Arguments<a class="headerlink" href="#named-arguments" title="Link to this heading"></a></h2>
+<dl class="option-list">
+<dt><kbd>-cf, --compfile</kbd></dt>
+<dd><p>Compounds file</p>
+</dd>
+<dt><kbd>-rf, --reacfile</kbd></dt>
+<dd><p>Reactions file</p>
+</dd>
+<dt><kbd>-o, --outfile</kbd></dt>
+<dd><p>Output file name</p>
+</dd>
+<dt><kbd>-cfg, --config</kbd></dt>
+<dd><p>Configuration file name</p>
+</dd>
+</dl>
+</section>
+<section id="chemistry">
+<h2>Chemistry<a class="headerlink" href="#chemistry" title="Link to this heading"></a></h2>
+<dl class="option-list">
+<dt><kbd>-T, --temperature</kbd></dt>
+<dd><p>Temperature value</p>
+</dd>
+<dt><kbd>-u, --units</kbd></dt>
+<dd><p>Energy units. Used to select kb and A if not provided</p>
+</dd>
+<dt><kbd>-kb, --boltzmann</kbd></dt>
+<dd><p>Boltzmann constant. Overrides the default</p>
+</dd>
+<dt><kbd>-A, --preexp</kbd></dt>
+<dd><p>Eyring equation pre-exponetial factor. Overrides the default</p>
+</dd>
+</dl>
+</section>
+<section id="graph-configuration">
+<h2>Graph configuration<a class="headerlink" href="#graph-configuration" title="Link to this heading"></a></h2>
+<dl class="option-list">
+<dt><kbd>-k, --kind</kbd></dt>
+<dd><p>Graph kind</p>
+</dd>
+<dt><kbd>-c, --colorscheme</kbd></dt>
+<dd><p>Color scheme</p>
+</dd>
+<dt><kbd>-off, --offset</kbd></dt>
+<dd><p>Colorscheme offset</p>
+</dd>
+<dt><kbd>-go, --graph_opts</kbd></dt>
+<dd><p>Graphviz options for graph in dictionary format</p>
+</dd>
+</dl>
+</section>
+<section id="edge-configuration">
+<h2>Edge configuration<a class="headerlink" href="#edge-configuration" title="Link to this heading"></a></h2>
+<dl class="option-list">
+<dt><kbd>-w, --width</kbd></dt>
+<dd><p>Edge constant/minimum width</p>
+</dd>
+<dt><kbd>-mw, --maxwidth</kbd></dt>
+<dd><p>Edge maximum width</p>
+</dd>
+<dt><kbd>-eo, --edge-opts</kbd></dt>
+<dd><p>Graphviz options for edges in dictionary format</p>
+</dd>
+</dl>
+</section>
+<section id="node-configuration">
+<h2>Node configuration<a class="headerlink" href="#node-configuration" title="Link to this heading"></a></h2>
+<dl class="option-list">
+<dt><kbd>-f, --fontcolor</kbd></dt>
+<dd><p>Font color of the nodes</p>
+</dd>
+<dt><kbd>-a, --fontcoloralt</kbd></dt>
+<dd><p>Alternate font color of the nodes</p>
+</dd>
+<dt><kbd>-l, --lumthreshold</kbd></dt>
+<dd><p>Luminance threshold for the nodes</p>
+</dd>
+<dt><kbd>-no, --node-opts</kbd></dt>
+<dd><p>Graphviz options for nodes in dictionary format</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="basic_usage.html" class="btn btn-neutral float-left" title="Basic Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="file_formats.html" class="btn btn-neutral float-right" title="File Formats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Sergio Pablo-García.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
