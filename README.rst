@@ -148,7 +148,7 @@ List of main developers and contact emails:
    `Github <https://github.com/asabadellr>`__ ] 
 *  Diego Garay-Ruiz [
    `ORCID <https://orcid.org/0000-0003-0744-0562>`__ ,
-   `Github <https://github.com/maserasgroup-repo>`__ ] 
+   `Github <https://github.com/dgarayr>`__ ] 
 *  Vladyslav Nosylevskyi [
    `ORCID <https://orcid.org/0009-0003-1544-7745>`__ 
    `Github <https://github.com/wvlab>`__ ] 
