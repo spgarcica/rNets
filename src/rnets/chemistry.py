@@ -136,7 +136,7 @@ def calc_activation_energy(
 
 def calc_pseudo_k_constant(
     ea: float
-    , T: float
+    , T: float = DEF_T
     , A: float = DEF_A
     , kb: float = DEF_KB
 ) -> float:
@@ -252,6 +252,8 @@ def normalizer(
 def calc_reactions_k_norms(
     rs: Sequence[Reaction]
     , T: float = DEF_T
+    , A: float = DEF_A
+    , kb: float = DEF_KB
     , norm_range: tuple[float, float] = (0., 1.)
 ) -> Iterator[float]:
     """From a set of reactions, compute the norm of each reaction using the
