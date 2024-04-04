@@ -57,9 +57,9 @@ After defining the compounds, we can now proceed to define the reactions:
    products = (B,) 
    r1 = Reaction(name='r1', 
                  compounds=(reactants,products),
-                 energy=20.0,
+                 energy=4.0,
                  idx=0)
-   r2 = Reaction('r2',((B,C),(D,)),20.0,1) 
+   r2 = Reaction('r2',((B,C),(D,)),7.0,1) 
 
 The :code:`name` and :code:`idx` parameters are used to identify the reaction
 in an user-friendly and code-friendly, respectively, but have no effect on the 
@@ -87,8 +87,8 @@ together all the previous code snippets:
    C = Compound('C',0.0,2) 
    D = Compound('D',-2.0,3)
 
-   r1 = Reaction('r1',((A,),(B,)),20.0,0) 
-   r2 = Reaction('r2',((B,C),(D,)),20.0,1) 
+   r1 = Reaction('r1',((A,),(B,)),4.0,0) 
+   r2 = Reaction('r2',((B,C),(D,)),7.0,1) 
    
    nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
 
@@ -123,8 +123,8 @@ Together with the network generation we have the following code:
    C = Compound('C',0.0,2) 
    D = Compound('D',-2.0,3)
 
-   r1 = Reaction('r1',((A,),(B,)),20.0,0) 
-   r2 = Reaction('r2',((B,C),(D,)),20.0,1) 
+   r1 = Reaction('r1',((A,),(B,)),4.0,0) 
+   r2 = Reaction('r2',((B,C),(D,)),7.0,1) 
    
    nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
 
@@ -163,8 +163,8 @@ python API. Putting all together:
    C = Compound('C',0.0,2) 
    D = Compound('D',-2.0,3)
 
-   r1 = Reaction('r1',((A,),(B,)),20.0,0) 
-   r2 = Reaction('r2',((B,C),(D,)),20.0,1) 
+   r1 = Reaction('r1',((A,),(B,)),4.0,0) 
+   r2 = Reaction('r2',((B,C),(D,)),7.0,1) 
    
    nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
 
@@ -209,8 +209,8 @@ computed based on the energies and concentrations.
    C = Compound('C',0.0,2,conc=1.0) 
    D = Compound('D',-2.0,3,conc=0.25)
 
-   r1 = Reaction('r1',((A,),(B,)),20.0,0) 
-   r2 = Reaction('r2',((B,C),(D,)),20.0,1) 
+   r1 = Reaction('r1',((A,),(B,)),4.0,0) 
+   r2 = Reaction('r2',((B,C),(D,)),7.0,1) 
    
    nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
 
@@ -255,8 +255,8 @@ python API. Putting all together:
    C = Compound('C',0.0,2,conc=1.0) 
    D = Compound('D',-2.0,3,conc=0.25)
 
-   r1 = Reaction('r1',((A,),(B,)),20.0,0) 
-   r2 = Reaction('r2',((B,C),(D,)),20.0,1) 
+   r1 = Reaction('r1',((A,),(B,)),4.0,0) 
+   r2 = Reaction('r2',((B,C),(D,)),7.0,1) 
    
    nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
 
