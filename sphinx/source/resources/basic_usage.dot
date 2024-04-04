@@ -1,0 +1,75 @@
+strict digraph {
+
+    graph [
+        rankdir=TB,
+        ranksep=0.5,
+        nodesep=0.25
+    ];
+    
+    node [
+        shape=plaintext,
+        style=filled
+    ];
+    
+    edge [
+        weight=2.
+    ];
+
+
+    "reactant" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>reactant</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#430153"
+    ];
+    
+    "intermediate" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>intermediate</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#430153"
+    ];
+    
+    "product" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff"><b>product</b></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#430153"
+    ];
+
+
+    "intermediate" -> "reactant"[
+        color="#fde624",
+        penwidth=1.0
+    ];
+    
+    "reactant" -> "intermediate"[
+        color="#fde624",
+        penwidth=1.0
+    ];
+    
+    "product" -> "intermediate"[
+        color="#79d150",
+        penwidth=5.0
+    ];
+    
+    "intermediate" -> "product"[
+        color="#79d150",
+        penwidth=5.0
+    ];
+}
