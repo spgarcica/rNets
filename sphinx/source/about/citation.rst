@@ -2,4 +2,6 @@
 Citation
 ========
 
-The present section is currently under construction and will be updated soon
+.. include:: ../../../README.rst
+   :start-after: citation-start
+   :end-before: citation-end

@@ -165,3 +165,29 @@ License
 rNets is freely available under an `MIT <https://opensource.org/licenses/MIT>`__ License
 
 .. project-license-end
+
+How to cite
+-----------
+
+.. citation-start
+
+To cite rNets please cite the following publications:
+
+
+.. code:: none
+
+   @misc{pablo-garcia_rnets_2024,
+       title = {{rNets}: {A} standalone package to visualize reaction networks.},
+       shorttitle = {{rNets}},
+       url = {https://chemrxiv.org/engage/chemrxiv/article-details/660c5ccae9ebbb4db9378cc1},
+       doi = {10.26434/chemrxiv-2024-l7gf5},
+       language = {en},
+       urldate = {2024-04-04},
+       publisher = {ChemRxiv},
+       author = {Pablo-García, Sergio and Pérez-Soto, Raúl and Sabadell-Rendón, Albert and Garay-Ruiz, Diego and Nosylevskyi, Vladyslav and López, Nuria},
+       month = apr,
+       year = {2024},
+       keywords = {catalysis, computational chemistry, density functional theory, dft, graphviz, microkinetics, python, reaction networks, visualization},
+   }
+
+.. citation-end
