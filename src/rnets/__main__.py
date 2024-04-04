@@ -69,7 +69,7 @@ def chem_group(parser: argparse.ArgumentParser) -> None:
         "-T",
         "--temperature",
         type=float,
-        help="Temperature value",
+        help="Temperature value in K",
         dest="chem.T",
         default=argparse.SUPPRESS,
     )
@@ -79,6 +79,7 @@ def chem_group(parser: argparse.ArgumentParser) -> None:
         type=str,
         help="Energy units. Used to select kb and A if not provided",
         dest="chem.e_units",
+        choices=tuple(chemistry.CONSTANTS['kb'].keys()),
         default=argparse.SUPPRESS,
     )
     chem.add_argument(
@@ -107,7 +108,7 @@ def graph_group(parser: argparse.ArgumentParser) -> None:
         "-k",
         "--kind",
         type=str,
-        help="Graph kind",
+        help="Kind of dotgraph",
         dest="graph.kind",
         default=argparse.SUPPRESS,
     )
