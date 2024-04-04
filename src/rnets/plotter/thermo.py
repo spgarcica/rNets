@@ -33,7 +33,8 @@ def build_dotgraph(
     , chem_cfg: ChemCfg = ChemCfg()
 ) -> Graph:
     """Build a dotgraph from a reaction network.
-
+    
+    Args:
         nw (:obj:`Network`): Network object to be converted into dot graph.
         graph_cfg (:obj:`GraphCfg`, optional): Graphviz configuration. Defaults
             to :obj:`ChemCfg`
