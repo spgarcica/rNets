@@ -25,7 +25,7 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#3e4988"
+        fillcolor="#430153"
     ];
     
     "B" [
@@ -37,7 +37,7 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#30678d"
+        fillcolor="#430153"
     ];
     
     "C" [
@@ -49,7 +49,7 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#3e4988"
+        fillcolor="#430153"
     ];
     
     "D" [
@@ -66,16 +66,16 @@ strict digraph {
 
 
     "A" -> "B"[
-        color="#35b778",
-        penwidth=5.0
-    ];
-    
-    "C" -> "D"[
         color="#fde624",
         penwidth=1.0
     ];
     
     "B" -> "D"[
+        color="#fde624",
+        penwidth=1.0
+    ];
+    
+    "C" -> "D"[
         color="#fde624",
         penwidth=1.0
     ];
