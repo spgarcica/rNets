@@ -1,3 +1,4 @@
+.. |example_00| graphviz:: ../resources/examples/example_00.dot
 .. |example_01| graphviz:: ../resources/examples/example_01.dot
 
 =======================
@@ -15,7 +16,7 @@ My first reaction graph
 To introduce the minimal components of rNets we will create 
 a very simple reaction network, which is shown below: 
 
-.. centered:: |example_01|
+.. centered:: |example_00|
 
 First we will start writing the :code:`Reactions` file and then we will 
 write the :code:`Compounds` file. In this case we have 2 reactions, 
@@ -133,10 +134,45 @@ instead of a png:
 Drawing a thermodynamic graph
 -----------------------------
 
-.. note::
-   
-   Currently under construction:
-   Here we will cover the generation of a graph colored by thermodynamic data
+For rNets, the absence of information about concentrations in the 
+:code:`compounds.csv` will always lead to an energy-based representation. So 
+the only difference with `My first reaction graph`_ example is that this time we will 
+be providing different energy values. Let's assume that we updated the energies 
+of the previous tables to generate the :code:`reactions.csv` and
+:code:`compounds.csv` files respectively
+
+.. code:: none 
+
+   cleft,cleft,direction,cright,energy,name
+   A,,->,B,4.0,R1
+   B,C,->,D,7.0,R2
+
+.. code:: none
+
+   name,energy
+   A,0.0
+   B,1.0
+   C,0.0
+   D,-2.0
+
+After updating the energy values of :code:`reactions.csv` and 
+:code:`compounds.csv` we can proceed with the generation of the graph. 
+
+.. code::
+
+   $ python -m rnets -cf compounds.csv -rf reactions.csv -o reaction_network.dot
+   $ dot -Tpng reaction_network.dot -o reaction_network.png 
+
+The resulting graph will look like: 
+
+.. centered:: |example_01|
+
+If we compare it with the graph generated in `My first reaction graph`_ example 
+we can now observe how, with the default color scheme, the most stable compounds
+are colored in a darker color ( :code:`D` ) while the least stable compounds 
+( :code:`B` ) are in a lighter color. Also we can observe how the reaction with 
+the lowest barrier has a thicker and darker color than the other reaction.  
+
 
 Drawing a kinetic graph
 -----------------------
