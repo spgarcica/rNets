@@ -1,5 +1,6 @@
 .. |example_00| graphviz:: ../resources/examples/example_00.dot
 .. |example_01| graphviz:: ../resources/examples/example_01.dot
+.. |example_02| graphviz:: ../resources/examples/example_02.dot
 
 =======================
 Command-line Examples
@@ -177,11 +178,66 @@ the lowest barrier has a thicker and darker color than the other reaction.
 Drawing a kinetic graph
 -----------------------
 
-.. note::
+As indicated in the previous section, the absence of information about 
+concentrations in the :code:`compounds.csv` will lead to an energy-based 
+representation. So, in order to change to a concentration-based representation 
+we need to first update our :code:`compounds.csv` which we can do directly on 
+the file or using a spreadsheet editor.
+
++---------+---------+---------+
+|   name  |  energy |   conc  |
++---------+---------+---------+
+|    A    |   0.0   |   0.75  |
++---------+---------+---------+
+|    B    |   1.0   |   0.1   |
++---------+---------+---------+
+|    C    |   0.0   |   1.0   |
++---------+---------+---------+
+|    D    |  -2.0   |   0.25  |
++---------+---------+---------+
+
+After adding the concentration column and saving our file as a .csv it will look
+like this: 
+
+.. code:: none
+
+   name,energy,conc
+   A,0.0,0.75
+   B,1.0,0.1
+   C,0.0,1.0
+   D,-2.0,0.25
+
+The :code:`reactions.csv` file instead, requires no further change, so we will 
+borrow it from the `Drawing a thermodynamic graph`_ example: 
+
+.. code:: none 
+
+   cleft,cleft,direction,cright,energy,name
+   A,,->,B,4.0,R1
+   B,C,->,D,7.0,R2
+
+After updating our :code:`compounds.csv` and with the already prepared 
+:code:`reactions.csv` we can proceed with the generation of the graph. 
+
+.. code::
+
+   $ python -m rnets -cf compounds.csv -rf reactions.csv -o reaction_network.dot
+   $ dot -Tpng reaction_network.dot -o reaction_network.png 
+
+The resulting graph will look like: 
+
+.. centered:: |example_02|
    
-   Currently under construction:
-   Here we will cover the generation of a graph colored by concentrations and 
-   reaction rates. 
+Compared with the previous two examples we can observe clear differences. Same 
+as the `Drawing a thermodynamic graph`_ example, the colors of the different 
+in this case are light for compounds in high concentration, while dark colors 
+corresponds to low concentration species. The major difference with the previous
+two examples is in the arrows. The arrows here represent the net reaction rate, 
+a thicker arrow means a larger net rate and a thinner one a lower net rate. The 
+direction of the arrow shows which species are being mainly generated and which 
+ones are being mainly consumed. This feature is specially interesting when 
+dealing with complex reaction networks where the concentration effects are 
+difficult to predict, as it provides a visual cue.
 
 Using different energy units
 ----------------------------

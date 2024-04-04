@@ -1,4 +1,5 @@
 .. |example_01| graphviz:: ../resources/examples/example_01.dot
+.. |example_02| graphviz:: ../resources/examples/example_02.dot
 
 =======================
 Python API Examples
@@ -238,6 +239,8 @@ tool:
 
    import subprocess
    subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
+.. centered:: |example_02|
 
 With this we will have generated a basic reaction network completely using rNets' 
 python API. Putting all together: 
