@@ -136,7 +136,7 @@ def calc_activation_energy(
 
 def calc_pseudo_k_constant(
     ea: float
-    , T: float
+    , T: float = DEF_T
     , A: float = DEF_A
     , kb: float = DEF_KB
 ) -> float:
@@ -149,7 +149,7 @@ def calc_pseudo_k_constant(
         T (float): Temperature at which the kinetic constant is
             computed. Defaults to :obj:`DEF_T`.
         A (float): Pre-exponential factor for the Arrhenious equation. Defaults
-            to :obj:`DEF_T`.
+            to :obj:`DEF_A`.
         kb (float): Boltzmann constant. Defaults to :obj:`DEF_KB`
 
     Returns:
@@ -252,6 +252,8 @@ def normalizer(
 def calc_reactions_k_norms(
     rs: Sequence[Reaction]
     , T: float = DEF_T
+    , A: float = DEF_A
+    , kb: float = DEF_KB
     , norm_range: tuple[float, float] = (0., 1.)
 ) -> Iterator[float]:
     """From a set of reactions, compute the norm of each reaction using the
@@ -261,13 +263,17 @@ def calc_reactions_k_norms(
         rs (sequence of :obj:`Reaction`): Reactions to use to compute the norm.
         T (float): Temperature at which the kinetic constant is
             computed. Defaults to :obj:`DEF_T`.
+        A (float): Pre-exponential factor for the Arrhenious equation. Defaults
+            to :obj:`DEF_A`.
+        kb (float): Boltzmann constant. Defaults to :obj:`DEF_KB`
 
     Returns:
         :obj:`Iterator` of float: Computed k norms preserving the order of the
             given reactions.
     """
     ks: tuple[float, ...] = tuple(map(
-        lambda r: calc_pseudo_k_constant(calc_activation_energy(r), T)
+        lambda r: calc_pseudo_k_constant(
+            calc_activation_energy(r), T=T, A=A, kb=kb)
         , rs
     ))
     norm: Callable[[float], float] = normalizer(*minmax(ks))

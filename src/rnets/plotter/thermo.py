@@ -11,6 +11,7 @@ from ..colors import Color
 from ..chemistry import (
     network_energy_normalizer
     , calc_reactions_k_norms
+    , ChemCfg
 )
 from ..dot import Graph
 from ..struct import Network, Visibility
@@ -28,44 +29,51 @@ from .utils import (
 
 def build_dotgraph(
     nw: Network
-    , cfg: GraphCfg = GraphCfg()
+    , graph_cfg: GraphCfg = GraphCfg()
+    , chem_cfg: ChemCfg = ChemCfg()
 ) -> Graph:
     """Build a dotgraph from a reaction network.
 
         nw (:obj:`Network`): Network object to be converted into dot graph.
-        cfg (:obj:`GraphCfg`, optional): Graphviz configuration.
+        graph_cfg (:obj:`GraphCfg`, optional): Graphviz configuration. Defaults
+            to :obj:`ChemCfg`
+        chem_cfg (:obj:`ChemCfg`, optional): Chemical parameters fo the
+            system. Defaults to :obj:`ChemCfg`
 
     Returns:
         Dot :obj:`Graph` with the colors and shapes of the netwkork.
     """
     c_norm: Callable[[float], Color] = color_interp(
         norm_fn=network_energy_normalizer(nw)
-        , cs=cfg.colorscheme
-        , offset=cfg.color_offset
+        , cs=graph_cfg.colorscheme
+        , offset=graph_cfg.color_offset
     )
     n_color_fn: Callable[[float, Visibility], tuple
                          [Color, Color]] = nodecolor_sel(
         c_norm=c_norm
-        , fg_c=cfg.node.font_color
-        , fg_alt=cfg.node.font_color_alt
-        , lum_threshold=cfg.node.font_lum_threshold
+        , fg_c=graph_cfg.node.font_color
+        , fg_alt=graph_cfg.node.font_color_alt
+        , lum_threshold=graph_cfg.node.font_lum_threshold
     )
     e_widths: Iterator[float]
-    if cfg.edge.max_width is None:
-        e_widths = repeat(cfg.edge.width)
+    if graph_cfg.edge.max_width is None:
+        e_widths = repeat(graph_cfg.edge.width)
     else:
         e_widths = calc_reactions_k_norms(
             rs=nw.reactions
-            , norm_range=(cfg.edge.width, cfg.edge.max_width)
+            , T=chem_cfg.T
+            , A=chem_cfg.A
+            , kb=chem_cfg.kb
+            , norm_range=(graph_cfg.edge.width, graph_cfg.edge.max_width)
           )
     e_colors: Iterator[Color]
-    if cfg.edge.solid_color is None:
+    if graph_cfg.edge.solid_color is None:
         e_colors = map(lambda r: c_norm(r.energy), nw.reactions)
     else:
-        e_colors = repeat(cfg.edge.solid_color)
+        e_colors = repeat(graph_cfg.edge.solid_color)
 
     return Graph(
-        kind=cfg.kind
+        kind=graph_cfg.kind
         , nodes=tuple(map(
             lambda c: build_dotnode(c, *n_color_fn(c.energy, c.visible))
             , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
@@ -78,5 +86,5 @@ def build_dotgraph(
                 , zip(nw.reactions, e_widths, e_colors)
             )
         )))
-        , options=build_glob_opt(cfg)
+        , options=build_glob_opt(graph_cfg)
     )
