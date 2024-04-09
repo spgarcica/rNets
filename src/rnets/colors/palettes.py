@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Color palettes. In the form of dict of obj:`Color`
+"""Color palettes. In the form of dict of :obj:`Color`
 
 Attributes:
     css (dict of str as keys and obj:`Color` as values): CSS4 colorscheme. More
