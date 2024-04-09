@@ -1,0 +1,79 @@
+strict digraph {
+
+    graph [
+        rankdir=TB,
+        ranksep=0.5,
+        nodesep=0.25
+    ];
+    
+    node [
+        shape=plaintext,
+        style=filled
+    ];
+    
+    edge [
+        weight=2.
+    ];
+
+
+    "A" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#000000">A</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#93b275"
+    ];
+    
+    "B" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">B</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#fe00fe"
+    ];
+    
+    "C" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#000000">C</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#31cc31"
+    ];
+    
+    "D" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#000000">D</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#eb5bdf"
+    ];
+
+
+    "B" -> "A"[
+        penwidth=3.0
+    ];
+    
+    "B" -> "D"[
+        penwidth=3.0
+    ];
+    
+    "C" -> "D"[
+        penwidth=3.0
+    ];
+}

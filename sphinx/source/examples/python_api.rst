@@ -2,6 +2,9 @@
 .. |example_01| graphviz:: ../resources/examples/example_01.dot
 .. |example_02| graphviz:: ../resources/examples/example_02.dot
 .. |example_03| graphviz:: ../resources/examples/example_03.dot
+.. |example_04a| graphviz:: ../resources/examples/example_04a.dot
+.. |example_04b| graphviz:: ../resources/examples/example_04b.dot
+.. |example_04c| graphviz:: ../resources/examples/example_04c.dot
 
 =======================
 Python API Examples
@@ -380,11 +383,164 @@ When we put all the steps together we end up with the following code:
 Formatting our graph
 --------------------
 
-.. note::
+In this example we will get introduced to the Graph, Edge and Node configuration
+classes ( :code:`rnets.plotter.utils.GraphCfg` , 
+:code:`rnets.plotter.utils.EdgeCfg` and :code:`rnets.plotter.utils.NodeCfg`). 
+To illustrate their usage we will borrow the `Drawing a kinetic graph`_ example 
+and we will change the width of the edges as well as the colorscheme.
+
+.. note:: 
+
+   In the following examples, only the :code:`GraphCfg` and :code:`EdgeCfg` 
+   classes will be used, however the usage of :code:`NodeCfg` is similar 
+   to :code:`EdgeCfg` .
+
+First we will add to the imports the :code:`GraphCfg` and :code:`EdgeCfg` classes:  
+
+.. code:: python 
    
-   Currently under construction:
-   Here we will cover how to prepare a graph configuration different from the 
-   default one and how to use it.
+   import subprocess
+
+   from rnets.struct import Network, Compound, Reaction
+   from rnets.plotter.kinetic import build_dotgraph
+   from rnets.plotter.utils import GraphCfg, EdgeCfg
+
+
+Next, we are going to define our reaction network 
+
+.. code:: python 
+
+   A = Compound('A',0.0,0,conc=0.75) 
+   B = Compound('B',1.0,1,conc=0.1) 
+   C = Compound('C',0.0,2,conc=1.0) 
+   D = Compound('D',-2.0,3,conc=0.25)
+
+   r1 = Reaction('r1',((A,),(B,)),4.0,0) 
+   r2 = Reaction('r2',((B,C),(D,)),7.0,1) 
+   
+   nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
+
+The next step is to instantiate our edge configuration object.
+
+.. code:: python 
+
+   edge_cfg = EdgeCfg(width=3)
+
+First, we will generate the graph without changing the colorscheme which is a 
+format of the graph, but we still need to create a :code:`GraphCfg` object, to 
+include our :code:`EdgeCfg` object: 
+
+.. code:: python 
+
+   graph_cfg = GraphCfg(edge=edge_cfg)
+
+and proceed to generate our graph, dotfile and png as in the previous examples: 
+
+.. code:: python 
+
+   graph = build_dotgraph(nw,graph_cfg=graph_cfg)
+
+   with open("example.dot", 'w', encoding="utf8") as of:
+       of.write(str(graph))
+   
+   subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
+.. centered:: |example_04a|
+
+Second, if we also want to change the color scheme, we need to specify it when 
+we create the :code:`GraphCfg` object. all we will need to do is to 
+specify a sequence of floats. The default colorscheme is :code:`viridis` which 
+is pre-defined in :code:`rnets.colors.colorschemes.VIRIDIS` . Here we can 
+find other pre-defined colorschemes such as :code:`magma`, :code:`plasma`, 
+:code:`inferno` and :code:`cividis` (All in uppercase). To use a pre-defined 
+color scheme the easiest will be to import it: 
+
+.. code:: python
+
+   from rnets.colors import PLASMA
+
+Now we instantiate the :code:`GraphCfg` object
+
+.. code:: python 
+
+   graph_cfg = GraphCfg(edge=edge_cfg,colorscheme=PLASMA)
+
+And the remaining steps are the same ones as before: 
+
+.. code:: python 
+
+   graph = build_dotgraph(nw,graph_cfg=graph_cfg)
+
+   with open("example.dot", 'w', encoding="utf8") as of:
+       of.write(str(graph))
+   
+   subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
+.. centered:: |example_04b|
+
+If instead we want to define our own colorscheme, we need to specify a sequence 
+of colors, represented as tuples of :code:`RGB` values between 0 and 1. For 
+convenience when defining custom colorschemes, we can find a dictionary with 
+some name to RGB tuple mapping at :code:`rnets.colors.palettes` that we can use: 
+
+.. code:: python 
+
+   from rnets.colors.palettes import css as colorname_to_rgb
+
+   my_colorscheme = ['magenta','limegreen']
+   colorscheme = [colorname_to_rgb[name] for name in my_colorscheme]
+
+As we did before, we now define our :code:`GraphCfg` object with our custom 
+colorscheme and proceed to generate the graph, :code:`.dot` file and 
+:code:`.png`
+
+.. code:: python 
+
+   graph_cfg = GraphCfg(edge=edge_cfg,colorscheme=colorscheme)
+
+   graph = build_dotgraph(nw,graph_cfg=graph_cfg)
+
+   with open("example.dot", 'w', encoding="utf8") as of:
+       of.write(str(graph))
+   
+   subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
+.. centered:: |example_04c|
+
+When we put all the steps together we end up with the following code: 
+
+.. code:: python 
+
+   import subprocess
+
+   from rnets.struct import Network, Compound, Reaction
+   from rnets.plotter.kinetic import build_dotgraph
+   from rnets.plotter.utils import GraphCfg, EdgeCfg
+   from rnets.colors.colorschemes import PLASMA
+
+   # Creation of the reaction network
+   A = Compound('A',0.0,0,conc=0.75) 
+   B = Compound('B',1.0,1,conc=0.1) 
+   C = Compound('C',0.0,2,conc=1.0) 
+   D = Compound('D',-2.0,3,conc=0.25)
+
+   r1 = Reaction('r1',((A,),(B,)),4.0,0) 
+   r2 = Reaction('r2',((B,C),(D,)),7.0,1) 
+   
+   nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
+
+   # Formatting
+   edge_cfg = EdgeCfg(width=3)
+   graph_cfg = GraphCfg(edge=edge_cfg,colorscheme=PLASMA)
+
+   # Creation of the graph and saving it as a .dot file. 
+   graph = build_dotgraph(nw,graph_cfg=graph_cfg)
+
+   with open("example.dot", 'w', encoding="utf8") as of:
+       of.write(str(graph))
+   
+   # Generating a PNG from the created .dot file
+   subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
 
 Integration with other software: Pykinetic (thermo)
 ---------------------------------------------------
