@@ -1,5 +1,7 @@
+.. |example_00| graphviz:: ../resources/examples/example_00.dot
 .. |example_01| graphviz:: ../resources/examples/example_01.dot
 .. |example_02| graphviz:: ../resources/examples/example_02.dot
+.. |example_03| graphviz:: ../resources/examples/example_03.dot
 
 =======================
 Python API Examples
@@ -17,7 +19,7 @@ My first Network
 To introduce the basic components of the python API of rNets we will create 
 a very simple reaction network, which is shown below: 
 
-.. centered:: |example_01|
+.. centered:: |example_00|
 
 The first thing is importing the appropriate classes. The :code:`Network` class 
 is within the struct :code:`struct` module 
@@ -148,6 +150,8 @@ tool:
    import subprocess
    subprocess.run('dot -Tpng example1.dot -o example1.png',shell=True)
 
+.. centered:: |example_01|
+
 With this we will have generated a basic reaction network completely using rNets' 
 python API. Putting all together: 
 
@@ -274,14 +278,104 @@ python API. Putting all together:
 
 
 
-Using different energy units
-----------------------------
+Using different energy units or temperature
+-------------------------------------------
 
-.. note::
+In this example we will get introduced to the chemical configuration class
+( :code:`rnets.chemistry.ChemCfg` ). to illustrate its usage we will borrow the 
+`Drawing a kinetic graph`_ example. 
+
+First we will add to the imports the Chemcfg
+
+.. code:: python 
    
-   Currently under construction:
-   Here we will cover how to prepare a chemical configuration different from the 
-   default one and how to use it.
+   import subprocess
+
+   from rnets.struct import Network, Compound, Reaction
+   from rnets.plotter.kinetic import build_dotgraph
+   from rnets.chemistry import ChemCfg
+
+
+Next, we are going to define our reaction network in :code:`kcal/mol` 
+
+.. code:: python 
+
+   A = Compound('A',0.0,0,conc=0.75)                  # 0.0 eV
+   B = Compound('B',23.1,1,conc=0.1)                  # 1.0 eV
+   C = Compound('C',0.0,2,conc=1.0)                   # 0.0 eV
+   D = Compound('D',-46.1,3,conc=0.25)                # -2.0 eV
+
+   r1 = Reaction('r1',((A,),(B,)),92.2,0)    # 4.0 eV 
+   r2 = Reaction('r2',((B,C),(D,)),161.4,1)  # 7.0 eV
+
+   nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
+
+The next step is to instantiate our chemical configuration object.
+
+.. code:: python 
+
+   chem_cfg = ChemCfg(e_units='kcal/mol')
+
+If the energies provided were at a reference state of 500K it is also specified 
+at the chemical configuration: 
+
+.. code:: python 
+
+   chem_cfg = ChemCfg(e_units='kcal/mol',T=500)
+
+Now, we proceed to the generation of the dotfile using the 
+:code:`kinetic.build_dotgraph` function. Here we need to specify as a parameter 
+of the function the chemical configuration object. 
+
+.. code:: python 
+
+   graph = build_dotgraph(nw,chem_cfg=chem_cfg)
+
+Finally, we proceed as in the other examples to write the :code:`.dot` file and 
+transform it to a :code:`.png` 
+
+.. code:: python 
+
+   with open("example.dot", 'w', encoding="utf8") as of:
+       of.write(str(graph))
+   
+   subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
+.. centered:: |example_03|
+
+When we put all the steps together we end up with the following code: 
+
+.. code:: python 
+
+   import subprocess
+
+   from rnets.struct import Network, Compound, Reaction
+   from rnets.plotter.kinetic import build_dotgraph
+   from rnets.chemistry import ChemCfg 
+
+   # Creation of the reaction network
+   A = Compound('A',0.0,0,conc=0.75)                  # 0.0 eV
+   B = Compound('B',23.1,1,conc=0.1)                  # 1.0 eV
+   C = Compound('C',0.0,2,conc=1.0)                   # 0.0 eV
+   D = Compound('D',-46.1,3,conc=0.25)                # -2.0 eV
+
+   r1 = Reaction('r1',((A,),(B,)),92.2,0)    # 4.0 eV 
+   r2 = Reaction('r2',((B,C),(D,)),161.4,1)  # 7.0 eV
+   
+   nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
+
+   # Creation of the Chemical Configuration
+   chem_cfg = ChemCfg(e_units='kcal/mol',T=500)
+
+   # Creation of the graph and saving it as a .dot file. 
+   graph = build_dotgraph(nw)
+
+   with open("example.dot", 'w', encoding="utf8") as of:
+       of.write(str(graph))
+   
+   # Generating a PNG from the created .dot file
+   subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
 
 Formatting our graph
 --------------------
