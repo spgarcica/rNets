@@ -2,6 +2,8 @@
 .. |example_01| graphviz:: ../resources/examples/example_01.dot
 .. |example_02| graphviz:: ../resources/examples/example_02.dot
 .. |example_03| graphviz:: ../resources/examples/example_03.dot
+.. |example_04a| graphviz:: ../resources/examples/example_04a.dot
+.. |example_04b| graphviz:: ../resources/examples/example_04b.dot
 
 =======================
 Command-line Examples
@@ -303,8 +305,67 @@ specify also the temperature in the command line:
 Formatting our graph
 --------------------
 
-.. note::
-   
-   Currently under construction:
-   Here we will cover how to prepare a graph configuration different from the 
-   default one and how to use it.
+In this final example we will cover how to change the basic formatting of the 
+graph. The options that we can change are listed in the command line help 
+:doc:`../quick_start/command_line_help` although an advanced configuration 
+can be done using the Graph, Node and Edge OPT in this example we will focus on 
+the less advanced options as they requrie no knowledge of the details of 
+graphviz. We will use the following :code:`compounds.csv`
+
+.. code:: none
+
+   name,energy,conc
+   A,0.0,0.75
+   B,1.0,0.1
+   C,0.0,1.0
+   D,-2.0,0.25
+
+and the following :code:`reactions.csv`
+
+.. code:: none 
+
+   cleft,cleft,direction,cright,energy,name
+   A,,->,B,4.0,R1
+   B,C,->,D,7.0,R2
+
+We are borrowing these files from the `Drawing a kinetic graph`_ example. 
+As in the `Using different energy units`_ example all we will need to is to 
+specify the flags in the command line. Lets assume that we want two different 
+changes, the first one being the colorscheme and the second one the edge width. 
+In other words, we want the edges to be thicker and we will use a different 
+color palette. 
+
+First, lets address the edge width. The default value is 1, so we will make it 
+3. to specify this change we will need to add to the command line the flag
+:code:`--width 3`. Consecuently the command line will look like: 
+
+.. code::
+
+   $ python -m rnets -cf compounds.csv -rf reactions.csv -o reaction_network.dot --width 3
+
+And now we generate the :code:`.png` file
+
+.. code::
+
+   $ dot -Tpng reaction_network.dot -o reaction_network.png 
+
+.. centered:: |example_04a|
+
+Next, to change the colorscheme we will use one of the predefined ones which are
+:code:`magma`, :code:`plasma`, :code:`inferno`, :code:`viridis` and :code:`cividis` . 
+Specifically, the :code:`viridis` is the default value, so we will use the 
+:code:`plasma` . As we did with the edge width, we will need to include the 
+flag :code:`--colorscheme plasma` . 
+
+.. code::
+
+   $ python -m rnets -cf compounds.csv -rf reactions.csv -o reaction_network.dot --width 3 --colorscheme plasma
+
+And now we generate the :code:`.png` file
+
+.. code::
+
+   $ dot -Tpng reaction_network.dot -o reaction_network.png 
+
+.. centered:: |example_04b| 
+
