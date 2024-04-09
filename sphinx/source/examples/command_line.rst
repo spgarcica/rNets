@@ -1,6 +1,7 @@
 .. |example_00| graphviz:: ../resources/examples/example_00.dot
 .. |example_01| graphviz:: ../resources/examples/example_01.dot
 .. |example_02| graphviz:: ../resources/examples/example_02.dot
+.. |example_03| graphviz:: ../resources/examples/example_03.dot
 
 =======================
 Command-line Examples
@@ -242,12 +243,62 @@ difficult to predict, as it provides a visual cue.
 Using different energy units
 ----------------------------
 
-.. note::
-   
-   Currently under construction:
+In this example we will get introduced to the chemical configuration class
+( :code:`rnets.chemistry.ChemCfg` ). to illustrate its usage we will borrow the 
+`Drawing a kinetic graph`_ example. 
 
-   Here we will cover how to prepare a chemical configuration different from the 
-   default one and how to use it.
+First, we are going to rewrite our :code:`compounds.csv` and 
+:code:`reactions.csv` in :code:`kcal/mol` which we can easily do in our 
+preferred spreadsheet editor. 
+
++---------+---------+---------+-------------+
+|   name  |  energy |   conc  |  energy(eV) |
++---------+---------+---------+-------------+
+|    A    |   0.0   |   0.75  |     0.0     |
++---------+---------+---------+-------------+
+|    B    |  23.1   |   0.1   |     1.0     |
++---------+---------+---------+-------------+
+|    C    |   0.0   |   1.0   |     0.0     |
++---------+---------+---------+-------------+
+|    D    | -46.1   |   0.25  |    -2.0     |
++---------+---------+---------+-------------+
+
+We remove the :code:`energy(eV)` column and save the file as a csv
+
+.. code:: none
+
+   name,energy,conc
+   A,0.0,0.75
+   B,23.1,0.1
+   C,0.0,1.0
+   D,-46.1,0.25
+
+We proceed similarly with the :code:`reactions.csv` obtaining the file: 
+
+.. code:: none 
+
+   cleft,cleft,direction,cright,energy,name
+   A,,->,B,92.2,R1
+   B,C,->,D,161.4,R2
+
+The next, we proceed to generate the :code:`.dot` file as we did in the previous 
+examples. However, this time we need to specify the energy units within the 
+command: 
+
+.. code::
+
+   $ python -m rnets -cf compounds.csv -rf reactions.csv -o reaction_network.dot --units kcal/mol
+   $ dot -Tpng reaction_network.dot -o reaction_network.png 
+
+.. centered:: |example_03|
+
+If the energies provided were at a reference state of 500K we would need to 
+specify also the temperature in the command line: 
+
+.. code::
+
+   $ python -m rnets -cf compounds.csv -rf reactions.csv -o reaction_network.dot --units kcal/mol --temperature 500
+
 
 Formatting our graph
 --------------------

@@ -365,7 +365,7 @@ When we put all the steps together we end up with the following code:
    nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
 
    # Creation of the Chemical Configuration
-   chem_cfg = ChemCfg(e_units='kcal/mol',T=500)
+   chem_cfg = ChemCfg(e_units='kcal/mol')
 
    # Creation of the graph and saving it as a .dot file. 
    graph = build_dotgraph(nw)
