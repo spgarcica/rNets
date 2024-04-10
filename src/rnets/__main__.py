@@ -118,6 +118,7 @@ def graph_group(parser: argparse.ArgumentParser) -> None:
         type=str,
         help="Color scheme",
         dest="graph.colorscheme",
+        choices=tuple(colorschemes.available.keys()),
         default=argparse.SUPPRESS,
     )
     graph.add_argument(
