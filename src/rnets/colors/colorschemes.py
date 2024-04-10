@@ -1310,10 +1310,21 @@ CIVIDIS: Colorscheme = (
     , (0.995737, 0.909344, 0.217772)
 )
 
+VIRIDIS_R = tuple(reversed(VIRIDIS))
+PLASMA_R = tuple(reversed(PLASMA))
+MAGMA_R = tuple(reversed(MAGMA))
+INFERNO_R = tuple(reversed(INFERNO))
+CIVIDIS_R = tuple(reversed(INFERNO))
+
 available: dict[str, Colorscheme] = {
     "viridis": VIRIDIS
     , "plasma": PLASMA
     , "magma": MAGMA
     , "inferno": INFERNO
     , "cividis": CIVIDIS
+    , "viridis_r": VIRIDIS_R
+    , "plasma_r": PLASMA_R
+    , "magma_r": MAGMA_R
+    , "inferno_r": INFERNO_R
+    , "cividis_r": CIVIDIS_R
 }
