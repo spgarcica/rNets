@@ -9,6 +9,11 @@ Attributes:
     MAGMA (:obj:`Colorscheme`): Magma colorscheme.
     PLASMA (:obj:`Colorscheme`): Plasma colorscheme.
     CIVIDIS (:obj:`Colorscheme`): Cividis colorscheme.
+    VIRIDIS_R (:obj:`Colorscheme`): Viridis colorscheme reversed.
+    INFERNO_R (:obj:`Colorscheme`): Inferno colorscheme reversed.
+    MAGMA_R (:obj:`Colorscheme`): Magma colorscheme reversed.
+    PLASMA_R (:obj:`Colorscheme`): Plasma colorscheme reversed.
+    CIVIDIS_R (:obj:`Colorscheme`): Cividis colorscheme reversed.
 """
 from collections.abc import Mapping, Sequence
 from .utils import Color
@@ -1310,11 +1315,11 @@ CIVIDIS: Colorscheme = (
     , (0.995737, 0.909344, 0.217772)
 )
 
-VIRIDIS_R = tuple(reversed(VIRIDIS))
-PLASMA_R = tuple(reversed(PLASMA))
-MAGMA_R = tuple(reversed(MAGMA))
-INFERNO_R = tuple(reversed(INFERNO))
-CIVIDIS_R = tuple(reversed(INFERNO))
+VIRIDIS_R: Colorscheme = tuple(reversed(VIRIDIS))
+PLASMA_R: Colorscheme = tuple(reversed(PLASMA))
+MAGMA_R: Colorscheme = tuple(reversed(MAGMA))
+INFERNO_R: Colorscheme = tuple(reversed(INFERNO))
+CIVIDIS_R: Colorscheme = tuple(reversed(INFERNO))
 
 available: dict[str, Colorscheme] = {
     "viridis": VIRIDIS
