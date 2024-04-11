@@ -297,8 +297,8 @@ def named_tuple_info[T: NamedTupleProtocol](
         k: str, v: Any, t: type, fl: NamedTupleMemberFlag
     ) -> NamedTupleMemberInfo | NamedTupleInfo:
         return (
-            named_tuple_info(nt, type_modifiers=type_modifiers)
-            if (nt := is_named_tuple_type(t))
+            named_tuple_info(t, type_modifiers=type_modifiers)
+            if (t not in type_modifiers and is_named_tuple_type(t))
             else create_member(k, v, t, fl)
         )
 
