@@ -86,7 +86,7 @@ class NamedTupleMemberModifier[T](NamedTuple):
     transform: NamedTupleMemberModifierTransformCallback[T] = _id
 
 
-type TypeModifiersDict = Mapping[type | TypeAliasType, NamedTupleMemberModifier]
+type TypeModifiersDict = Mapping[type | TypeAliasType | UnionType, NamedTupleMemberModifier]
 
 
 def __singular_modifier[T](
@@ -195,7 +195,7 @@ def __union_modifier[T](
 
 
 def resolve_type(
-    t: type | TypeAliasType,
+    t: type | TypeAliasType | UnionType,
     *,
     type_modifiers: TypeModifiersDict,
 ) -> NamedTupleMemberModifier:
@@ -230,6 +230,7 @@ def resolve_type(
     args = typing.get_args(t)
 
     if origin is None:
+        assert not isinstance(t, UnionType)
         return __singular_modifier(t, type_modifiers)
 
     f = None
@@ -243,7 +244,7 @@ def resolve_type(
     elif issubclass(origin, Mapping):
         f = __mapping_modifier
 
-    elif origin is UnionType or origin is Union:
+    if origin is UnionType or origin is Union:
         f = __union_modifier
 
     if f is None:

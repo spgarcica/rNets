@@ -1,10 +1,11 @@
 import argparse
 import collections
 import tomllib
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Sequence, Mapping
 from itertools import chain
 from pathlib import Path
 from typing import Any, NamedTuple, NoReturn, Self, Unpack
+import inspect
 
 from rnets import chemistry
 from rnets import conf_type_checker as conf
@@ -79,7 +80,7 @@ def chem_group(parser: argparse.ArgumentParser) -> None:
         type=str,
         help="Energy units. Used to select kb and A if not provided",
         dest="chem.e_units",
-        choices=tuple(chemistry.CONSTANTS['kb'].keys()),
+        choices=tuple(chemistry.CONSTANTS["kb"].keys()),
         default=argparse.SUPPRESS,
     )
     chem.add_argument(
@@ -334,6 +335,34 @@ def opts_transform(
     return (kwargs.get("default") or {}) | x
 
 
+def chemcfg_modifier() -> conf.NamedTupleMemberModifier[chemistry.ChemCfg]:
+    strmod = conf.resolve_type(str, type_modifiers={})
+    floatmod = conf.resolve_type(float, type_modifiers={})
+    floatnmod = conf.resolve_type(float | None, type_modifiers={})
+    mods = {
+        "T": floatmod,
+        "e_units": strmod,
+        "kb": floatnmod,
+        "h": floatnmod,
+        "A": floatnmod,
+    }
+
+    def chemcfg_check(
+        x: Any, **kwargs: Unpack[conf.NamedTupleMemberModifierKwargs]
+    ) -> bool:
+        if not isinstance(x, dict):
+            return False
+
+        return all(k in mods and mods[k].check(v) for k, v in x)
+
+    def chemcfg_transform(
+        x: Any, **kwargs: Unpack[conf.NamedTupleMemberModifierKwargs]
+    ) -> chemistry.ChemCfg:
+        return chemistry.build_chemcfg(**x)
+
+    return conf.NamedTupleMemberModifier(chemcfg_check, chemcfg_transform)
+
+
 def run() -> None:
     type_modifiers: conf.TypeModifiersDict = {
         Opts: conf.NamedTupleMemberModifier(
@@ -352,6 +381,7 @@ def run() -> None:
         colorschemes.Colorscheme: conf.NamedTupleMemberModifier(
             colorsequence_check, colorsequence_transform
         ),
+        chemistry.ChemCfg: chemcfg_modifier(),
     }
 
     cli_dict = parse_cli_args()
@@ -383,10 +413,8 @@ def run() -> None:
         ),
     )
 
-    if plot_thermo:
-        dot = thermo.build_dotgraph(network, config.graph)
-    else:
-        dot = kinetic.build_dotgraph(network, config.graph, config.chem)
+    p = thermo if plot_thermo else kinetic
+    dot = p.build_dotgraph(network, config.graph, config.chem)
 
     with open(config.out_file, "w", encoding="utf8") as out_file:
         out_file.write(str(dot))
