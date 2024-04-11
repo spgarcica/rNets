@@ -4,8 +4,19 @@ import typing
 from collections.abc import Callable, Generator, Mapping, Sequence
 from enum import EnumType, Flag, auto
 from types import UnionType
-from typing import (Any, NamedTuple, NotRequired, Protocol, Self,
-                    TypeAliasType, TypedDict, Union, Unpack, runtime_checkable)
+from typing import (
+    Any,
+    NamedTuple,
+    NotRequired,
+    TypeGuard,
+    Protocol,
+    Self,
+    TypeAliasType,
+    TypedDict,
+    Union,
+    Unpack,
+    runtime_checkable,
+)
 
 
 def _id[T](x: T, **kwargs) -> T:
@@ -246,12 +257,11 @@ def resolve_type(
     )
 
 
-def is_named_tuple(t: type) -> type[NamedTupleProtocol] | None:
-    """Use it for typecasting, when pyright can't infer"""
+def is_named_tuple_type(t: type) -> TypeGuard[type[NamedTupleProtocol]]:
     if isinstance(t, NamedTupleProtocol):
-        return t
+        return True
 
-    return None
+    return False
 
 
 def named_tuple_info[T: NamedTupleProtocol](
@@ -288,7 +298,7 @@ def named_tuple_info[T: NamedTupleProtocol](
     ) -> NamedTupleMemberInfo | NamedTupleInfo:
         return (
             named_tuple_info(nt, type_modifiers=type_modifiers)
-            if (nt := is_named_tuple(t))
+            if (nt := is_named_tuple_type(t))
             else create_member(k, v, t, fl)
         )
 
