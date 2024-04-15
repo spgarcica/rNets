@@ -43,7 +43,7 @@ class ChemCfg(NamedTuple):
 
 
 def build_chemcfg(
-    T: float
+    T: float = DEF_T
     , e_units: str = "eV"
     , kb: float | None = None
     , h: float | None = None
