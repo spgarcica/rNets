@@ -5,7 +5,6 @@ from collections.abc import Iterable, Sequence, Mapping
 from itertools import chain
 from pathlib import Path
 from typing import Any, NamedTuple, NoReturn, Self, Unpack
-import inspect
 
 from rnets import chemistry
 from rnets import conf_type_checker as conf
@@ -26,7 +25,7 @@ class GeneralCfg(NamedTuple):
     reac_file: Path
     out_file: Path
     graph: pt_utils.GraphCfg
-    chem: chemistry.ChemCfg
+    chem: chemistry.ChemCfg = chemistry.ChemCfg()
 
 
 def parse_opt(x: str) -> tuple[str, str] | None:
@@ -350,10 +349,15 @@ def chemcfg_modifier() -> conf.NamedTupleMemberModifier[chemistry.ChemCfg]:
     def chemcfg_check(
         x: Any, **kwargs: Unpack[conf.NamedTupleMemberModifierKwargs]
     ) -> bool:
-        if not isinstance(x, dict):
+        if not isinstance(x, Mapping):
             return False
 
-        return all(k in mods and mods[k].check(v) for k, v in x)
+        return all(
+            (k in mods)
+            or error(conf.RedundantFieldError(chemistry.ChemCfg, k))
+            and mods[k].check(v)
+            for k, v in x.items()
+        )
 
     def chemcfg_transform(
         x: Any, **kwargs: Unpack[conf.NamedTupleMemberModifierKwargs]
