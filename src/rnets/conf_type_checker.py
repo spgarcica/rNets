@@ -86,7 +86,9 @@ class NamedTupleMemberModifier[T](NamedTuple):
     transform: NamedTupleMemberModifierTransformCallback[T] = _id
 
 
-type TypeModifiersDict = Mapping[type | TypeAliasType | UnionType, NamedTupleMemberModifier]
+type TypeModifiersDict = Mapping[
+    type | TypeAliasType | UnionType, NamedTupleMemberModifier
+]
 
 
 def __singular_modifier[T](
@@ -194,11 +196,22 @@ def __union_modifier[T](
     return NamedTupleMemberModifier(check, transform)
 
 
+class TypeNotSupportedError(Exception):
+    def __init__(
+        self: Self, t: type | TypeAliasType | UnionType, msg: str | None = None
+    ) -> None:
+        self.t, self.msg = t, msg or f"Type {t!r} is not supported"
+
+    def __str__(self) -> str:
+        return self.msg
+
+
 def resolve_type(
     t: type | TypeAliasType | UnionType,
     *,
     type_modifiers: TypeModifiersDict,
 ) -> NamedTupleMemberModifier:
+    ogt = t
     while True:
         if type_modifiers is not None and t in type_modifiers:
             return type_modifiers[t]
@@ -248,8 +261,7 @@ def resolve_type(
         f = __union_modifier
 
     if f is None:
-        # warning?
-        raise ValueError("CAN'T GET WHAT YOU WANT")
+        raise TypeNotSupportedError(ogt)
 
     return f(
         origin,  # type: ignore
@@ -308,24 +320,53 @@ def named_tuple_info[T: NamedTupleProtocol](
     )
 
 
+class RedundantFieldError(Exception):
+    def __init__(
+        self: Self, nm: type[NamedTupleProtocol], key: str, msg: str | None = None
+    ) -> None:
+        self.nm, self.key, self.msg = (
+            nm,
+            key,
+            msg
+            or (
+                f"It seems you have supplied field {key}, which can't be found "
+                f"in the context of {nm.__name__} section"
+            ),
+        )
+
+    def __str__(self: Self) -> str:
+        return self.msg
+
+
+class EmptyFieldError(Exception):
+    def __init__(
+        self: Self, key: str, msg: str | None = None
+    ) -> None:
+        self.key, self.msg = (
+            key,
+            msg
+            or (
+                f"It seems you haven't declared a required value of {key!r}"
+            ),
+        )
+
+    def __str__(self: Self) -> str:
+        return self.msg
+
+
 def recreate_named_tuple[T: NamedTupleProtocol](
     info: NamedTupleInfo[T], d: Mapping[str, Any]
 ) -> T:
     for k in d:
         if k not in info.members:
-            raise ValueError(
-                f"It seems you have supplied key {k}, which can't be found "
-                f"in the context of {info.origin.__name__} section"
-            )
+            raise RedundantFieldError(info.origin, k)
 
     def check_and_return[K](
         key: str, value: K | None, info: NamedTupleMemberInfo[K]
     ) -> K:
         if value is None:
             if NamedTupleMemberFlag.OPTIONAL not in info.flags:
-                raise ValueError(
-                    f"It seems you haven't declared a required value of {key!r}"
-                )
+                raise EmptyFieldError(key)
             return info.default
 
         kwargs = {
