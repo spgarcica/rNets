@@ -21,7 +21,7 @@ To generate the Figures, once rNets is installed, type:
 python -m rnets -cf Pd_comp.csv -rf Pd_reac.csv -o reaction_network.dot
 dot -Tpng reaction_network.dot -o reaction_network.png
 
-NOTE: To generate the theta.csv file, download AMUSE on https://github.com/LopezGroup-ICIQ/amuse. In the tutorial folder (as for an example), open a jupyter-notebook and type:
+NOTE: To generate the theta.csv file, use AMUSE, available on https://github.com/LopezGroup-ICIQ/amuse. In the tutorial folder (as for an example), open a jupyter-notebook or make a script and type:
 
 import numpy as np
 
