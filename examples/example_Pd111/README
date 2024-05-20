@@ -1,7 +1,36 @@
-To use this script type:
+This folder contains all the files required to generate the Figure 4 and 8: 
+
+Input from AMUSE (see https://github.com/LopezGroup-ICIQ/amuse):'Pd_g.mkm','rm.mkm','theta.csv'
+
+Parser to generate the rNets required files from the AMUSE inputs: 'parser_visual.py' 
+
+rNets input generated using 'parser_visual.py': 'Pd_comp.csv', 'Pd_reac.csv'
+
+To generate the rNets input for Figure 4 type:
+
+python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx Pd_reac.csv -in_comp Pd_g.mkm -in_rx rm.mkm -in_theta “noc”
+
+This action will generate the 'Pd_comp.csv' and 'Pd_reac.csv' files, containing the reactions and the energetics of the reaction network.
+
+To generate the rNets input for Figure 5 type:
 
 python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx Pd_reac.csv -in_comp Pd_g.mkm -in_rx rm.mkm -in_theta theta.csv
 
-For further information type:
+To generate the Figures, once rNets is installed, type:
 
-python parser_visual.py -h
+python -m rnets -cf Pd_comp.csv -rf Pd_reac.csv -o reaction_network.dot
+dot -Tpng reaction_network.dot -o reaction_network.png
+
+NOTE: To generate the theta.csv file, download AMUSE on https://github.com/LopezGroup-ICIQ/amuse. In the tutorial folder (as for an example), open a jupyter-notebook and type:
+
+import numpy as np
+
+import os, sys
+from mkm import MKM
+
+#Generate the model
+model = MKM(“PdModel”, <PATH_TO_rm.mkm>, <PATH_TO_Pd_g.mkm>)
+
+#Perform the kinetic run
+#T=573 K, P=5e6 Pa, ratio CO2:H2 = 1:4
+x = model.kinetic_run(573, 5e6, np.asarray([0.8, 0.2, 0,0,0]))
