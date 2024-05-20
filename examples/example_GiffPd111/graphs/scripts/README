@@ -1,8 +1,0 @@
-All the scripts in this folder were developed by Dr. Diego Garay-Ruiz, with a little help of Dr. Albert Sabadell-Rendón.
-
-To generate the example just type:
-
-chmod u+x generate_kinetic_graphs.sh
-
-./generate_kinetic_graphs.sh
-
