@@ -211,6 +211,7 @@ def resolve_type(
     *,
     type_modifiers: TypeModifiersDict,
 ) -> NamedTupleMemberModifier:
+    """Returns a member modifier for a given type"""
     ogt = t
     while True:
         if type_modifiers is not None and t in type_modifiers:
@@ -282,6 +283,7 @@ def named_tuple_info[T: NamedTupleProtocol](
     *,
     type_modifiers: TypeModifiersDict | None = None,
 ) -> NamedTupleInfo[T]:
+    """Returns metadata about named tuple"""
     if type_modifiers is None:
         type_modifiers = {}
 
@@ -339,15 +341,10 @@ class RedundantFieldError(Exception):
 
 
 class EmptyFieldError(Exception):
-    def __init__(
-        self: Self, key: str, msg: str | None = None
-    ) -> None:
+    def __init__(self: Self, key: str, msg: str | None = None) -> None:
         self.key, self.msg = (
             key,
-            msg
-            or (
-                f"It seems you haven't declared a required value of {key!r}"
-            ),
+            msg or (f"It seems you haven't declared a required value of {key!r}"),
         )
 
     def __str__(self: Self) -> str:
@@ -357,6 +354,7 @@ class EmptyFieldError(Exception):
 def recreate_named_tuple[T: NamedTupleProtocol](
     info: NamedTupleInfo[T], d: Mapping[str, Any]
 ) -> T:
+    """From a given metadata and data recreate a NamedTuple"""
     for k in d:
         if k not in info.members:
             raise RedundantFieldError(info.origin, k)
