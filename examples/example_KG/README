@@ -2,7 +2,7 @@ This directory contains all the files required to generate Figure 5 in the main 
 - OntoRXN-based knowledge graph: `CycOct.owl`
 - Python script to parse the reaction network and produce rNets input: `RNets_KG_Parser.py`
 
-The manipulation (reading and querying) of the KG requires the `numpy`, `rdflib` and `owlready2` libraries to be installed.
+The manipulation (reading and querying) of the KG requires the `numpy`, `rdflib` and `owlready2` libraries to be installed. In this example, numpy 1.26.4, owlready2 0.46 and rdflib 7.0.0 versions were used.
 
 To run the example, run the following line:
 `python RNets_KG_Parser.py CycOct_comps.csv CycOct_reactions.csv CycOct.owl --reference EpOr+CO2+TMABr --hidden-species CO2,TMA,TMABr`
