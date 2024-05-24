@@ -1,10 +1,11 @@
-from collections.abc import Sequence
+from collections.abc import Sequence, Callable
 import importlib.util
 import json
 import shutil
 import sys
 from pathlib import Path
 import subprocess
+from typing import Any
 
 
 def eprint(*args, **kwargs):
@@ -39,6 +40,14 @@ assets = Path("assets")
 temp = Path("temp")
 temp_graphs = temp / "graphs"
 result = Path("res")
+base_graph = assets / "base_graph.dot"
+props = temp / "props.json"
+
+
+def sh(*args: str) -> None:
+    print(*args)
+    subprocess.run(args)
+    return
 
 
 def intermediate_graphs(arr: Sequence[int]) -> Sequence[Path]:
@@ -59,10 +68,50 @@ def intermediate_graphs(arr: Sequence[int]) -> Sequence[Path]:
     ]
 
 
-def sh(*args: str) -> None:
-    print(*args)
-    subprocess.run(args)
-    return
+def get_declarations() -> Sequence[tuple[int, str]]:
+    return list(
+        filter(
+            lambda t: t[1].strip().count('"') >= 2 and t[1].strip()[-1] == "[",
+            enumerate(base_graph.read_text(encoding="utf-8").splitlines()),
+        )
+    )
+
+
+def nodes_edges_from_declarations(declarations: Sequence[tuple[int, str]]):
+    def aux(condition: Callable[[str], bool]) -> Sequence[tuple[int, str]]:
+        return [
+            (i, line.replace('"', "").replace("[", "").strip())
+            for i, line in declarations
+            if condition(line)
+        ]
+
+    nodes = aux(lambda line: "->" not in line)
+    edges = aux(lambda line: "->" in line)
+
+    return nodes, edges
+
+
+def get_positions(data):
+    nodes_data = data["objects"]
+    edges_data = data["edges"]
+
+    def nodes_pos():
+        return {item["name"]: item["pos"] for item in nodes_data}
+
+    def edges_pos():
+        edge_mapping = {}
+
+        for ed in edges_data:
+            pos = ed["pos"]
+            head, tail = ed["head"], ed["tail"]
+            start = nodes_data[int(head)]["name"]
+            end = nodes_data[int(tail)]["name"]
+            edge_mapping[f"{start} -> {end}"] = pos
+            edge_mapping[f"{end} -> {start}"] = pos
+
+        return edge_mapping
+
+    return nodes_pos(), edges_pos()
 
 
 def main() -> None:
@@ -88,55 +137,25 @@ def main() -> None:
         11914,
     )
 
-    graph_paths = intermediate_graphs(arr)
-    base_graph = assets / "base_graph.dot"
-    props = temp / "props.json"
-
     sh("dot", "-Tpng", str(base_graph), "-o", "auto_layout_orig.png")
 
-    with open(base_graph, "r", encoding="utf-8") as f:
-        content = list(
-            filter(
-                lambda t: t[1].strip().count('"') >= 2 and t[1].strip()[-1] == "[",
-                enumerate(f.readlines()),
-            )
-        )
-
-    nodes = [
-        (i, line.replace('"', "").replace("[", "").strip())
-        for i, line in content
-        if "->" not in line
-    ]
-    edges = [
-        (i, line.replace('"', "").replace("[", "").strip())
-        for i, line in content
-        if "->" in line
-    ]
+    graph_paths = intermediate_graphs(arr)
+    declarations = get_declarations()
+    nodes, edges = nodes_edges_from_declarations(declarations)
 
     sh("dot", "-Tjson", str(base_graph), "-o", str(props))
-    with open(props, "r") as f:
-        data = json.load(f)
+    data = json.loads(props.read_text(encoding="utf-8"))
 
-    nodes_data, edges_data = data["objects"], data["edges"]
-    pos_info = {item["name"]: item["pos"] for item in nodes_data}
-
-    edge_mapping = {}
-    for ed in edges_data:
-        pos = ed["pos"]
-        head, tail = ed["head"], ed["tail"]
-        start = nodes_data[int(head)]["name"]
-        end = nodes_data[int(tail)]["name"]
-        edge_mapping[f"{start} -> {end}"] = pos
-        edge_mapping[f"{end} -> {start}"] = pos
+    nodes_pos, edges_pos = get_positions(data)
 
     for n, g in enumerate(graph_paths):
-        gs = g.read_text().split("\n")
+        gs = g.read_text(encoding="utf-8").splitlines()
 
         for i, node in nodes:
-            gs[i] += f' pos="{pos_info[node]}!",'
+            gs[i] += f' pos="{nodes_pos[node]}!",'
 
         for i, node in edges:
-            gs[i] += f' pos="{edge_mapping[node]}",'
+            gs[i] += f' pos="{edges_pos[node]}",'
 
         gr = g.with_stem(f"{g.stem}_nw")
         r = result / f"{n}.png"
@@ -144,6 +163,7 @@ def main() -> None:
         gr.write_text("\n".join(gs))
 
         sh("neato", "-n2", "-Tpng", str(gr), "-o", str(r))
+
     return
 
 
