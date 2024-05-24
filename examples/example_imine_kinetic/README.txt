@@ -34,7 +34,7 @@ do not require the pykinetic to run. To run the simulation we execute:
 
 python kinetic_model.py
 
-This will generate a 'kinetic_model.data' file in 2-6 mins depending on the 
+This will generate a 'kinetic_model.data' in file in 2-6 mins depending on the 
 CPU performance of the computer. 
 
 Static Figure Generation
@@ -43,7 +43,7 @@ Static Figure Generation
 Next, To illustrate the generation of Figures 7a, 7b, S5 and S6 I will use as example the 
 generation of Figures 7a and 7b. First we will execute the following line: 
 
-python generate_kinetic_snapshots.py comps_draco_42_simple.csv reactions_draco_42_simple.csv kinetic_model.data
+python kinetic_snapshots.py assets/comps_draco_42_simple.csv assets/reactions_draco_42_simple.csv kinetic_model.data
 
 This will generate 2 .dot files, 'snapshot_00600.dot' and 'snapshot_02400.dot'.
 The following step is to use graphviz to render the images: 
@@ -61,7 +61,7 @@ To generate a GIF file showing the evolution of the species over time we will
 start by generating a .dot file for every 10s of simulation into a folder named
 'gif_folder'. We can preform this task by running the following line: 
 
-python generate_kinetic_gif.py comps_draco_42.csv reactions_draco_42.csv kinetic_model.data
+python kinetic_gif.py assets/comps_draco_42.csv assets/reactions_draco_42.csv kinetic_model.data
 
 Our next step is to transform all the generated dot files into .png format 
 we can do that manually or we can use some bash scripting. The following 
@@ -74,10 +74,7 @@ for the manuscript, the GIMP software was used for this task. An alternative thr
 command line is imagemagick which can provide a decent-quality gif using the following
 command: 
 
-convert -delay 0 -loop 1 gif_folder/*.png imine_graph_animation.gif
+magick convert -delay 0 -loop 1 gif_folder/*.png imine_graph_animation.gif
 
 Upon successfull completion of the '.png' to '.gif' the imine_graph_animation.gif will 
 contain the desired gif file. 
-
-
-
