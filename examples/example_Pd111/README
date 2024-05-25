@@ -14,7 +14,7 @@ This action will generate the 'Pd_comp.csv' and 'Pd_reac.csv' files, containing 
 
 To generate the rNets input for Figure 5 type:
 
-python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx Pd_reac.csv -in_comp Pd_g.mkm -in_rx rm.mkm -in_theta theta.csv
+python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx Pd_reac.csv -in_comp assets/Pd_g.mkm -in_rx assets/rm.mkm -in_theta assets/theta.csv
 
 To generate the Figures, once rNets is installed, type:
 
