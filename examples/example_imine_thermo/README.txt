@@ -1,4 +1,4 @@
-In this folder there are 4 different reaction networks. 
+In assets folder there are 4 different reaction networks. 
 
 a) 'comps_paper_simple.csv' and 'reactions_paper_simple.csv'
 b) 'comps_32_simple.csv' and 'reactions_32_simple.csv' 
@@ -24,7 +24,7 @@ the generation of Figure 3a.
 First we will generate the .dot file containing the reaction network from 
 the compounds and reactions files. To do so we execute the following line: 
 
-python generate_dotfile.py comps_paper_simple.csv reactions_paper_simple.csv figure_3a.dot
+python dotfile.py assets/comps_paper_simple.csv assets/reactions_paper_simple.csv figure_3a.dot
 
 This will generate a file named figure_3a.dot in the current directory. Next we 
 will render the figure with graphviz. We will generate a .png file, but other 
