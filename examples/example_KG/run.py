@@ -48,7 +48,8 @@ temp.mkdir(exist_ok=True)
 result.mkdir(exist_ok=True)
 comps = temp / "comps.csv"
 reactions = temp / "reactions.csv"
-graph = temp / "graph.dot"
+graph = temp / "CycOct_network.dot"
+hgraph = graph.with_stem(graph.stem + "_horizontal")
 
 
 def sh(*args: str) -> None:
@@ -68,7 +69,18 @@ def main():
     reactions.write_text(edges, encoding="utf-8")
 
     sh("rnets", "-cf", str(comps), "-rf", str(reactions), "-o", str(graph))
+    sh(
+        "rnets",
+        "-Grankdir=LR",
+        "-cf",
+        str(comps),
+        "-rf",
+        str(reactions),
+        "-o",
+        str(hgraph),
+    )
     sh("dot", "-Tpng", str(graph), "-o", str(result / graph.with_suffix(".png").name))
+    sh("dot", "-Tpng", str(hgraph), "-o", str(result / hgraph.with_suffix(".png").name))
 
 
 if __name__ == "__main__":
