@@ -27,8 +27,7 @@ def check_deps() -> bool:
 
     return (
         check_module("pandas")
-        and 
-        check_module("numpy")
+        and check_module("numpy")
         and check_exec("rnets")
         and check_exec("dot")
     )

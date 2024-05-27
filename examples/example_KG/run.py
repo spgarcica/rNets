@@ -71,7 +71,8 @@ def main():
     sh("rnets", "-cf", str(comps), "-rf", str(reactions), "-o", str(graph))
     sh(
         "rnets",
-        "-Grankdir=LR",
+        "-go",
+        "rankdir=LR",
         "-cf",
         str(comps),
         "-rf",
