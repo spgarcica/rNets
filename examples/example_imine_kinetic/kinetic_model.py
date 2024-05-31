@@ -1,8 +1,8 @@
-import sys
+from typing import Any
+from pathlib import Path
 import numpy as np
 import scipy.integrate
 
-OFile = 'kinetic_model.data'
 
 # Parameters
 species = 28
@@ -648,16 +648,28 @@ def jacobian(t,x):
     
     return Jac
     
-t = np.arange(0,tfin,trep)
-# Time indexes and Out predefinition
-solution = scipy.integrate.solve_ivp(fun=model, jac=jacobian, y0=xini,
-                                     t_span=(0,tfin), t_eval=t,
-                                     method='LSODA', max_step=min(dt,trep),
-                                     rtol=1E-6,atol=1E-11)
+def generate(ofile: Path) -> np.ndarray[Any, np.dtype[np.float64]] | None:
+    if ofile.exists():
+        return np.loadtxt(ofile, dtype=float)
+        
+    t = np.arange(0, tfin, trep)
+    # Time indexes and Out predefinition
+    solution = scipy.integrate.solve_ivp(
+        fun=model,
+        jac=jacobian,
+        y0=xini,
+        t_span=(0, tfin),
+        t_eval=t,
+        method="LSODA",
+        max_step=min(dt, trep),
+        rtol=1e-6,
+        atol=1e-11,
+    )
 
-if not solution.success:
-    print(solution.message)
-else:
+    if not solution.success:
+        print(solution.message)
+        return None
+
     print(f"""
           nfev={solution.nfev}
           njev={solution.njev}
@@ -665,7 +677,12 @@ else:
           status={solution.status}
           success={solution.success}
           """)
-    x = np.zeros(shape=(len(solution.t),species+1))
-    x[:,0] = solution.t
-    x[:,1:] = solution.y[:,:].transpose()
-    np.savetxt(OFile,x,delimiter='\t')
+
+    x = np.zeros(shape=(len(solution.t), species + 1))
+    x[:, 0] = solution.t
+    x[:, 1:] = solution.y[:, :].transpose()
+    np.savetxt(ofile, x, delimiter="\t")
+    return x
+
+if __name__ == "__main__":
+    generate(Path("kinetic_model.data"))

@@ -4,8 +4,19 @@ import typing
 from collections.abc import Callable, Generator, Mapping, Sequence
 from enum import EnumType, Flag, auto
 from types import UnionType
-from typing import (Any, NamedTuple, NotRequired, Protocol, Self,
-                    TypeAliasType, TypedDict, Union, Unpack, runtime_checkable)
+from typing import (
+    Any,
+    NamedTuple,
+    NotRequired,
+    TypeGuard,
+    Protocol,
+    Self,
+    TypeAliasType,
+    TypedDict,
+    Union,
+    Unpack,
+    runtime_checkable,
+)
 
 
 def _id[T](x: T, **kwargs) -> T:
@@ -75,7 +86,9 @@ class NamedTupleMemberModifier[T](NamedTuple):
     transform: NamedTupleMemberModifierTransformCallback[T] = _id
 
 
-type TypeModifiersDict = Mapping[type | TypeAliasType, NamedTupleMemberModifier]
+type TypeModifiersDict = Mapping[
+    type | TypeAliasType | UnionType, NamedTupleMemberModifier
+]
 
 
 def __singular_modifier[T](
@@ -183,11 +196,23 @@ def __union_modifier[T](
     return NamedTupleMemberModifier(check, transform)
 
 
+class TypeNotSupportedError(Exception):
+    def __init__(
+        self: Self, t: type | TypeAliasType | UnionType, msg: str | None = None
+    ) -> None:
+        self.t, self.msg = t, msg or f"Type {t!r} is not supported"
+
+    def __str__(self) -> str:
+        return self.msg
+
+
 def resolve_type(
-    t: type | TypeAliasType,
+    t: type | TypeAliasType | UnionType,
     *,
     type_modifiers: TypeModifiersDict,
 ) -> NamedTupleMemberModifier:
+    """Returns a member modifier for a given type"""
+    ogt = t
     while True:
         if type_modifiers is not None and t in type_modifiers:
             return type_modifiers[t]
@@ -219,6 +244,7 @@ def resolve_type(
     args = typing.get_args(t)
 
     if origin is None:
+        assert not isinstance(t, UnionType)
         return __singular_modifier(t, type_modifiers)
 
     f = None
@@ -232,12 +258,11 @@ def resolve_type(
     elif issubclass(origin, Mapping):
         f = __mapping_modifier
 
-    elif origin is UnionType or origin is Union:
+    if origin is UnionType or origin is Union:
         f = __union_modifier
 
     if f is None:
-        # warning?
-        raise ValueError("CAN'T GET WHAT YOU WANT")
+        raise TypeNotSupportedError(ogt)
 
     return f(
         origin,  # type: ignore
@@ -246,12 +271,11 @@ def resolve_type(
     )
 
 
-def is_named_tuple(t: type) -> type[NamedTupleProtocol] | None:
-    """Use it for typecasting, when pyright can't infer"""
+def is_named_tuple_type(t: type) -> TypeGuard[type[NamedTupleProtocol]]:
     if isinstance(t, NamedTupleProtocol):
-        return t
+        return True
 
-    return None
+    return False
 
 
 def named_tuple_info[T: NamedTupleProtocol](
@@ -259,6 +283,7 @@ def named_tuple_info[T: NamedTupleProtocol](
     *,
     type_modifiers: TypeModifiersDict | None = None,
 ) -> NamedTupleInfo[T]:
+    """Returns metadata about named tuple"""
     if type_modifiers is None:
         type_modifiers = {}
 
@@ -287,8 +312,8 @@ def named_tuple_info[T: NamedTupleProtocol](
         k: str, v: Any, t: type, fl: NamedTupleMemberFlag
     ) -> NamedTupleMemberInfo | NamedTupleInfo:
         return (
-            named_tuple_info(nt, type_modifiers=type_modifiers)
-            if (nt := is_named_tuple(t))
+            named_tuple_info(t, type_modifiers=type_modifiers)
+            if (t not in type_modifiers and is_named_tuple_type(t))
             else create_member(k, v, t, fl)
         )
 
@@ -297,24 +322,49 @@ def named_tuple_info[T: NamedTupleProtocol](
     )
 
 
+class RedundantFieldError(Exception):
+    def __init__(
+        self: Self, nm: type[NamedTupleProtocol], key: str, msg: str | None = None
+    ) -> None:
+        self.nm, self.key, self.msg = (
+            nm,
+            key,
+            msg
+            or (
+                f"It seems you have supplied field {key}, which can't be found "
+                f"in the context of {nm.__name__} section"
+            ),
+        )
+
+    def __str__(self: Self) -> str:
+        return self.msg
+
+
+class EmptyFieldError(Exception):
+    def __init__(self: Self, key: str, msg: str | None = None) -> None:
+        self.key, self.msg = (
+            key,
+            msg or (f"It seems you haven't declared a required value of {key!r}"),
+        )
+
+    def __str__(self: Self) -> str:
+        return self.msg
+
+
 def recreate_named_tuple[T: NamedTupleProtocol](
     info: NamedTupleInfo[T], d: Mapping[str, Any]
 ) -> T:
+    """From a given metadata and data recreate a NamedTuple"""
     for k in d:
         if k not in info.members:
-            raise ValueError(
-                f"It seems you have supplied key {k}, which can't be found "
-                f"in the context of {info.origin.__name__} section"
-            )
+            raise RedundantFieldError(info.origin, k)
 
     def check_and_return[K](
         key: str, value: K | None, info: NamedTupleMemberInfo[K]
     ) -> K:
         if value is None:
             if NamedTupleMemberFlag.OPTIONAL not in info.flags:
-                raise ValueError(
-                    f"It seems you haven't declared a required value of {key!r}"
-                )
+                raise EmptyFieldError(key)
             return info.default
 
         kwargs = {
