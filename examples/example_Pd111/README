@@ -1,5 +1,15 @@
 This folder contains all the files required to generate the Figure 4 and 8: 
 
+Runner to generate in a straightforward way Figure 4 without colorbar (ideal for Windows users): 'run.py'
+
+To execute this script type:
+
+python run.py
+
+The inputs and process followed by 'run.py' is the following: 
+
+IMPORTANT NOTE: This process was generated in Linux. Some modifications, particularly for setting the paths to the inputs and outputs, might be required for Windows users.
+
 Input from AMUSE (see https://github.com/LopezGroup-ICIQ/amuse):'Pd_g.mkm','rm.mkm','theta.csv'
 
 Parser to generate the rNets required files from the AMUSE inputs: 'parser_visual.py' 
@@ -8,13 +18,13 @@ rNets input generated using 'parser_visual.py': 'Pd_comp.csv', 'Pd_reac.csv'
 
 To generate the rNets input for Figure 4 type:
 
-python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx Pd_reac.csv -in_comp Pd_g.mkm -in_rx rm.mkm -in_theta “noc”
+python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx ./assets/Pd_reac.csv -in_comp ./assets/Pd_g.mkm -in_rx ./assets/rm.mkm -in_theta noc
 
 This action will generate the 'Pd_comp.csv' and 'Pd_reac.csv' files, containing the reactions and the energetics of the reaction network.
 
-To generate the rNets input for Figure 5 type:
+To generate the rNets input for Figure 8 type:
 
-python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx Pd_reac.csv -in_comp assets/Pd_g.mkm -in_rx assets/rm.mkm -in_theta assets/theta.csv
+python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx Pd_reac.csv -in_comp ./assets/Pd_g.mkm -in_rx ./assets/rm.mkm -in_theta ./assets/theta.csv
 
 To generate the Figures, once rNets is installed, type:
 
