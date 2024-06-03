@@ -72,6 +72,16 @@ def main() -> None:
     for snapshot, of in zip(snapshots, ("figure_7a.png", "figure_7b.png")):
         sh("dot", "-Tpng", str(snapshot), "-o", str(result / of))
 
+    snapshots = kinetic_snapshot.generate(
+        assets / "comps_draco_42.csv",
+        assets / "reactions_draco_42.csv",
+        model,
+        temp,
+    )
+
+    for snapshot, of in zip(snapshots, ("figure_S5.png", "figure_S6.png")):
+        sh("dot", "-Tpng", str(snapshot), "-o", str(result / of))
+
     snapshots = kinetic_gif.generate(
         assets / "comps_draco_42.csv", assets / "reactions_draco_42.csv", model, temp
     )
