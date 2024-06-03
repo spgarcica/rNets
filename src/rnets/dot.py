@@ -52,7 +52,7 @@ class Edge(NamedTuple):
     """Structure representing a dot edge between two nodes.
 
     Attributes:
-        start (str): Starting node name.
+        origin (str): Starting node name.
         target (str): Target node name.
         direction (str): Symbol to use to connect both nodes.
             See dot manual for possible values.
