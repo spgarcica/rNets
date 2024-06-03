@@ -29,7 +29,7 @@ And then, run the *dot* utility to produce the reaction network graph.
 
 To get the horizontal layout in Figure 5, the corresponding graph argument should be passed to *dot*, setting *rankdir* to LR (left-right) instead of the default TB (top-bottom):
 
-`dot -Grankdir=LR -Tpng CycOct_network.dot -o CycOct_network_horizontal.png` 
+`dot -Grankdir=LR -Nfontsize=16 -Granksep=0.1 Gnodesep=0.5 -Tpng CycOct_network.dot -o CycOct_network_horizontal.png` 
 
 For details on CRN-KG generation, check the corresponding article [Garay-Ruiz and Bo, J. Cheminf. 2022, 14, 29](doi.org/10.1186/s13321-022-00610-x).
 
