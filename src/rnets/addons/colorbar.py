@@ -42,7 +42,7 @@ class ColorbarCfg(NamedTuple):
             uniform perception. Defaults to -1.
         node_name (str, optional): Name of the generated node. Defaults to
             Colorbar.
-        fillcolor (obj:`Color`, optional): Color of the node. Defaults to
+        fillcolor (:obj:`Color`, optional): Color of the node. Defaults to
             white.
         anchor_node (str or None): Node to anchor the colorbar. Defaults to None
     """
@@ -114,7 +114,7 @@ def item_to_str(
     """Convert an item into a string.
 
     Args:
-        item (obj:`Item` or None): Item to be converted.
+        item (:obj:`Item` or None): Item to be converted.
         separator (str): Separator between the different contains.
 
     Returns:
@@ -136,17 +136,17 @@ def build_node(
     , name: str
     , fillcolor: Color
 ) -> Node:
-    """Given an obj:`Item`, create a dot node using the str form of the item as
+    """Given an :obj:`Item`, create a dot node using the str form of the item as
     a the node label.
 
     Args:
-        item (obj:`item`): Item that will be converted into a Node.
+        item (:obj:`item`): Item that will be converted into a Node.
         name (str, optional): Name of the generated node.
-        fillcolor (obj:`Color`): Color of the node.
+        fillcolor (:obj:`Color`): Color of the node.
 
     Returns:
 
-        obj:`Node` built node using the str form of the item as the label.
+        :obj:`Node` built node using the str form of the item as the label.
     """
     return Node(
         name
@@ -188,7 +188,7 @@ def build_color_segment(
     , width: int
     , height: int
 ) -> Item:
-    """Given a pair of obj:`Color`, build a HTML cell containing an horizontal
+    """Given a pair of :obj:`Color`, build a HTML cell containing an horizontal
     gradient.
 
     Args:
@@ -197,7 +197,7 @@ def build_color_segment(
         height (int): Height of the segment, in HTML table units.
 
     Returns:
-        obj:`Item` of the generated segment.
+        :obj:`Item` of the generated segment.
     """
     return Item("TD"
         , {"BGCOLOR": f"{rgb_to_hexstr(cs[0])}:{rgb_to_hexstr(cs[1])}"
@@ -231,7 +231,7 @@ def build_body(
         height (int): Height of the segment, in HTML table units.
 
     Returns:
-       obj:`Item` of the generated row.
+       :obj:`Item` of the generated row.
     """
     return (Item(
         "TR", {}
@@ -248,19 +248,19 @@ def build_colorbar(
     , cfg: ColorbarCfg
     , title: str | None="Energy"
 ) -> Node:
-    """Given a obj:`ColorbarCfg` build the associated graphviz obj:`Node`.
+    """Given a :obj:`ColorbarCfg` build the associated graphviz :obj:`Node`.
 
     Args:
-        color_fn (function taking a [0,1] float as input and returning a
-            obj:`Color`): Color interpolation function.
+        color_fn (:obj:`function`): Color interpolation function. It should take
+                 a float between [0,1] and return an :obj:`Color`
         c_ran (tuple of two floats, optional): Minimum and maximum energy
              values. Defaults to None
-        cfg (obj:`ColorbarCfg`): Configuration used to build the colorbar.
+        cfg (:obj:`ColorbarCfg`): Configuration used to build the colorbar.
         title (str, optional): Title of the colorbar. Defaults to None.
 
 
     Returns:
-        obj:`Node` built from the given configuration.
+        :obj:`Node` built from the given configuration.
     """
     return build_node(
         Item(
