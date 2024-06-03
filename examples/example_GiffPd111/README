@@ -1,13 +1,70 @@
-To generate the Supporting Gif, first generate all the required .dot graphs from the microkinetick ouputs.
+This folder contains all the files required to generate the supporting GIF 
+corresponding to the animation of Figure 8 of the rnets original publication.
 
-To do so, run the do_graphs.sh script by typing:
+example_GiffPd111
+  -README
+  -run.py
+  assets
+    -base_graph.dot
+    -Pd_comp_0.csv
+    -Pd_comp_1000.csv
+    -Pd_comp_2500.csv
+    -Pd_comp_5000.csv
+    -Pd_comp_8000.csv
+    -Pd_comp_8500.csv
+    -Pd_comp_9250.csv
+    -Pd_comp_9350.csv
+    -Pd_comp_9450.csv
+    -Pd_comp_9500.csv
+    -Pd_comp_9650.csv
+    -Pd_comp_9750.csv
+    -Pd_comp_10000.csv
+    -Pd_comp_10250.csv
+    -Pd_comp_11914.csv
+    -Pd_reac_0.csv
+    -Pd_reac_1000.csv
+    -Pd_reac_2500.csv
+    -Pd_reac_5000.csv
+    -Pd_reac_8000.csv
+    -Pd_reac_8500.csv
+    -Pd_reac_9250.csv
+    -Pd_reac_9350.csv
+    -Pd_reac_9450.csv
+    -Pd_reac_9500.csv
+    -Pd_reac_9650.csv
+    -Pd_reac_9750.csv
+    -Pd_reac_10000.csv
+    -Pd_reac_10250.csv
+    -Pd_reac_11914.csv
+    -theta_0_Pd.csv
+    -theta_1000_Pd.csv
+    -theta_2500_Pd.csv
+    -theta_5000_Pd.csv
+    -theta_8000_Pd.csv
+    -theta_8500_Pd.csv
+    -theta_9250_Pd.csv
+    -theta_9350_Pd.csv
+    -theta_9450_Pd.csv
+    -theta_9500_Pd.csv
+    -theta_9650_Pd.csv
+    -theta_9750_Pd.csv
+    -theta_10000_Pd.csv
+    -theta_10250_Pd.csv
+    -theta_11914_Pd.csv
 
-chmod u+x do_graphs.sh
+Here each matching combination of :code:`Pd_reac*.csv`, :code:`Pd_comp*.csv` and 
+:code:`theta_*_Pd.csv` corresponds to a snapshot of the reaction network during 
+the kinetic simulation carried out using AMUSE. The :code:`base_graph.dot` is a 
+previously generated .dot file to facilitate the constant node positioning for 
+the generation of a GIF. 
 
-./do_graphs.sh
+To quickly execute the example and produce the final GIF, run:
 
-Afterwards, type:
+python run.py
 
-cd graphs/scripts/
+In this script several steps have been automated: 
 
-Once you are there, read the following README
+1) The generation of all the .dot files form the .csv files using rnets
+2) Enforcing constant positions of the nodes in the final pngs through a 
+combination of dot and neato
+3) Combination of all the generated .png files into a single GIF.
