@@ -35,12 +35,14 @@ dot -Tpng figure_3a.dot -o figure_3a.png
 
 With this we have generated the image of the reaction network. 
 
+For convenience, to reproduce generate all the figures we provide the run.py 
+script which automates the generation of all the figures (Figure 3a, 3b, S4 and 
+S5) facilitating the reproducibility of the figures in the article across 
+different OS. 
+
 Note: 
 
-Please note that within generate_dotfile.py, a custom treatment for the "simple"
+Please note that within dotfile.py, a custom treatment for the "simple"
 files is included. This is not necessary to generate a reaction network graph, 
 but it was used to add some control over the final layout to guarantee that
-the resulting figure would fit in the manuscript. It has also been added 
-to the examples to ensure the reproducibility of the figures in the article. 
-
-
+the resulting figure would fit in the manuscript.

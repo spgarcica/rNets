@@ -19,21 +19,19 @@ files:
 
    example_imine_thermo
      -README.txt
-     -comps_paper.csv
-     -reactions_paper.csv
-     -comps_paper_simple.csv
-     -reactions_paper_simple.csv
-     -comps_32.csv
-     -reactions_32.csv
-     -comps_32_simple.csv
-     -reactions_32_simple.csv
-     -generate_dotfile.py
-     -figure_3b.dot
-     -figure_3a.dot
-     -figure_S3.dot
-     -figure_S4.dot
+     -assets
+       -comps_paper.csv
+       -reactions_paper.csv
+       -comps_paper_simple.csv
+       -reactions_paper_simple.csv
+       -comps_32.csv
+       -reactions_32.csv
+       -comps_32_simple.csv
+       -reactions_32_simple.csv
+     -dotfile.py
+     -run.py
 
-Here we have 4 different compound-reaction file pairs: 
+In the assets folder we have 4 different compound-reaction file pairs: 
 
    a) :code:`comps_paper_simple.csv` and :code:`reactions_paper_simple.csv`
    b) :code:`comps_32_simple.csv` and :code:`reactions_32_simple.csv` 
@@ -52,29 +50,51 @@ but with a corrected set of energies. The files in :code:`c` are the uncorrected
 full reaction network and the files in :code:`d` are used for the corrected full 
 reaction network.
 
-The procedure for the generation of all images is the same one, only needing to 
-change the compounds and reactions files. We will use the files in :code:`a` (
-uncorrected and simplified reaction network ) to illustrate the procedure. 
-
 Preliminary steps
 .................
 
 For the present example the only required software is rNets and graphviz. Please
 follow the installation instructions of rNets.
 
-Generation of the network graphs
-................................
+Quickstart
+..........
 
-First we will generate the .dot file containing the reaction network from 
-the compounds and reactions files. To do so we execute the following line:
+For convenience we created the :code:`run.py` script which facilitates the 
+generation of all the figures in one go. To execute the code the user will have 
+to type in the following command: 
 
 .. code:: shell-session
 
-   $ python generate_dotfile.py comps_paper_simple.csv reactions_paper_simple.csv figure_3a.dot
+   python run.py
 
-his will generate a file named figure_3a.dot in the current directory. Next we 
-will render the figure with graphviz. We will generate a .png file, but other 
-formats such as svg are also possible. To do so, we will execute the following
+Upon execution two new folders will appear: :code:`temp` and :code:`res`. The 
+:code:`temp` folder contains the .dot files, which serve as input to graphviz 
+for the actual image generation. The :code:`res` folder will contain the 
+automatically rendered .png files.
+
+Manual Generation of the network graphs
+.......................................
+
+The procedure for the generation of all images is the same one, only needing to 
+change the compounds and reactions files. We will use the files in :code:`a)` (
+uncorrected and simplified reaction network ) to illustrate the procedure. 
+
+.. warning:: 
+
+   The following step by step examples assume a UNIX-like OS. In the case of 
+   Windows OS please adapt accordingly the paths to the files or use the 
+   :code:`run.py` script. 
+
+First we will generate the .dot file containing the reaction network from 
+the compounds and reactions files. To do so we will execute the following line:
+
+.. code:: shell-session
+
+   $ python dotfile.py assets/comps_paper_simple.csv assets/reactions_paper_simple.csv figure_3a.dot
+
+This will generate a file named figure_3a.dot in the current directory. Next we 
+will render the figure with graphviz as a .png file, (other 
+formats such as svg are also possible). To do so, we will execute the following
 command: 
 
 .. code:: shell-session
@@ -85,12 +105,12 @@ With this we have generated the image of the reaction network.
 
 .. note::
 
-   Please note that within generate_dotfile.py, a custom treatment for the 
+   Please note that within dotfile.py, a custom treatment for the 
    :code:`simple.csv` files is included. This is not necessary to generate a 
    reaction network graph, but it was used to add some control over the final 
-   layout to guarantee that the resulting figure would fit in the manuscript. It 
-   has also been added to the examples to ensure the reproducibility of the figures
-   in the article. 
+   layout to guarantee that the resulting figure would fit in the manuscript. 
+   It has also been added to the examples to ensure the reproducibility of the 
+   figures in the article. 
 
 
 Kinetic representations
