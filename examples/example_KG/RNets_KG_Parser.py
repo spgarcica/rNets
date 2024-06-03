@@ -284,7 +284,9 @@ def kin_query_formatter(query_handler):
 
     stage_to_calcs = {entry[0]:entry[-1].split(";") for entry in query_handler.StageTable}
     calc_to_name = {entry[0]:entry[3] for entry in query_handler.CalcTable}
-    calc_to_gibbs = {entry[0]:entry[2] for entry in query_handler.CalcTable}
+    # Transform kcal mol-1 (example) to electronvolt
+    eV_to_kcalmol = 23.060548
+    calc_to_gibbs = {entry[0]:entry[2]/eV_to_kcalmol for entry in query_handler.CalcTable}
 
     return stage_to_calcs,calc_to_name,calc_to_gibbs
 
