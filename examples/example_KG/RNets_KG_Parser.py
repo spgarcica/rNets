@@ -176,18 +176,14 @@ class SimpleKGManager:
         '''Basic processing for OntoRXN (clean ontology or instantiated graphs): prepare imports,
         namespaces and RDFLib world'''
         owl.set_datatype_iri(float, "http://www.w3.org/2001/XMLSchema#float") 
-        occ = self.Ontology.imported_ontologies[0].load()
-        #mop = self.Ontology.imported_ontologies[1].load()
-        self.OntoCompChem = occ
         # Prepare namespaces
         namespace_dict = {
-            "gc":occ.get_namespace("http://purl.org/gc/"),
-            "osp":occ.get_namespace("http://theworldavatar.com/ontology/ontospecies/OntoSpecies.owl#"),
-            "pt":occ.get_namespace("http://www.daml.org/2003/01/periodictable/PeriodicTable.owl"),
-            "term":occ.get_namespace("http://purl.org/dc/terms/"),
-            "qudt":occ.get_namespace("http://data.nasa.gov/qudt/owl/qudt#"),
-            "occ":occ.get_namespace("http://theworldavatar.com/ontology/ontocompchem/ontocompchem.owl#"),
-            #"occ":occ,
+            "gc":self.Ontology.get_namespace("http://purl.org/gc/"),
+            "osp":self.Ontology.get_namespace("http://theworldavatar.com/ontology/ontospecies/OntoSpecies.owl#"),
+            "pt":self.Ontology.get_namespace("http://www.daml.org/2003/01/periodictable/PeriodicTable.owl"),
+            "term":self.Ontology.get_namespace("http://purl.org/dc/terms/"),
+            "qudt":self.Ontology.get_namespace("http://data.nasa.gov/qudt/owl/qudt#"),
+            "occ":self.Ontology.get_namespace("http://theworldavatar.com/ontology/ontocompchem/ontocompchem.owl#"),
             "onto":self.Ontology
         }
         self.Namespace.update(namespace_dict)

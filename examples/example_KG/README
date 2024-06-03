@@ -15,7 +15,7 @@ In absence of these arguments, the graph will still be generated, but with a mor
 
 From these files, we may then run rNets to generate the `.dot` file containing the reaction network:
 
-`python -m rnets -cf CycOct_comps.csv -rf CyCOct_reactions -o CycOct_network.dot` 
+`python -m rnets -cf CycOct_comps.csv -rf CycOct_reactions.csv -o CycOct_network.dot` 
 
 And then, run the *dot* utility to produce the reaction network graph.
 
