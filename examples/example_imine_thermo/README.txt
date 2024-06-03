@@ -16,7 +16,7 @@ to compose both figures into a single figure.
 
 The files in c) are the non-simplified reaction network of Figure 3a, included
 in the SI as Figure S3. The files in d) are the non-simplified reaction network
-of Figure 3b, included in the SI as Figure S4.  
+of Figure 3b, included in the SI as Figure S3 and S4.  
 
 To illustrate the generation of any of these figures I will use as example
 the generation of Figure 3a. 
@@ -35,9 +35,9 @@ dot -Tpng figure_3a.dot -o figure_3a.png
 
 With this we have generated the image of the reaction network. 
 
-For convenience, to reproduce generate all the figures we provide the run.py 
-script which automates the generation of all the figures (Figure 3a, 3b, S4 and 
-S5) facilitating the reproducibility of the figures in the article across 
+For convenience, to generate all the figures we provide the run.py 
+script which automates the generation of all the figures (Figure 3a, 3b, S3 and 
+S4) facilitating the reproducibility of the figures in the article across 
 different OS. 
 
 Note: 
