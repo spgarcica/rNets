@@ -44,8 +44,8 @@ result.mkdir(exist_ok=True)
 model_path = assets / "kinetic_model.data"
 comps = temp / "Pd_comp.csv"
 reactions = temp / "Pd_reac.csv"
-graph = temp / "graph.dot"
-
+graph = temp / "figure_4.dot"
+graph2 = temp / "figure_8.dot"
 
 def sh(*args: str) -> None:
     print(*args)
@@ -54,6 +54,27 @@ def sh(*args: str) -> None:
 
 
 def main() -> None:
+    # Generate Figure 4
+    sh(
+        "python",
+        "./parser_visual.py",
+        "-outfname_comp",
+        str(comps),
+        "-outfname_rx",
+        str(reactions),
+        "-in_comp",
+        str(assets / "Pd_g.mkm"),
+        "-in_rx",
+        str(assets / "rm.mkm"),
+        "-in_theta",
+        'noc',
+    )
+
+    sh("rnets", "-cf", str(comps), "-rf", str(reactions), "-o", str(graph))
+
+    sh("dot", "-Tpng", str(graph), "-o", str(result / graph.with_suffix(".png").name))
+
+    # Generate Figure 8
     sh(
         "python",
         "./parser_visual.py",
@@ -69,9 +90,9 @@ def main() -> None:
         str(assets / "theta.csv"),
     )
 
-    sh("rnets", "-cf", str(comps), "-rf", str(reactions), "-o", str(graph))
+    sh("rnets", "-cf", str(comps), "-rf", str(reactions), "-o", str(graph2))
 
-    sh("dot", "-Tpng", str(graph), "-o", str(result / graph.with_suffix(".png").name))
+    sh("dot", "-Tpng", str(graph2), "-o", str(result / graph2.with_suffix(".png").name))
 
 
 if __name__ == "__main__":
