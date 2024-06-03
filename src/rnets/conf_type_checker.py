@@ -245,6 +245,13 @@ def resolve_type(
 
     if origin is None:
         assert not isinstance(t, UnionType)
+        if is_named_tuple_type(t):
+            info = named_tuple_info(t, type_modifiers=type_modifiers)
+            return NamedTupleMemberModifier(
+                lambda x, **kwargs: isinstance(x, Mapping),
+                lambda x, **kwargs: recreate_named_tuple(info, x),
+            )
+
         return __singular_modifier(t, type_modifiers)
 
     f = None
