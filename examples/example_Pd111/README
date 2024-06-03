@@ -1,46 +1,95 @@
-This folder contains all the files required to generate the Figure 4 and 8: 
+This folder contains all the files required to generate the Figure 4 and 8 of 
+the main text of the rNets publication: 
 
-Runner to generate in a straightforward way Figure 4 without colorbar (ideal for Windows users): 'run.py'
+example_Pd111
+  -README
+  assets
+    -Pd_g.mkm
+    -rm.mkm
+    -theta.csv
+  -parser_visual.py
+  -run.py
 
-To execute this script type:
+Here the `Pd_g.mkm` and `rm.mkm` are files containing information 
+similar to the Compounds and the Reactions files of rNets, but adjusted to the 
+format used by [AMUSE] (https://www.dx.doi.org/10.1039/D3DD00163F) and the 
+`parser_visual.py` script is used to translate to the format of rNets' Compounds
+and Reactions files. 
+
+For the generation of the figures only the external library "numpy" is required.
+For the generation of the files (already provided) in assets the "AMUSE" software
+is required (see https://github.com/LopezGroup-ICIQ/amuse)
+
+To quickly execute the example and produce the final images, run:
 
 python run.py
 
-The inputs and process followed by 'run.py' is the following: 
+The different parts of the workflow built in `run.py` are detailed through the 
+rest of the README:
 
-IMPORTANT NOTE: This process was generated in Linux. Some modifications, particularly for setting the paths to the inputs and outputs, might be required for Windows users.
+.. note::
 
-Input from AMUSE (see https://github.com/LopezGroup-ICIQ/amuse):'Pd_g.mkm','rm.mkm','theta.csv'
+   This workflow was developed in Linux. Some modifications, particularly for 
+   setting the paths to the inputs and outputs, might be required for 
+   Windows users. We highly encourage Windows users to use the `run.py` script.
 
-Parser to generate the rNets required files from the AMUSE inputs: 'parser_visual.py' 
+Manual Generation of Figure 4
+------------------------------
 
-rNets input generated using 'parser_visual.py': 'Pd_comp.csv', 'Pd_reac.csv'
-
-To generate the rNets input for Figure 4 type:
+For the generation of Figure 4 of the original rNets publication the following 
+command should be run: 
 
 python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx ./assets/Pd_reac.csv -in_comp ./assets/Pd_g.mkm -in_rx ./assets/rm.mkm -in_theta noc
 
-This action will generate the 'Pd_comp.csv' and 'Pd_reac.csv' files, containing the reactions and the energetics of the reaction network.
+With this the 'Pd_comp.csv' and 'Pd_reac.csv' files will be generated, containing
+the reactions and the energetics of the reaction network. in a suitable format 
+for rNets.
 
-To generate the rNets input for Figure 8 type:
+Next we generate the .dot file: 
 
-python parser_visual.py -outfname_comp Pd_comp.csv -outfname_rx Pd_reac.csv -in_comp ./assets/Pd_g.mkm -in_rx ./assets/rm.mkm -in_theta ./assets/theta.csv
+python -m rnets -cf Pd_comp.csv -rf Pd_reac.csv -o figure_4.dot
 
-To generate the Figures, once rNets is installed, type:
+Finally we proceed to render the figure as a png: 
 
-python -m rnets -cf Pd_comp.csv -rf Pd_reac.csv -o reaction_network.dot
-dot -Tpng reaction_network.dot -o reaction_network.png
+dot -Tpng figure_4.dot -o figure_4.png
 
-NOTE: To generate the theta.csv file, use AMUSE, available on https://github.com/LopezGroup-ICIQ/amuse. In the tutorial folder (as for an example), open a jupyter-notebook or make a script and type:
+Manual Generation of Figure 8
+------------------------------
 
-import numpy as np
+The equivalent steps for generating the Figure 8 of the original publication are: 
 
-import os, sys
-from mkm import MKM
+python parser_visual.py -outfname_comp assets/Pd_comp.csv -outfname_rx Pd_reac.csv -in_comp ./assets/Pd_g.mkm -in_rx ./assets/rm.mkm -in_theta ./assets/theta.csv
 
-#Generate the model
-model = MKM(“PdModel”, <PATH_TO_rm.mkm>, <PATH_TO_Pd_g.mkm>)
+.. note::
 
-#Perform the kinetic run
-#T=573 K, P=5e6 Pa, ratio CO2:H2 = 1:4
-x = model.kinetic_run(573, 5e6, np.asarray([0.8, 0.2, 0,0,0]))
+   please note that the argument -in_theta is no longer "noc" but a file instead.
+
+Next we generate the .dot file: 
+
+python -m rnets -cf Pd_comp.csv -rf Pd_reac.csv -o figure_8.dot
+
+Finally we proceed to render the figure as a png: 
+
+dot -Tpng figure_8.dot -o figure_8.png
+
+Regarding the generation of the input files
+-------------------------------------------
+
+Although the theta.csv file, is already provided, to generate it manually the
+AMUSE software should be used, available on https://github.com/LopezGroup-ICIQ/amuse. 
+In the tutorial folder of AMUSE (as for an example), open a jupyter-notebook or 
+make a script and type the following python code
+
+.. code:: python 
+
+   import numpy as np
+
+   import os, sys
+   from mkm import MKM
+
+   #Generate the model
+   model = MKM(“PdModel”, <PATH_TO_rm.mkm>, <PATH_TO_Pd_g.mkm>)
+
+   #Perform the kinetic run
+   #T=573 K, P=5e6 Pa, ratio CO2:H2 = 1:4
+   x = model.kinetic_run(573, 5e6, np.asarray([0.8, 0.2, 0,0,0]))
