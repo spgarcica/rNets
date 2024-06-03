@@ -7,9 +7,9 @@ direction of the arrows is decided based on the calculated net rate.
 from collections.abc import Sequence
 from itertools import chain, repeat, starmap
 from functools import partial, reduce
-from typing import Callable, Iterator
+from typing import Callable, Iterator, Iterable
 
-from ..colors import Color
+from ..colors.utils import Color, ColorSpace, interp_cs
 from ..chemistry import (
     calc_net_rate
     , normalizer
@@ -17,7 +17,8 @@ from ..chemistry import (
     , ChemCfg
     , network_conc_normalizer
 )
-from ..dot import Graph
+from ..addons.colorbar import build_colorbar, build_anchor, ColorbarCfg
+from ..dot import Edge, Graph, Node
 from ..struct import Reaction, Network, Visibility
 
 from .utils import (
@@ -29,6 +30,43 @@ from .utils import (
     , color_interp
     , GraphCfg
 )
+
+def get_colorbar(
+    nw: Network
+    , graph_cfg: GraphCfg
+    , colorbar_cfg: ColorbarCfg
+    , colorspace: ColorSpace="lab"
+) -> tuple[Node, Edge | tuple[()]]:
+    """Build a colorbar for the thermodynamic plot.
+
+    Args:
+        graph_cfg (:obj:`GraphCfg`, optional): Graphviz configuration. Defaults
+            to :obj:`ChemCfg`.
+        colorbar_cfg (:obj:`ColorbarCfg` or None, optional): Colorbar
+            parameters of the system. Defaults to None.
+        colorspace (ColorSpace, optional): Colorspace of the colorbar. Defaults
+            to "lab".
+
+    Returns:
+        tuple of two values, the first one being a obj:`Node` representing the
+        color bar and the second value being an invisible edge that anchors the
+        colorbar to another node.
+    """
+    def f_none[T](xs: Iterable[T | None]) -> Iterable[T]:
+        return (x for x in xs if x is not None)
+    c_range = minmax(starmap(
+            getattr
+            , zip(f_none(nw.compounds), repeat("conc"))))
+    anchor: Edge | tuple[()] = ()
+    if colorbar_cfg.anchor is not None:
+        anchor = build_anchor(colorbar_cfg.anchor, colorbar_cfg.node_name)
+    return (
+        build_colorbar(
+            interp_cs(graph_cfg.colorscheme, colorspace)
+            , c_range
+            , colorbar_cfg
+            , "Concentration")
+        , anchor)
 
 
 def filter_unique_react(
@@ -56,6 +94,7 @@ def build_dotgraph(
     nw: Network
     , graph_cfg: GraphCfg = GraphCfg()
     , chem_cfg: ChemCfg = ChemCfg()
+    , colorbar_cfg: ColorbarCfg | None = None
 ) -> Graph:
     """Build a kinetic dotgraph from a reaction network.
 
@@ -65,11 +104,20 @@ def build_dotgraph(
             to :obj:`ChemCfg`
         chem_cfg (:obj:`ChemCfg`, optional): Chemical parameters fo the
             system. Defaults to :obj:`ChemCfg`
+        colorbar_cfg (:obj:`ColorbarCfg` or None, optional): Colorbar
+            parameters of the system. Defaults to None.
 
     Returns:
         Dot :obj:`Graph` representing the kinetic information with the colors
         and shapes of the network.
     """
+    if colorbar_cfg is None:
+        cb_node, cb_edge = ((),())
+    else:
+        cb_node, cb_edge = get_colorbar(
+            nw
+            , graph_cfg
+            , colorbar_cfg)
     c_norm: Callable[[float], Color] = color_interp(
         norm_fn=network_conc_normalizer(nw)
         , cs=graph_cfg.colorscheme
@@ -109,10 +157,11 @@ def build_dotgraph(
         e_dir = map(lambda x: x < 0, rates)
 
     return Graph(
-        kind=graph_cfg.kind, nodes=tuple(map(
+        kind=graph_cfg.kind
+        , nodes=tuple(map(
             lambda c: build_dotnode(c, *n_color_fn(c.conc, c.visible))
             , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
-        ))
+        )) + ((cb_node,) if cb_node else cb_node)
         , edges=tuple(chain.from_iterable(starmap(
             build_dotedges
             , filter(
@@ -120,6 +169,6 @@ def build_dotgraph(
                 lambda xs: EdgeArgs(*xs).react.visible != Visibility.FALSE
                 , zip(u_react, e_widths, e_colors, e_dir)
             )
-        )))
+        ))) + ((cb_edge,) if cb_edge else cb_edge)
         , options=build_glob_opt(graph_cfg)
     )

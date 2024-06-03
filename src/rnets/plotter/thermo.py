@@ -7,15 +7,17 @@ of the edges is based on their computed kinetic constants.
 from itertools import chain, repeat, starmap
 from typing import Callable, Iterator
 
-from ..colors import Color
+from ..colors.utils import Color, ColorSpace, interp_cs
 from ..chemistry import (
     network_energy_normalizer
+    , minmax
     , calc_reactions_k_norms
     , ChemCfg
 )
-from ..dot import Graph
+from ..dot import Edge, Node, Graph
 from ..struct import Network, Visibility
 
+from ..addons.colorbar import build_colorbar, build_anchor, ColorbarCfg
 from .utils import (
     EdgeArgs
     , build_glob_opt
@@ -27,23 +29,76 @@ from .utils import (
 )
 
 
+def get_colorbar(
+    nw: Network
+    , graph_cfg: GraphCfg
+    , chem_cfg: ChemCfg
+    , colorbar_cfg: ColorbarCfg
+    , colorspace: ColorSpace="lab"
+) -> tuple[Node, Edge | tuple[()]]:
+    """Build a colorbar for the thermodynamic plot.
+
+    Args:
+        graph_cfg (:obj:`GraphCfg`, optional): Graphviz configuration. Defaults
+            to :obj:`ChemCfg`.
+        chem_cfg (:obj:`ChemCfg`, optional): Chemical parameters fo the
+            system. Defaults to :obj:`ChemCfg`.
+        colorbar_cfg (:obj:`ColorbarCfg` or None, optional): Colorbar
+            parameters of the system. Defaults to None.
+        colorspace (ColorSpace, optional): Colorspace of the colorbar. Defaults
+            to "lab".
+
+    Returns:
+        tuple of two values, the first one being a obj:`Node` representing the
+        color bar and the second value being an invisible edge that anchors the
+        colorbar to another node.
+    """
+    c_range = minmax(chain.from_iterable(map(
+        lambda xs: starmap(
+            getattr
+            , zip(xs, repeat("energy")))
+        , (nw.compounds, nw.reactions))))
+    anchor: Edge | tuple[()] = ()
+    if colorbar_cfg.anchor is not None:
+        anchor = build_anchor(colorbar_cfg.anchor, colorbar_cfg.node_name)
+    return (
+        build_colorbar(
+            interp_cs(graph_cfg.colorscheme, colorspace)
+            , c_range
+            , colorbar_cfg
+            , "Energy" if chem_cfg.e_units is None else f"Energy ({chem_cfg.e_units})")
+        , anchor)
+
+
 def build_dotgraph(
     nw: Network
     , graph_cfg: GraphCfg = GraphCfg()
     , chem_cfg: ChemCfg = ChemCfg()
+    , colorbar_cfg: ColorbarCfg | None = None
 ) -> Graph:
     """Build a dotgraph from a reaction network.
     
     Args:
+
         nw (:obj:`Network`): Network object to be converted into dot graph.
         graph_cfg (:obj:`GraphCfg`, optional): Graphviz configuration. Defaults
             to :obj:`ChemCfg`
         chem_cfg (:obj:`ChemCfg`, optional): Chemical parameters fo the
             system. Defaults to :obj:`ChemCfg`
+        colorbar_cfg (:obj:`ColorbarCfg` or None, optional): Colorbar
+            parameters of the system. Defaults to None.
 
     Returns:
         Dot :obj:`Graph` with the colors and shapes of the netwkork.
     """
+    if colorbar_cfg is None:
+        cb_node, cb_edge = ((),())
+    else:
+        cb_node, cb_edge = get_colorbar(
+            nw
+            , graph_cfg
+            , chem_cfg
+            , colorbar_cfg)
     c_norm: Callable[[float], Color] = color_interp(
         norm_fn=network_energy_normalizer(nw)
         , cs=graph_cfg.colorscheme
@@ -78,7 +133,7 @@ def build_dotgraph(
         , nodes=tuple(map(
             lambda c: build_dotnode(c, *n_color_fn(c.energy, c.visible))
             , filter(lambda c: c.visible != Visibility.FALSE, nw.compounds)
-        ))
+        )) + ((cb_node,) if cb_node else cb_node)
         , edges=tuple(chain.from_iterable(starmap(
             build_dotedges
             , filter(
@@ -86,6 +141,6 @@ def build_dotgraph(
                 lambda xs: EdgeArgs(*xs).react.visible != Visibility.FALSE
                 , zip(nw.reactions, e_widths, e_colors)
             )
-        )))
+        ))) + ((cb_edge,) if cb_edge else cb_edge)
         , options=build_glob_opt(graph_cfg)
     )
