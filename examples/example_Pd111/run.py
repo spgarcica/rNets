@@ -36,6 +36,10 @@ def check_deps() -> bool:
 if not check_deps():
     exit(1)
 
+from rnets import parser as pr
+from rnets import plotter as pt
+from rnets.addons.colorbar import ColorbarCfg
+
 assets = Path("assets")
 temp = Path("temp")
 result = Path("res")
@@ -51,6 +55,18 @@ def sh(*args: str) -> None:
     print(*args)
     subprocess.run(args)
     return
+
+def generate_thermo(cf: Path, rf: Path) -> str:
+    nw = pr.parse_network_from_file(cf, rf)
+    colorbar_cfg = ColorbarCfg(anchor='CO2(g)')
+    dot = str(pt.thermo.build_dotgraph(nw,colorbar_cfg=colorbar_cfg))
+    return dot
+
+def generate_kinetic(cf: Path, rf: Path) -> str:
+    nw = pr.parse_network_from_file(cf, rf)
+    colorbar_cfg = ColorbarCfg(anchor='i15')
+    dot = str(pt.kinetic.build_dotgraph(nw,colorbar_cfg=colorbar_cfg))
+    return dot
 
 
 def main() -> None:
@@ -70,7 +86,7 @@ def main() -> None:
         'noc',
     )
 
-    sh("rnets", "-cf", str(comps), "-rf", str(reactions), "-o", str(graph))
+    graph.write_text(generate_thermo(comps, reactions), encoding="utf-8")
 
     sh("dot", "-Tpng", str(graph), "-o", str(result / graph.with_suffix(".png").name))
 
@@ -90,7 +106,7 @@ def main() -> None:
         str(assets / "theta.csv"),
     )
 
-    sh("rnets", "-cf", str(comps), "-rf", str(reactions), "-o", str(graph2))
+    graph2.write_text(generate_kinetic(comps, reactions), encoding="utf-8")
 
     sh("dot", "-Tpng", str(graph2), "-o", str(result / graph2.with_suffix(".png").name))
 
