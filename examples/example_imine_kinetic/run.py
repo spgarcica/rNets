@@ -9,28 +9,27 @@ import subprocess
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
+def check_module(module: str) -> bool:
+    m = importlib.util.find_spec(module)
+    if m is None:
+        eprint(f"Can't find python module {module}")
+        return False
+    return True
+
+def check_exec(executable: str) -> bool:
+    e = shutil.which(executable)
+    if e is None:
+        eprint(f"Can't find executable {executable} in PATH")
+        return False
+    return True
 
 def check_deps() -> bool:
-    def check_module(module: str) -> bool:
-        m = importlib.util.find_spec(module)
-        if m is None:
-            eprint(f"Can't find python module {module}")
-            return False
-        return True
-
-    def check_exec(executable: str) -> bool:
-        e = shutil.which(executable)
-        if e is None:
-            eprint(f"Can't find executable {executable} in PATH")
-            return False
-        return True
-
     return (
         check_module("rnets")
         and check_module("numpy")
         and check_module("scipy")
         and check_exec("dot")
-        and check_exec("magick")
+        and (check_exec("magick") or check_exec("convert")) # magick, version >= 7; convert version <= 6
     )
 
 
@@ -84,16 +83,27 @@ def main() -> None:
 
     pngs = [aux(snapshot) for snapshot in snapshots]
 
-    sh(
-        "magick",
-        "convert",
-        "-delay",
-        "0",
-        "-loop",
-        "1",
-        *pngs,
-        str(result / "imine_graph_animation.gif"),
-    )
+    if check_exec("magick"):
+        sh(
+            "magick",
+            "convert",
+            "-delay",
+            "0",
+            "-loop",
+            "1",
+            *pngs,
+            str(result / "imine_graph_animation.gif"),
+        )
+    else:
+        sh(
+            "convert",
+            "-delay",
+            "0",
+            "-loop",
+            "1",
+            *pngs,
+            str(result / "imine_graph_animation.gif"),
+        )
 
 
 if __name__ == "__main__":
