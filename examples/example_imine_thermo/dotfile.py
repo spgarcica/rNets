@@ -3,11 +3,12 @@ from pathlib import Path
 
 from rnets import parser as pr
 from rnets import plotter as pt
-
+from rnets.addons.colorbar import ColorbarCfg
 
 def generate(cf: Path, rf: Path) -> str:
     nw = pr.parse_network_from_file(cf, rf)
-    dot = str(pt.thermo.build_dotgraph(nw))
+    colorbar_cfg = ColorbarCfg()
+    dot = str(pt.thermo.build_dotgraph(nw,colorbar_cfg=colorbar_cfg))
 
     if cf.stem.endswith("simple") or rf.stem.endswith("simple"):
         return "\n".join(
