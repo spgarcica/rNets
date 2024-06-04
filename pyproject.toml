@@ -14,7 +14,9 @@ requires-python = ">=3.12"
 authors = [
     {name = "Sergio Pablo-Garcia", email = "spgarcica@gmail.com"},
     {name = "Raul Perez Soto", email = "rperezsoto.research@gmail.com"},
-    {name = "wvlab"}
+    {name = "wvlab"},
+    {name = "Albert Sabadell-Rendón"},
+    {name = "Diego Garay-Ruiz"}
 ]
 maintainers = [
     {name = "Sergio Pablo-Garcia", email = "spgarcica@gmail.com"}
