@@ -5,6 +5,9 @@
 .. |example_04a| graphviz:: ../resources/examples/example_04a.dot
 .. |example_04b| graphviz:: ../resources/examples/example_04b.dot
 .. |example_04c| graphviz:: ../resources/examples/example_04c.dot
+.. |example_05a| graphviz:: ../resources/examples/example_05a.dot
+.. |example_05b| graphviz:: ../resources/examples/example_05b.dot
+.. |example_05c| graphviz:: ../resources/examples/example_05c.dot
 
 =======================
 Python API Examples
@@ -541,6 +544,153 @@ When we put all the steps together we end up with the following code:
    
    # Generating a PNG from the created .dot file
    subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
+Adding a colorbar legend
+------------------------
+
+In this example we will add a colorbar to our graph using the ColorbarCfg class
+( :code:`rnets.addons.colorbar.ColorbarCfg`)
+To illustrate their usage we will borrow the `Drawing a thermodynamic graph`_ .
+
+.. note:: 
+
+   Currently only the addition of a colorbar is only accessible through the 
+   python API, although it will be included as an option in the commandline 
+   parser in future versions.
+
+First we will add to the imports the :code:`ColorbarCfg` class:  
+
+.. code:: python 
+   
+   import subprocess
+
+   from rnets.struct import Network, Compound, Reaction
+   from rnets.plotter.thermo import build_dotgraph
+   from rnets.addons.colorbar import ColorbarCfg
+
+Next, we are going to define our reaction network 
+
+.. code:: python 
+
+   from rnets.struct import Network, Compound, Reaction
+   from rnets.plotter.thermo import build_dotgraph
+
+   A = Compound('A',0.0,0)
+   B = Compound('B',1.0,1)
+   C = Compound('C',0.0,2)
+   D = Compound('D',-2.0,3)
+
+   r1 = Reaction('r1',((A,),(B,)),4.0,0)
+   r2 = Reaction('r2',((B,C),(D,)),7.0,1)
+
+   nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
+
+The next step is to instantiate our colorbar configuration object. For now 
+we will use the default configuration.
+
+.. code:: python 
+
+   colorbar_cfg = ColorbarCfg()
+
+Finally, we need to provide  during the  generation of our graph. Followed 
+by the already usual steps of writing it to a file and running dot to generate 
+the .png file: 
+
+.. code:: python 
+
+   graph = build_dotgraph(nw,colorbar_cfg=colorbar_cfg)
+
+   with open("example.dot", 'w', encoding="utf8") as of:
+       of.write(str(graph))
+   
+   subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
+.. centered:: |example_05a|
+
+The position of the colorbar can be tricky. If we do not want to generate the 
+graph as an SVG to freely edit it, we can try to anchor it to a node. To 
+illustrate the example we will anchor it to the 'D' node. All we need to do 
+is to specify it on the creation of the colorbar configuration object: 
+
+.. code:: python 
+
+   colorbar_cfg = ColorbarCfg(anchor='D')
+
+   graph = build_dotgraph(nw,colorbar_cfg=colorbar_cfg)
+
+   with open("example.dot", 'w', encoding="utf8") as of:
+       of.write(str(graph))
+   
+   subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
+.. centered:: |example_05b|
+
+The colorbar is dependent on the plotter which means that if we want to change
+the colorscheme we can do it as indicated in the previous example without any 
+extra steps. 
+
+.. code:: python
+
+   from rnets.colors import PLASMA
+   from rnets.plotter.utils import GraphCfg
+
+Now we instantiate the :code:`GraphCfg` object
+
+.. code:: python 
+
+   graph_cfg = GraphCfg(colorscheme=PLASMA)
+
+And the remaining steps are the same ones as before: 
+
+.. code:: python 
+
+   graph = build_dotgraph(nw,graph_cfg=graph_cfg, colorbar_cfg=colorbar_cfg)
+
+   with open("example.dot", 'w', encoding="utf8") as of:
+       of.write(str(graph))
+   
+   subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
+.. centered:: |example_05c|
+
+When we put all the steps together we end up with the following code: 
+
+.. code:: python 
+
+   import subprocess
+
+   from rnets.struct import Network, Compound, Reaction
+   from rnets.plotter.thermo import build_dotgraph
+   from rnets.plotter.utils import GraphCfg
+   from rnets.colors.colorschemes import PLASMA
+   from rnets.addons.colorbar import ColorbarCfg
+
+   # Creation of the reaction network
+   A = Compound('A',0.0,0) 
+   B = Compound('B',1.0,1) 
+   C = Compound('C',0.0,2) 
+   D = Compound('D',-2.0,3)
+
+   r1 = Reaction('r1',((A,),(B,)),4.0,0) 
+   r2 = Reaction('r2',((B,C),(D,)),7.0,1) 
+   
+   nw = Network(compounds=(A,B,C,D),reactions=(r1,r2))
+
+   # Formatting
+   graph_cfg = GraphCfg(colorscheme=PLASMA)
+
+   # Colorbar
+   colorbar_cfg = ColorbarCfg(anchor='D')
+
+   # Creation of the graph and saving it as a .dot file. 
+   graph = build_dotgraph(nw,graph_cfg=graph_cfg,colorbar_cfg=colorbar_cfg)
+
+   with open("example.dot", 'w', encoding="utf8") as of:
+       of.write(str(graph))
+   
+   # Generating a PNG from the created .dot file
+   subprocess.run('dot -Tpng example.dot -o example.png',shell=True)
+
 
 Integration with other software: Pykinetic (thermo)
 ---------------------------------------------------
