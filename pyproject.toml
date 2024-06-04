@@ -22,7 +22,7 @@ maintainers = [
     {name = "Sergio Pablo-Garcia", email = "spgarcica@gmail.com"}
 ]
 description = "Rnets software for the visualization of reaction networks"
-readme = "README.md"
+readme = "README.rst"
 license  = {file = "LICENSE"}
 keywords = ["dot", "graphviz", "reaction", "networks", "chemistry", "reactivity"]
 classifiers = [
@@ -30,8 +30,8 @@ classifiers = [
 ]
 
 [project.urls]
-homepage = "https://codeberg.org/spgarcica/rNets"
-repository = "https://codeberg.org/spgarcica/rNets"
+homepage = "https://spgarcica.github.io/rNets/"
+repository = "https://github.com/spgarcica/rNets"
 
 [project.scripts]
 rnets = "rnets.__main__:run"
