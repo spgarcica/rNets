@@ -2,6 +2,9 @@
 rNets
 =========
 
+.. image:: https://zenodo.org/badge/777953752.svg
+  :target: https://zenodo.org/doi/10.5281/zenodo.11463948
+
 ------------------------------------------------------------------
 A python tool for the generation of graphs of reaction network 
 ------------------------------------------------------------------
