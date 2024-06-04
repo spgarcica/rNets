@@ -7,7 +7,7 @@ where = ["src"]
 include = ["rnets","rnets.plotter","rnets.colors","rnets.addons"]
 
 [project]
-name = "rnets"
+name = "rNets"
 version = "24.06"
 dependencies = []
 requires-python = ">=3.12"
