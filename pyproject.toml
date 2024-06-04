@@ -8,7 +8,7 @@ include = ["rnets","rnets.plotter","rnets.colors","rnets.addons"]
 
 [project]
 name = "rnets"
-version = "24.01"
+version = "24.06"
 dependencies = []
 requires-python = ">=3.12"
 authors = [
