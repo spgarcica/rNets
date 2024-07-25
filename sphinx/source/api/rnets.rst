@@ -11,6 +11,7 @@ rnets
    rnets.parser
    rnets.plotter
    rnets.struct
+   rnets.addons
 
 
 

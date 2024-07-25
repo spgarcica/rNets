@@ -39,6 +39,10 @@ def check_deps() -> bool:
 if not check_deps():
     exit(1)
 
+from rnets import parser as pr
+from rnets import plotter as pt
+from rnets.addons.colorbar import ColorbarCfg
+
 import RNets_KG_Parser as kg
 
 temp = Path("temp")
@@ -57,6 +61,11 @@ def sh(*args: str) -> None:
     subprocess.run(args)
     return
 
+def generate(cf: Path, rf: Path) -> str:
+    nw = pr.parse_network_from_file(cf, rf)
+    colorbar_cfg = ColorbarCfg(anchor='BAK')
+    dot = str(pt.thermo.build_dotgraph(nw,colorbar_cfg=colorbar_cfg))
+    return dot
 
 def main():
     ref = "EpOr+CO2+TMABr"
@@ -68,20 +77,16 @@ def main():
     comps.write_text(compounds, encoding="utf-8")
     reactions.write_text(edges, encoding="utf-8")
 
-    sh("rnets", "-cf", str(comps), "-rf", str(reactions), "-o", str(graph))
-    sh(
-        "rnets",
-        "-go",
-        "rankdir=LR",
-        "-cf",
-        str(comps),
-        "-rf",
-        str(reactions),
-        "-o",
-        str(hgraph),
-    )
+    graph.write_text(generate(comps, reactions), encoding="utf-8")
     sh("dot", "-Tpng", str(graph), "-o", str(result / graph.with_suffix(".png").name))
-    sh("dot", "-Tpng", str(hgraph), "-o", str(result / hgraph.with_suffix(".png").name))
+    sh(
+        "dot", 
+        "-Tpng", str(graph),
+        "-Grankdir=LR",
+        "-Nfontsize=16",
+        "-Granksep=0.1", 
+        "-Gnodesep=0.5",
+        "-o", str(result / hgraph.with_suffix(".png").name))
 
 
 if __name__ == "__main__":

@@ -1,25 +1,39 @@
-This directory contains all the files required to generate Figure 5 in the main text of the rNets publication:
+This directory contains all the files required to generate Figure 5 in the main 
+text of the rNets publication:
 - OntoRXN-based knowledge graph: `CycOct.owl`
 - Python script to parse the reaction network and produce rNets input: `RNets_KG_Parser.py`
 - Python wrapper to run the complete pipeline in one step: `run.py`
 
-The manipulation (reading and querying) of the KG requires the `numpy`, `rdflib` and `owlready2` libraries to be installed. In this example, numpy 1.26.4, owlready2 0.46 and rdflib 7.0.0 versions were used.
+The manipulation (reading and querying) of the KG requires the `numpy`, `rdflib`
+and `owlready2` libraries to be installed. In this example, numpy 1.26.4, 
+owlready2 0.46 and rdflib 7.0.0 versions were used.
 
 To quickly execute the example and produce the final image, run:
 `python run.py`
 
-The different parts of the workflow built in `run.py` are detailed through the rest of the README:
+The different parts of the workflow built in `run.py` are detailed through the 
+rest of the README:
 
-To produce the compounds and reaction files required by rNets from the knowledge graph, run the following line:
+To produce the compounds and reaction files required by rNets from the knowledge
+graph, run the following line:
+
 python RNets_KG_Parser.py CycOct_comps.csv CycOct_reactions.csv CycOct.owl --reference EpOr+CO2+TMABr --hidden-species CO2,TMA,TMABr
 
-The two first arguments are the *compounds* (`CycOct_comps.csv`) and *reactions* (`CycOct_reactions.csv`) that will be read by rNets, followed by the name of the target `.owl` file (`CycOct.owl`). The optional arguments control:
-- `--reference`. Species used to determine the energy reference, separated by "+" symbol. In this case, we select the initial reactants and catalyst for the proposed process: EpOr+CO2+TMABr.
-- `--hidden-species`. Comma-separated list of species which will not be assigned a node in the produced DOT file, but will be considered to balance energies. 
+The two first arguments are the *compounds* (`CycOct_comps.csv`) and *reactions*
+(`CycOct_reactions.csv`) that will be read by rNets, followed by the name of the
+target `.owl` file (`CycOct.owl`). The optional arguments control:
+- `--reference`. Species used to determine the energy reference, separated by 
+"+" symbol. In this case, we select the initial reactants and catalyst for the 
+proposed process: EpOr+CO2+TMABr.
+- `--hidden-species`. Comma-separated list of species which will not be assigned
+a node in the produced DOT file, but will be considered to balance energies. 
 
-In absence of these arguments, the graph will still be generated, but with a more complex layout (as in Figure S2 in the SI), and the energies in the compounds and reaction files will be absolute. 
+In absence of these arguments, the graph will still be generated, but with a 
+more complex layout (as in Figure S2 in the SI), and the energies in the 
+compounds and reaction files will be absolute. 
 
-From these files, we may then run rNets to generate the `.dot` file containing the reaction network:
+From these files, we may then run rNets to generate the `.dot` file containing 
+the reaction network:
 
 python -m rnets -cf CycOct_comps.csv -rf CycOct_reactions.csv -o CycOct_network.dot 
 
@@ -27,10 +41,13 @@ And then, run the *dot* utility to produce the reaction network graph.
 
 `dot -Tpng CycOct_network.dot -o CycOct_network.png`
 
-To get the horizontal layout in Figure 5, the corresponding graph argument should be passed to *dot*, setting *rankdir* to LR (left-right) instead of the default TB (top-bottom):
+To get the horizontal layout in Figure 5, the corresponding graph argument 
+should be passed to *dot*, setting *rankdir* to LR (left-right) instead of the 
+default TB (top-bottom):
 
-`dot -Grankdir=LR -Tpng CycOct_network.dot -o CycOct_network_horizontal.png` 
+`dot -Grankdir=LR -Nfontsize=16 -Granksep=0.1 Gnodesep=0.5 -Tpng CycOct_network.dot -o CycOct_network_horizontal.png` 
 
-For details on CRN-KG generation, check the corresponding article [Garay-Ruiz and Bo, J. Cheminf. 2022, 14, 29](doi.org/10.1186/s13321-022-00610-x).
+For details on CRN-KG generation, check the corresponding article
+[Garay-Ruiz and Bo, J. Cheminf. 2022, 14, 29](doi.org/10.1186/s13321-022-00610-x).
 
 

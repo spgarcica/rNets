@@ -1,9 +1,12 @@
-This folder contains all the files required to generate the Figure 7: 
+This folder contains all the files required to generate the Figure 7 and 
+figures S5 and S6: 
 
-a) 'comps_draco_42_simple.csv','reactions_draco_42_simple.csv','comps_draco_42.csv','reactions_draco_42.csv'
-b) 'kinetic_model.py', 'kinetic_model.index'
-c) 'generate_kinetic_snapshots.py' 
-d) 'generate_kinetic_gif.py' 
+a) 'assets/comps_draco_42_simple.csv','assets/reactions_draco_42_simple.csv',
+   'assets/comps_draco_42.csv','assets/reactions_draco_42.csv'
+b) 'kinetic_model.py', 'assets/kinetic_model.index'
+c) 'kinetic_snapshots.py' 
+d) 'kinetic_gif.py' 
+e) 'run.py'
 
 Files in a) are used to create the reaction network and provide the energetics
 needed to compute the kinetic constants and thus the net rates of the 
@@ -15,7 +18,15 @@ simulation, and will generate a '.data' file containing the concentrations
 at each time of all species. The file in c) is a script to generate the '.dot'
 files at different times, which are used in the generation of the Figure 
 7a and 7b of the original rNets publication. The file in d) is a script to 
-generate all the .dot files required to generate the .gif file included as SI. 
+generate all the .dot files required to generate the .gif file which is the 
+focus of the following section. The file in e) integrates all the workflow within
+a single script.
+
+.. note::
+
+   The 'kinetic_model.py' obtained from pykinetic (v0.1.0) has been slighly 
+   modified to facilitate the re-generation of all figures under the 
+   'run.py' script
 
 The files with the termination "simple.csv" include the ones required to 
 generate the figures as presented in the manuscript (Figure 7a and 7b). The 
@@ -23,6 +34,12 @@ files without the termination "simple.csv" correspond to the full reaction
 network (Used to generate the figure S5 and S6 in the SI). The '42' 
 makes reference to the systematic bias included into the DFT computed energies,
 specifically 4.2 kcal/mol which in the main document shows as 17.56 kJ/mol.
+
+.. note::
+   For convenience, to generate all the figures we provide the run.py 
+   script which automates the generation of all the figures (Figure 7a, 7b, S4 and 
+   S5) facilitating the reproducibility of the figures in the article across 
+   different OS. 
 
 Data preparation
 ----------------
@@ -75,6 +92,10 @@ command line is imagemagick which can provide a decent-quality gif using the fol
 command: 
 
 magick convert -delay 0 -loop 1 gif_folder/*.png imine_graph_animation.gif
+
+.. note::
+
+   for imagemagick versions up to 6 please substitute "magick convert" by "convert"
 
 Upon successfull completion of the '.png' to '.gif' the imine_graph_animation.gif will 
 contain the desired gif file. 

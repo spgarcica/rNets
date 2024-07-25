@@ -7,20 +7,22 @@ where = ["src"]
 include = ["rnets","rnets.plotter","rnets.colors","rnets.addons"]
 
 [project]
-name = "rnets"
-version = "24.01"
+name = "rNets"
+version = "24.06"
 dependencies = []
 requires-python = ">=3.12"
 authors = [
     {name = "Sergio Pablo-Garcia", email = "spgarcica@gmail.com"},
     {name = "Raul Perez Soto", email = "rperezsoto.research@gmail.com"},
-    {name = "wvlab"}
+    {name = "wvlab"},
+    {name = "Albert Sabadell-Rendón"},
+    {name = "Diego Garay-Ruiz"}
 ]
 maintainers = [
     {name = "Sergio Pablo-Garcia", email = "spgarcica@gmail.com"}
 ]
 description = "Rnets software for the visualization of reaction networks"
-readme = "README.md"
+readme = "README.rst"
 license  = {file = "LICENSE"}
 keywords = ["dot", "graphviz", "reaction", "networks", "chemistry", "reactivity"]
 classifiers = [
@@ -28,8 +30,8 @@ classifiers = [
 ]
 
 [project.urls]
-homepage = "https://codeberg.org/spgarcica/rNets"
-repository = "https://codeberg.org/spgarcica/rNets"
+homepage = "https://spgarcica.github.io/rNets/"
+repository = "https://github.com/spgarcica/rNets"
 
 [project.scripts]
 rnets = "rnets.__main__:run"

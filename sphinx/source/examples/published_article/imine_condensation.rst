@@ -19,21 +19,19 @@ files:
 
    example_imine_thermo
      -README.txt
-     -comps_paper.csv
-     -reactions_paper.csv
-     -comps_paper_simple.csv
-     -reactions_paper_simple.csv
-     -comps_32.csv
-     -reactions_32.csv
-     -comps_32_simple.csv
-     -reactions_32_simple.csv
-     -generate_dotfile.py
-     -figure_3b.dot
-     -figure_3a.dot
-     -figure_S3.dot
-     -figure_S4.dot
+     assets
+       -comps_paper.csv
+       -reactions_paper.csv
+       -comps_paper_simple.csv
+       -reactions_paper_simple.csv
+       -comps_32.csv
+       -reactions_32.csv
+       -comps_32_simple.csv
+       -reactions_32_simple.csv
+     -dotfile.py
+     -run.py
 
-Here we have 4 different compound-reaction file pairs: 
+In the assets folder we have 4 different compound-reaction file pairs: 
 
    a) :code:`comps_paper_simple.csv` and :code:`reactions_paper_simple.csv`
    b) :code:`comps_32_simple.csv` and :code:`reactions_32_simple.csv` 
@@ -52,29 +50,52 @@ but with a corrected set of energies. The files in :code:`c` are the uncorrected
 full reaction network and the files in :code:`d` are used for the corrected full 
 reaction network.
 
-The procedure for the generation of all images is the same one, only needing to 
-change the compounds and reactions files. We will use the files in :code:`a` (
-uncorrected and simplified reaction network ) to illustrate the procedure. 
-
 Preliminary steps
 .................
 
 For the present example the only required software is rNets and graphviz. Please
 follow the installation instructions of rNets.
 
-Generation of the network graphs
-................................
+Quickstart
+..........
 
-First we will generate the .dot file containing the reaction network from 
-the compounds and reactions files. To do so we execute the following line:
+For convenience we created the :code:`run.py` script which facilitates the 
+generation of all the figures in one go. To execute the code the user will have 
+to type in the following command: 
 
 .. code:: shell-session
 
-   $ python generate_dotfile.py comps_paper_simple.csv reactions_paper_simple.csv figure_3a.dot
+   python run.py
 
-his will generate a file named figure_3a.dot in the current directory. Next we 
-will render the figure with graphviz. We will generate a .png file, but other 
-formats such as svg are also possible. To do so, we will execute the following
+Upon execution two new folders will appear: :code:`temp` and :code:`res`. The 
+:code:`temp` folder contains the .dot files, which serve as input to graphviz 
+for the actual image generation. The :code:`res` folder will contain the 
+automatically rendered .png files.
+
+Manual Generation of the network graphs
+.......................................
+
+
+The procedure for the generation of all images is the same one, only needing to 
+change the compounds and reactions files. We will use the files in :code:`a)` (
+uncorrected and simplified reaction network ) to illustrate the procedure. 
+
+.. warning:: 
+
+   The following step by step examples assume a UNIX-like OS. In the case of 
+   Windows OS please adapt accordingly the paths to the files or use the 
+   :code:`run.py` script. 
+
+First we will generate the .dot file containing the reaction network from 
+the compounds and reactions files. To do so we will execute the following line:
+
+.. code:: shell-session
+
+   $ python dotfile.py assets/comps_paper_simple.csv assets/reactions_paper_simple.csv figure_3a.dot
+
+This will generate a file named figure_3a.dot in the current directory. Next we 
+will render the figure with graphviz as a .png file, (other 
+formats such as svg are also possible). To do so, we will execute the following
 command: 
 
 .. code:: shell-session
@@ -85,12 +106,12 @@ With this we have generated the image of the reaction network.
 
 .. note::
 
-   Please note that within generate_dotfile.py, a custom treatment for the 
+   Please note that within dotfile.py, a custom treatment for the 
    :code:`simple.csv` files is included. This is not necessary to generate a 
    reaction network graph, but it was used to add some control over the final 
-   layout to guarantee that the resulting figure would fit in the manuscript. It 
-   has also been added to the examples to ensure the reproducibility of the figures
-   in the article. 
+   layout to guarantee that the resulting figure would fit in the manuscript. 
+   It has also been added to the examples to ensure the reproducibility of the 
+   figures in the article. 
 
 
 Kinetic representations
@@ -105,22 +126,25 @@ files:
 
    example_imine_kinetic
     -README.txt
-    -comps_draco_42.csv
-    -reactions_draco_42.csv
-    -comps_draco_42_simple.csv
-    -reactions_draco_42_simple.csv
+    assets
+      -comps_draco_42.csv
+      -reactions_draco_42.csv
+      -comps_draco_42_simple.csv
+      -reactions_draco_42_simple.csv
     -kinetic_model.py
     -kinetic_model.index
-    -generate_kinetic_snapshots.py
-    -generate_kinetic_gif.py
+    -kinetic_snapshots.py
+    -kinetic_gif.py
+    -run.py
 
 Here we have 4 different types of files: 
 
-   a) :code:`comps_draco_42_simple.csv` , :code:`reactions_draco_42_simple.csv`,
-      :code:`comps_draco_42.csv`, :code:`reactions_draco_42.csv`
-   b) :code:`kinetic_model.py` , :code:`kinetic_model.index`
-   c) :code:`generate_kinetic_snapshots.py`  
-   d) :code:`generate_kinetic_gif.py`  
+   a) :code:`assets/comps_draco_42_simple.csv` , :code:`assets/reactions_draco_42_simple.csv`,
+      :code:`assets/comps_draco_42.csv`, :code:`assets/reactions_draco_42.csv`
+   b) :code:`kinetic_model.py` , :code:`assets/kinetic_model.index`
+   c) :code:`kinetic_snapshots.py`  
+   d) :code:`kinetic_gif.py`  
+   e) :code:`run.py`
 
 Files in :code:`a` are used to create the reaction network and provide the energetics
 needed to compute the kinetic constants and thus the net rates of the 
@@ -133,7 +157,14 @@ at each time of all species. The file in :code:`c` is a script to generate the
 :code:`.dot` files at different times, which are used in the generation the 
 static graph figures which are the focus of the present section. The file in 
 :code:`d` is a script to generate all the :code:`.dot` files required to 
-generate the :code:`.gif` file which is the focus of the following section.
+generate the :code:`.gif` file which is the focus of the following section. 
+The file in :code:`e` integrates all the workflow within a single script.
+
+.. note::
+
+   The :code:`kinetic_model.py` obtained from pykinetic (v0.1.0) has been slighly 
+   modified to facilitate the re-generation of all figures under the 
+   :code:`run.py` script (see the Quickstart subsection)
 
 The files with the termination :code:`simple.csv` are used to draw a simplified
 version of the reaction network. The files without the termination 
@@ -156,35 +187,46 @@ simulation:
 
    $ python kinetic_model.py
 
-This will generate a :code:`kinetic_model.data` file in 2-6 mins depending on the 
-CPU performance of the computer. 
+This will generate a :code:`kinetic_model.data` file in the :code:`assets` 
+2-6 mins depending on the CPU performance of the computer. 
+
+Quickstart
+..........
+
+For convenience we created the :code:`run.py` script which facilitates the 
+generation of all the figures and gifs in one go. To execute the code the user 
+will have to type in the following command: 
+
+.. code:: shell-session
+
+   python run.py
+
+Upon execution two new folders will appear: :code:`temp` and :code:`res`. The 
+:code:`temp` folder contains the .dot files, which serve as input to graphviz 
+for the actual image generation. The :code:`res` folder will contain the 
+automatically rendered .png files as well as the .gif file.
 
 
-Generation of the network graphs
-................................
+Manual Generation of the network graphs
+.......................................
+
+.. warning:: 
+
+   The following step by step examples assume a UNIX-like OS. In the case of 
+   Windows OS please adapt accordingly the paths to the files or use the 
+   :code:`run.py` script. 
 
 Next, we proceed to generate the reaction network, colored by concentration of 
 the different species at different times during the simulation. For the example
 the :code:`simple.csv` files will be used but the files for the full network can
 also be used.
 
-.. highlight:: python 
-
-.. literalinclude:: ../../../../examples/example_imine_kinetic/generate_kinetic_snapshots.py
-
-.. highlight:: default
-
 .. code:: shell-session
 
-   $ python generate_kinetic_snapshots.py comps_draco_42_simple.csv reactions_draco_42_simple.csv kinetic_model.data
-
-.. todo::
-
-   Add explanation of the script, or reference to the appropriate python API 
-   example and update the python script to use namedtuple._replace method
+   $ python kinetic_snapshots.py assets/comps_draco_42_simple.csv assets/reactions_draco_42_simple.csv kinetic_model.data
 
 This will generate 2 :code:`.dot` files, :code:`snapshot_00600.dot` and 
-:code.`snapshot_02400.dot`. The following step is to use graphviz to render the images: 
+:code:`snapshot_02400.dot`. The following step is to use graphviz to render the images: 
 
 .. code:: shell-session
 
@@ -204,18 +246,26 @@ files:
 
    example_imine_kinetic
     -README.txt
-    -comps_draco_42.csv
-    -reactions_draco_42.csv
-    -comps_draco_42_simple.csv
-    -reactions_draco_42_simple.csv
+    assets
+      -comps_draco_42.csv
+      -reactions_draco_42.csv
+      -comps_draco_42_simple.csv
+      -reactions_draco_42_simple.csv
     -kinetic_model.py
     -kinetic_model.index
-    -generate_kinetic_snapshots.py
-    -generate_kinetic_gif.py
+    -kinetic_snapshots.py
+    -kinetic_gif.py
+    -run.py
 
 For a detailed explanation of the purpose of each of this files please look at 
 the previous section. The focus of this section is to generate a gif changing 
 the color of the species as the kinetic simulation progresses. 
+
+.. warning:: 
+
+   The following step by step examples assume a UNIX-like OS. In the case of 
+   Windows OS please adapt accordingly the paths to the files or use the 
+   :code:`run.py` script. 
 
 Preliminary steps
 .................
@@ -243,25 +293,14 @@ GIF generation
 To generate a GIF file showing the evolution of the species over time we will
 start by generating a :code:`.dot` file for every 10s of simulation into a 
 folder named :code:`gif_folder`. To preform this task the python script 
-:code:`generate_kinetic_gif.py` is included. 
-
-.. highlight:: python 
-
-.. literalinclude:: ../../../../examples/example_imine_kinetic/generate_kinetic_gif.py
-
-.. highlight:: default
+:code:`kinetic_gif.py` is included. 
 
 To use it we need to provide the compounds and reactions files and the data from the 
 kinetic simulation: 
 
 .. code:: shell-session
    
-   $ python generate_kinetic_gif.py comps_draco_42.csv reactions_draco_42.csv kinetic_model.data
-
-.. todo::
-
-   Add explanation of the script, or reference to the appropriate python API 
-   example and update the python script to use namedtuple._replace method
+   $ python kinetic_gif.py assets/comps_draco_42.csv assets/reactions_draco_42.csv kinetic_model.data
 
 Our next step is to transform all the generated :code:`dot` files into 
 :code:`png` format. We can do that manually or we can use some bash scripting. 

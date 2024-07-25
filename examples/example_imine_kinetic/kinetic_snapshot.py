@@ -8,6 +8,7 @@ import numpy as np
 from rnets import parser
 from rnets.struct import Network, Compound, Reaction
 from rnets.plotter.kinetic import build_dotgraph as build_kin_dotgraph
+from rnets.addons.colorbar import ColorbarCfg
 
 
 type Model = np.ndarray[Any, np.dtype[np.float64]]
@@ -68,7 +69,7 @@ def generate(
         )
 
         nw = Network(compounds=new_compounds, reactions=new_reactions)
-        nw_snapshot = build_kin_dotgraph(nw)
+        nw_snapshot = build_kin_dotgraph(nw,colorbar_cfg=ColorbarCfg(anchor="[I+N+W+W]"))
         f = Path(op / f"snapshot_{ti:05.0f}.dot")
         f.write_text(str(nw_snapshot), encoding="utf8")
         return f

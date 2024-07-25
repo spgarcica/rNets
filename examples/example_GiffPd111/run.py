@@ -11,23 +11,27 @@ from typing import Any
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
+def check_module(module: str) -> bool:
+    m = importlib.util.find_spec(module)
+    if m is None:
+        eprint(f"Can't find python module {module}")
+        return False
+    return True
+
+def check_exec(executable: str) -> bool:
+    e = shutil.which(executable)
+    if e is None:
+        eprint(f"Can't find executable {executable} in PATH")
+        return False
+    return True
 
 def check_deps() -> bool:
-    def check_module(module: str) -> bool:
-        m = importlib.util.find_spec(module)
-        if m is None:
-            eprint(f"Can't find python module {module}")
-            return False
-        return True
-
-    def check_exec(executable: str) -> bool:
-        e = shutil.which(executable)
-        if e is None:
-            eprint(f"Can't find executable {executable} in PATH")
-            return False
-        return True
-
-    return check_module("rnets") and check_exec("dot") and check_exec("neato")
+    return (
+        check_module("rnets")
+        and check_exec("dot")
+        and check_exec("neato")
+        and (check_exec("magick") or check_exec("convert")) # magick, version >= 7; convert version <= 6
+    )
 
 
 if not check_deps():
@@ -62,7 +66,7 @@ def intermediate_graphs(arr: Sequence[int]) -> Sequence[Path]:
         aux(
             assets / f"Pd_comp_{i}.csv",
             assets / f"Pd_reac_{i}.csv",
-            temp_graphs / f"graph_{i}.dot",
+            temp_graphs / f"graph_{i:06d}.dot",
         )
         for i in arr
     ]
@@ -148,6 +152,8 @@ def main() -> None:
 
     nodes_pos, edges_pos = get_positions(data)
 
+    pngs = []
+
     for n, g in enumerate(graph_paths):
         gs = g.read_text(encoding="utf-8").splitlines()
 
@@ -158,11 +164,35 @@ def main() -> None:
             gs[i] += f' pos="{edges_pos[node]}",'
 
         gr = g.with_stem(f"{g.stem}_nw")
-        r = result / f"{n}.png"
+        r = result / f"{n:03d}.png"
 
         gr.write_text("\n".join(gs))
 
         sh("neato", "-n2", "-Tpng", str(gr), "-o", str(r))
+        pngs.append(str(r))
+
+
+    if check_exec("magick"):
+        sh(
+            "magick",
+            "convert",
+            "-delay",
+            "50",
+            "-loop",
+            "0",
+            *pngs,
+            str(result / "Pd111_animation.gif"),
+        )
+    else:
+        sh(
+            "convert",
+            "-delay",
+            "50",
+            "-loop",
+            "0",
+            *pngs,
+            str(result / "Pd111_animation.gif"),
+        )
 
     return
 
