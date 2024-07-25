@@ -1,0 +1,9 @@
+The data to generate the graphs presented in Nickel Dynamics Switch the Selectivity of CO2 Hydrogenation, DOI: 10.26434/chemrxiv-2024-qzrlv, is here presented
+
+To generate the pre-input files run:
+
+python runner_Ni.py <PATH_TO_COMP>.csv <PATH_TO_REAC>.csv
+
+Then, to generate the graphs itself, type:
+
+dot -Nfontsize=38 -Tpng graph.dot -o <PATH_TO_OUTPUT>.png
