@@ -12,7 +12,7 @@ strict digraph {
     ];
     
     edge [
-        weight=2.
+       weight=2.
     ];
 
 
@@ -471,6 +471,128 @@ strict digraph {
         ,
         fillcolor="#33608c"
     ];
+    
+    "Colorbar" [
+        fillcolor="#ffffff",
+        label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="-1">
+            <TR>
+                <TD COLSPAN="100">Energy (eV)</TD>
+            </TR>
+            <TR>
+                <TD BGCOLOR="#430153:#440457" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#440457:#45085b" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#45085b:#460c5f" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#460c5f:#460f62" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#460f62:#471365" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#471365:#471769" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#471769:#481a6c" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#481a6c:#481d6f" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#481d6f:#482172" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#482172:#472474" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#472474:#472777" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#472777:#472a79" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#472a79:#462d7b" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#462d7b:#46317d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#46317d:#45347f" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#45347f:#443781" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#443781:#433a83" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#433a83:#423d84" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#423d84:#414085" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#414085:#404386" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#404386:#3f4687" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#3f4687:#3e4988" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#3e4988:#3d4c89" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#3d4c89:#3c4e8a" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#3c4e8a:#3a518a" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#3a518a:#39548b" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#39548b:#38578b" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#38578b:#37598c" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#37598c:#355c8c" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#355c8c:#345f8c" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#345f8c:#33618d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#33618d:#32648d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#32648d:#31668d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#31668d:#30698d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#30698d:#2e6b8d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#2e6b8d:#2d6e8d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#2d6e8d:#2c708d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#2c708d:#2b738e" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#2b738e:#2a758e" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#2a758e:#29778e" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#29778e:#297a8e" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#297a8e:#287c8e" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#287c8e:#277f8d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#277f8d:#26818d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#26818d:#25838d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#25838d:#24868d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#24868d:#23888d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#23888d:#228b8c" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#228b8c:#218d8c" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#218d8c:#218f8c" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#218f8c:#20928b" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#20928b:#1f948b" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#1f948b:#1f978a" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#1f978a:#1e9989" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#1e9989:#1e9b89" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#1e9b89:#1f9e88" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#1f9e88:#1fa087" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#1fa087:#20a286" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#20a286:#21a585" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#21a585:#22a783" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#22a783:#24aa82" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#24aa82:#26ac80" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#26ac80:#29ae7f" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#29ae7f:#2cb07d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#2cb07d:#2fb37b" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#2fb37b:#32b579" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#32b579:#36b777" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#36b777:#3ab975" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#3ab975:#3ebc73" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#3ebc73:#43be70" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#43be70:#47c06d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#47c06d:#4cc26b" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#4cc26b:#51c468" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#51c468:#57c665" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#57c665:#5cc862" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#5cc862:#61ca5f" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#61ca5f:#67cc5b" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#67cc5b:#6dcd58" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#6dcd58:#73cf54" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#73cf54:#79d150" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#79d150:#7fd24d" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#7fd24d:#86d449" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#86d449:#8cd544" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#8cd544:#93d740" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#93d740:#99d83c" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#99d83c:#a0d938" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#a0d938:#a7db33" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#a7db33:#addc2f" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#addc2f:#b4dd2a" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#b4dd2a:#bbde26" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#bbde26:#c2df22" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#c2df22:#c9e01e" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#c9e01e:#cfe11b" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#cfe11b:#d6e119" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#d6e119:#dde218" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#dde218:#e3e318" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#e3e318:#eae419" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#eae419:#f0e51c" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#f0e51c:#f6e520" WIDTH="1" HEIGHT="20"></TD>
+                <TD BGCOLOR="#f6e520:#fde624" WIDTH="1" HEIGHT="20"></TD>
+            </TR>
+            <TR>
+                <TD COLSPAN="100%">
+                    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" WIDTH="100%">
+                        <TR>
+                            <TD ALIGN="LEFT" WIDTH="33%">-1.77</TD>
+                            <TD ALIGN="CENTER" WIDTH="34%">-0.28</TD>
+                            <TD ALIGN="RIGHT" WIDTH="33%">1.20</TD>
+                        </TR>
+                    </TABLE>
+                </TD>
+            </TR>
+        </TABLE>>
+    ];
 
 
     "2H*" -> "H2(g)"[
@@ -545,12 +667,12 @@ strict digraph {
     
     "H2O*" -> "CO*_H2O*"[
         color="#22a684",
-        penwidth=7.0
+        penwidth=5.4
     ];
     
     "CO(g)" -> "CO*_H2O*"[
         color="#22a684",
-        penwidth=7.0
+        penwidth=5.4
     ];
     
     "CO*_H2O*" -> "H2O*"[
@@ -663,22 +785,22 @@ strict digraph {
         penwidth=3.0
     ];
     
-    "CH*_3H*_O*" -> "CH*_H*_O*"[
-        color="#22a684",
-        penwidth=3.0
-    ];
-    
     "CH*_3H*_O*" -> "H2(g)"[
         color="#22a684",
         penwidth=3.0
     ];
     
-    "CH*_H*_O*" -> "CH*_3H*_O*"[
+    "CH*_3H*_O*" -> "CH*_H*_O*"[
         color="#22a684",
         penwidth=3.0
     ];
     
     "H2(g)" -> "CH*_3H*_O*"[
+        color="#22a684",
+        penwidth=3.0
+    ];
+    
+    "CH*_H*_O*" -> "CH*_3H*_O*"[
         color="#22a684",
         penwidth=3.0
     ];
@@ -823,22 +945,22 @@ strict digraph {
         penwidth=3.0
     ];
     
-    "H2O(g)" -> "C*_H2O*"[
-        color="#22a684",
-        penwidth=3.000000000010219
-    ];
-    
     "C*" -> "C*_H2O*"[
         color="#22a684",
         penwidth=3.000000000010219
     ];
     
-    "C*_H2O*" -> "H2O(g)"[
+    "H2O(g)" -> "C*_H2O*"[
+        color="#22a684",
+        penwidth=3.000000000010219
+    ];
+    
+    "C*_H2O*" -> "C*"[
         color="#22a684",
         penwidth=3.0000000068840718
     ];
     
-    "C*_H2O*" -> "C*"[
+    "C*_H2O*" -> "H2O(g)"[
         color="#22a684",
         penwidth=3.0000000068840718
     ];
@@ -893,22 +1015,22 @@ strict digraph {
         penwidth=3.0
     ];
     
-    "CH*_2H*_OH*" -> "H2(g)"[
-        color="#22a684",
-        penwidth=3.0
-    ];
-    
     "CH*_2H*_OH*" -> "CH*_OH*"[
         color="#22a684",
         penwidth=3.0
     ];
     
-    "H2(g)" -> "CH*_2H*_OH*"[
+    "CH*_2H*_OH*" -> "H2(g)"[
         color="#22a684",
         penwidth=3.0
     ];
     
     "CH*_OH*" -> "CH*_2H*_OH*"[
+        color="#22a684",
+        penwidth=3.0
+    ];
+    
+    "H2(g)" -> "CH*_2H*_OH*"[
         color="#22a684",
         penwidth=3.0
     ];
@@ -1023,12 +1145,17 @@ strict digraph {
         penwidth=3.0
     ];
     
+    "2H*" -> "CO*_2H*"[
+        color="#22a684",
+        penwidth=3.0
+    ];
+    
     "CO(g)" -> "CO*_2H*"[
         color="#22a684",
         penwidth=3.0
     ];
     
-    "2H*" -> "CO*_2H*"[
+    "CO*_2H*" -> "2H*"[
         color="#22a684",
         penwidth=3.0
     ];
@@ -1038,8 +1165,7 @@ strict digraph {
         penwidth=3.0
     ];
     
-    "CO*_2H*" -> "2H*"[
-        color="#22a684",
-        penwidth=3.0
+    "CH*_H*_O*" -> "Colorbar"[
+        style=invis
     ];
 }
