@@ -25,55 +25,43 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#c1df22"
-    ];
-    
-    "Ad" [
-        label=<
-        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR>
-            <TD><FONT COLOR="#000000">Ad</FONT></TD>
-          </TR>
-        </TABLE>
-        >
-        ,
-        fillcolor="#c1df22"
+        fillcolor="#61c95f"
     ];
     
     "2H*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#000000">2H*</FONT></TD>
+            <TD><FONT COLOR="#ffffff">2H*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#1f9f87"
+        fillcolor="#1f968a"
     ];
     
     "CO2*_2H*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#000000">CO2*_2H*</FONT></TD>
+            <TD><FONT COLOR="#ffffff">CO2*_2H*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#1fa186"
+        fillcolor="#355c8c"
     ];
     
-    "CO*_O*_2H*" [
+    "COOH*_H*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#ffffff">CO*_O*_2H*</FONT></TD>
+            <TD><FONT COLOR="#ffffff">COOH*_H*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#443982"
+        fillcolor="#267f8d"
     ];
     
     "CO*_OH*_H*" [
@@ -85,7 +73,7 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#1f968a"
+        fillcolor="#45085b"
     ];
     
     "CO*_H2O*" [
@@ -97,7 +85,31 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#450558"
+        fillcolor="#3f4788"
+    ];
+    
+    "H2O*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#000000">H2O*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#8ad546"
+    ];
+    
+    "CO*_O*_2H*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">CO*_O*_2H*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#472b7a"
     ];
     
     "CO*" [
@@ -109,74 +121,62 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#2c718d"
+        fillcolor="#38578b"
     ];
     
-    "CO*_Ad" [
+    "CO*_2H*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#ffffff">CO*_Ad</FONT></TD>
+            <TD><FONT COLOR="#ffffff">CO*_2H*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#3c4e8a"
-    ];
-    
-    "CO*_2H*_Ad" [
-        label=<
-        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR>
-            <TD><FONT COLOR="#ffffff">CO*_2H*_Ad</FONT></TD>
-          </TR>
-        </TABLE>
-        >
-        ,
-        fillcolor="#31658d"
-    ];
-    
-    "CHO*_H*_Ad" [
-        label=<
-        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR>
-            <TD><FONT COLOR="#ffffff">CHO*_H*_Ad</FONT></TD>
-          </TR>
-        </TABLE>
-        >
-        ,
-        fillcolor="#1f9989"
+        fillcolor="#460f61"
     ];
     
     "CHO*_H*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#000000">CHO*_H*</FONT></TD>
+            <TD><FONT COLOR="#ffffff">CHO*_H*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#22a783"
+        fillcolor="#2a768e"
     ];
     
-    "CH*_O*_H*" [
+    "CH*_H*_O*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#ffffff">CH*_O*_H*</FONT></TD>
+            <TD><FONT COLOR="#ffffff">CH*_H*_O*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#2f698d"
+        fillcolor="#30678d"
     ];
     
-    "CH*_O*_3H*" [
+    "CH*_3H*_O*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#ffffff">CH*_O*_3H*</FONT></TD>
+            <TD><FONT COLOR="#ffffff">CH*_3H*_O*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#472475"
+    ];
+    
+    "CH*_2H*_OH*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">CH*_2H*_OH*</FONT></TD>
           </TR>
         </TABLE>
         >
@@ -184,28 +184,16 @@ strict digraph {
         fillcolor="#430153"
     ];
     
-    "CH*_OH*_2H*" [
+    "CH*_H*_H2O*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#ffffff">CH*_OH*_2H*</FONT></TD>
+            <TD><FONT COLOR="#ffffff">CH*_H*_H2O*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#453580"
-    ];
-    
-    "CH*_H2O*_H*" [
-        label=<
-        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR>
-            <TD><FONT COLOR="#ffffff">CH*_H2O*_H*</FONT></TD>
-          </TR>
-        </TABLE>
-        >
-        ,
-        fillcolor="#2a768e"
+        fillcolor="#414186"
     ];
     
     "CH*_H*" [
@@ -217,67 +205,199 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#2d6e8d"
+        fillcolor="#3a518a"
     ];
     
-    "CH*_H*_Ad" [
+    "CH2*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#ffffff">CH*_H*_Ad</FONT></TD>
+            <TD><FONT COLOR="#ffffff">CH2*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#31658d"
+        fillcolor="#29788e"
     ];
     
-    "CH2*_Ad" [
+    "CH2*_2H*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#ffffff">CH2*_Ad</FONT></TD>
+            <TD><FONT COLOR="#ffffff">CH2*_2H*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#218e8c"
+        fillcolor="#433a83"
     ];
     
-    "CH2*_2H*_Ad" [
+    "CH3*_H*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#ffffff">CH2*_2H*_Ad</FONT></TD>
+            <TD><FONT COLOR="#ffffff">CH3*_H*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#33618d"
+        fillcolor="#472b7a"
     ];
     
-    "CH3*_H*_Ad" [
+    "CH4*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#ffffff">CH3*_H*_Ad</FONT></TD>
+            <TD><FONT COLOR="#ffffff">CH4*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#47196b"
+        fillcolor="#3d4b89"
     ];
     
-    "CH4*_Ad" [
+    "COH*_H*" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#ffffff">CH4*_Ad</FONT></TD>
+            <TD><FONT COLOR="#ffffff">COH*_H*</FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#462c7b"
+        fillcolor="#1f9989"
+    ];
+    
+    "C*_OH*_H*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">C*_OH*_H*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#3f4687"
+    ];
+    
+    "C*_H2O*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">C*_H2O*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#29788e"
+    ];
+    
+    "C*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">C*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#24868d"
+    ];
+    
+    "C*_2H*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">C*_2H*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#3d4b89"
+    ];
+    
+    "CHOH*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#000000">CHOH*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#24aa82"
+    ];
+    
+    "CH*_OH*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">CH*_OH*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#3c4c89"
+    ];
+    
+    "CHOH*_2H*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">CHOH*_2H*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#2c728d"
+    ];
+    
+    "CH2OH*_H*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">CH2OH*_H*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#218d8c"
+    ];
+    
+    "CH3OH*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">CH3OH*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#1f988a"
+    ];
+    
+    "CH2*_OH*_H*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">CH2*_OH*_H*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#453480"
+    ];
+    
+    "CH2*_H2O*" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#ffffff">CH2*_H2O*</FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#2f6a8d"
     ];
     
     "H2(g)" [
@@ -289,7 +409,7 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#c1df22"
+        fillcolor="#61c95f"
     ];
     
     "CO2(g)" [
@@ -301,7 +421,19 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#c1df22"
+        fillcolor="#61c95f"
+    ];
+    
+    "CO(g)" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#000000"><i>CO(g)</i></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#9ad83b"
     ];
     
     "H2O(g)" [
@@ -313,19 +445,31 @@ strict digraph {
         </TABLE>
         >
         ,
-        fillcolor="#fde624"
+        fillcolor="#9ad83b"
+    ];
+    
+    "CH3OH(g)" [
+        label=<
+        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR>
+            <TD><FONT COLOR="#000000"><i>CH3OH(g)</i></FONT></TD>
+          </TR>
+        </TABLE>
+        >
+        ,
+        fillcolor="#6acc59"
     ];
     
     "CH4(g)" [
         label=<
         <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
           <TR>
-            <TD><FONT COLOR="#000000"><i>CH4(g)</i></FONT></TD>
+            <TD><FONT COLOR="#ffffff"><i>CH4(g)</i></FONT></TD>
           </TR>
         </TABLE>
         >
         ,
-        fillcolor="#1f9e88"
+        fillcolor="#29788e"
     ];
     
     "Colorbar" [
@@ -440,9 +584,9 @@ strict digraph {
                 <TD COLSPAN="100%">
                     <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" WIDTH="100%">
                         <TR>
-                            <TD ALIGN="LEFT" WIDTH="33%">-2.24</TD>
-                            <TD ALIGN="CENTER" WIDTH="34%">-1.01</TD>
-                            <TD ALIGN="RIGHT" WIDTH="33%">0.22</TD>
+                            <TD ALIGN="LEFT" WIDTH="33%">-1.83</TD>
+                            <TD ALIGN="CENTER" WIDTH="34%">-0.62</TD>
+                            <TD ALIGN="RIGHT" WIDTH="33%">0.58</TD>
                         </TR>
                     </TABLE>
                 </TD>
@@ -452,382 +596,572 @@ strict digraph {
 
 
     "2H*" -> "H2(g)"[
-        color="#c1df22",
+        color="#61c95f",
         penwidth=1.0
     ];
     
     "2H*" -> "Ni"[
-        color="#c1df22",
+        color="#61c95f",
         penwidth=1.0
     ];
     
     "H2(g)" -> "2H*"[
-        color="#c1df22",
-        penwidth=1.0425367982101093
+        color="#61c95f",
+        penwidth=1.0000003067629044
     ];
     
     "Ni" -> "2H*"[
-        color="#c1df22",
-        penwidth=1.0425367982101093
-    ];
-    
-    "CO2*_2H*" -> "CO2(g)"[
-        color="#c1df22",
-        penwidth=1.0
+        color="#61c95f",
+        penwidth=1.0000003067629044
     ];
     
     "CO2*_2H*" -> "2H*"[
-        color="#c1df22",
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CO2(g)" -> "CO2*_2H*"[
-        color="#c1df22",
+    "CO2*_2H*" -> "CO2(g)"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
     "2H*" -> "CO2*_2H*"[
-        color="#c1df22",
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CO*_O*_2H*" -> "CO2*_2H*"[
-        color="#57c665",
+    "CO2(g)" -> "CO2*_2H*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CO2*_2H*" -> "CO*_O*_2H*"[
-        color="#57c665",
-        penwidth=1.000000001235401
+    "COOH*_H*" -> "CO2*_2H*"[
+        color="#a1d937",
+        penwidth=1.0
     ];
     
-    "CO*_OH*_H*" -> "CO*_O*_2H*"[
-        color="#228c8c",
-        penwidth=5.0
+    "CO2*_2H*" -> "COOH*_H*"[
+        color="#a1d937",
+        penwidth=1.0
     ];
     
-    "CO*_O*_2H*" -> "CO*_OH*_H*"[
-        color="#228c8c",
-        penwidth=1.0000000000000002
+    "CO*_OH*_H*" -> "COOH*_H*"[
+        color="#31b47a",
+        penwidth=1.0
+    ];
+    
+    "COOH*_H*" -> "CO*_OH*_H*"[
+        color="#31b47a",
+        penwidth=1.0
     ];
     
     "CO*_H2O*" -> "CO*_OH*_H*"[
-        color="#52c467",
+        color="#218f8c",
         penwidth=1.0
     ];
     
     "CO*_OH*_H*" -> "CO*_H2O*"[
-        color="#52c467",
-        penwidth=1.0000000000269798
+        color="#218f8c",
+        penwidth=1.0
+    ];
+    
+    "H2O*" -> "CO*_H2O*"[
+        color="#61c95f",
+        penwidth=5.0
+    ];
+    
+    "CO(g)" -> "CO*_H2O*"[
+        color="#61c95f",
+        penwidth=5.0
+    ];
+    
+    "CO*_H2O*" -> "H2O*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CO*_H2O*" -> "CO(g)"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "H2O(g)" -> "H2O*"[
+        color="#61c95f",
+        penwidth=1.0040547747742763
+    ];
+    
+    "Ni" -> "H2O*"[
+        color="#61c95f",
+        penwidth=1.0040547747742763
+    ];
+    
+    "H2O*" -> "H2O(g)"[
+        color="#61c95f",
+        penwidth=1.0003026189335427
+    ];
+    
+    "H2O*" -> "Ni"[
+        color="#61c95f",
+        penwidth=1.0003026189335427
+    ];
+    
+    "CO*_O*_2H*" -> "CO2*_2H*"[
+        color="#25848d",
+        penwidth=1.0
+    ];
+    
+    "CO2*_2H*" -> "CO*_O*_2H*"[
+        color="#25848d",
+        penwidth=1.0000000000000184
+    ];
+    
+    "CO*_OH*_H*" -> "CO*_O*_2H*"[
+        color="#31668d",
+        penwidth=1.0
+    ];
+    
+    "CO*_O*_2H*" -> "CO*_OH*_H*"[
+        color="#31668d",
+        penwidth=1.0000000000000002
     ];
     
     "H2O(g)" -> "CO*_H2O*"[
-        color="#c1df22",
+        color="#61c95f",
         penwidth=1.0
     ];
     
     "CO*" -> "CO*_H2O*"[
-        color="#c1df22",
+        color="#61c95f",
         penwidth=1.0
     ];
     
     "CO*_H2O*" -> "H2O(g)"[
-        color="#c1df22",
+        color="#61c95f",
         penwidth=1.0
     ];
     
     "CO*_H2O*" -> "CO*"[
-        color="#c1df22",
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CO*_Ad" -> "Ad"[
-        color="#c1df22",
+    "CO*_2H*" -> "H2(g)"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CO*_Ad" -> "CO*"[
-        color="#c1df22",
+    "CO*_2H*" -> "CO*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "Ni" -> "Ad"[
-        color="#c1df22",
+    "H2(g)" -> "CO*_2H*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "Ni" -> "CO*"[
-        color="#c1df22",
+    "CO*" -> "CO*_2H*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "Ad" -> "CO*_Ad"[
-        color="#c1df22",
+    "CHO*_H*" -> "CO*_2H*"[
+        color="#26808d",
+        penwidth=1.0000000063496066
+    ];
+    
+    "CO*_2H*" -> "CHO*_H*"[
+        color="#26808d",
         penwidth=1.0
     ];
     
-    "Ad" -> "Ni"[
-        color="#c1df22",
+    "CH*_H*_O*" -> "CHO*_H*"[
+        color="#6bcd59",
         penwidth=1.0
     ];
     
-    "CO*" -> "CO*_Ad"[
-        color="#c1df22",
+    "CHO*_H*" -> "CH*_H*_O*"[
+        color="#6bcd59",
         penwidth=1.0
     ];
     
-    "CO*" -> "Ni"[
-        color="#c1df22",
+    "CH*_3H*_O*" -> "H2(g)"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CO*_2H*_Ad" -> "H2(g)"[
-        color="#c1df22",
+    "CH*_3H*_O*" -> "CH*_H*_O*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CO*_2H*_Ad" -> "CO*_Ad"[
-        color="#c1df22",
+    "H2(g)" -> "CH*_3H*_O*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "H2(g)" -> "CO*_2H*_Ad"[
-        color="#c1df22",
+    "CH*_H*_O*" -> "CH*_3H*_O*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CO*_Ad" -> "CO*_2H*_Ad"[
-        color="#c1df22",
+    "CH*_2H*_OH*" -> "CH*_3H*_O*"[
+        color="#33618d",
         penwidth=1.0
     ];
     
-    "CHO*_H*_Ad" -> "CO*_2H*_Ad"[
-        color="#24a982",
-        penwidth=1.0000271286720195
+    "CH*_3H*_O*" -> "CH*_2H*_OH*"[
+        color="#33618d",
+        penwidth=1.0000000000000002
     ];
     
-    "CO*_2H*_Ad" -> "CHO*_H*_Ad"[
-        color="#24a982",
+    "CH*_H*_H2O*" -> "CH*_2H*_OH*"[
+        color="#228b8c",
+        penwidth=1.0
+    ];
+    
+    "CH*_2H*_OH*" -> "CH*_H*_H2O*"[
+        color="#228b8c",
+        penwidth=1.0
+    ];
+    
+    "H2O(g)" -> "CH*_H*_H2O*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH*_H*" -> "CH*_H*_H2O*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH*_H*_H2O*" -> "H2O(g)"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH*_H*_H2O*" -> "CH*_H*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH2*" -> "CH*_H*"[
+        color="#1f958b",
+        penwidth=1.000000000001478
+    ];
+    
+    "CH*_H*" -> "CH2*"[
+        color="#1f958b",
+        penwidth=1.0
+    ];
+    
+    "CH2*_2H*" -> "H2(g)"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH2*_2H*" -> "CH2*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "H2(g)" -> "CH2*_2H*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH2*" -> "CH2*_2H*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH3*_H*" -> "CH2*_2H*"[
+        color="#26808d",
+        penwidth=1.0
+    ];
+    
+    "CH2*_2H*" -> "CH3*_H*"[
+        color="#26808d",
+        penwidth=1.0
+    ];
+    
+    "CH4*" -> "CH3*_H*"[
+        color="#25848d",
+        penwidth=1.0
+    ];
+    
+    "CH3*_H*" -> "CH4*"[
+        color="#25848d",
+        penwidth=1.0
+    ];
+    
+    "Ni" -> "CH4*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH4(g)" -> "CH4*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH4*" -> "Ni"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH4*" -> "CH4(g)"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "COH*_H*" -> "CO*_2H*"[
+        color="#5bc862",
+        penwidth=1.0000000000000002
+    ];
+    
+    "CO*_2H*" -> "COH*_H*"[
+        color="#5bc862",
+        penwidth=1.0
+    ];
+    
+    "C*_OH*_H*" -> "COH*_H*"[
+        color="#87d448",
+        penwidth=1.0
+    ];
+    
+    "COH*_H*" -> "C*_OH*_H*"[
+        color="#87d448",
+        penwidth=1.0
+    ];
+    
+    "C*_H2O*" -> "C*_OH*_H*"[
+        color="#3ebc73",
+        penwidth=1.0
+    ];
+    
+    "C*_OH*_H*" -> "C*_H2O*"[
+        color="#3ebc73",
+        penwidth=1.0
+    ];
+    
+    "H2O(g)" -> "C*_H2O*"[
+        color="#61c95f",
+        penwidth=1.0000000000000002
+    ];
+    
+    "C*" -> "C*_H2O*"[
+        color="#61c95f",
+        penwidth=1.0000000000000002
+    ];
+    
+    "C*_H2O*" -> "H2O(g)"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "C*_H2O*" -> "C*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "C*_2H*" -> "H2(g)"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "C*_2H*" -> "C*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "H2(g)" -> "C*_2H*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "C*" -> "C*_2H*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH*_H*" -> "C*_2H*"[
+        color="#24858d",
+        penwidth=1.0000000000000002
+    ];
+    
+    "C*_2H*" -> "CH*_H*"[
+        color="#24858d",
+        penwidth=1.0
+    ];
+    
+    "CHOH*" -> "CHO*_H*"[
+        color="#21a684",
+        penwidth=1.0000015716734636
+    ];
+    
+    "CHO*_H*" -> "CHOH*"[
+        color="#21a684",
+        penwidth=1.0000000000000004
+    ];
+    
+    "CH*_OH*" -> "CHOH*"[
+        color="#fde624",
+        penwidth=1.0
+    ];
+    
+    "CHOH*" -> "CH*_OH*"[
+        color="#fde624",
+        penwidth=1.0
+    ];
+    
+    "CH*_2H*_OH*" -> "H2(g)"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH*_2H*_OH*" -> "CH*_OH*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "H2(g)" -> "CH*_2H*_OH*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CH*_OH*" -> "CH*_2H*_OH*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CHOH*_2H*" -> "CHOH*"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CHOH*_2H*" -> "H2(g)"[
+        color="#61c95f",
+        penwidth=1.0
+    ];
+    
+    "CHOH*" -> "CHOH*_2H*"[
+        color="#61c95f",
+        penwidth=1.0000000000000784
+    ];
+    
+    "H2(g)" -> "CHOH*_2H*"[
+        color="#61c95f",
+        penwidth=1.0000000000000784
+    ];
+    
+    "CH2OH*_H*" -> "CHOH*_2H*"[
+        color="#1e9c88",
+        penwidth=1.0000000004303102
+    ];
+    
+    "CHOH*_2H*" -> "CH2OH*_H*"[
+        color="#1e9c88",
         penwidth=1.0000000000000047
     ];
     
-    "CHO*_H*" -> "CHO*_H*_Ad"[
-        color="#c1df22",
+    "CH3OH*" -> "CH2OH*_H*"[
+        color="#58c764",
         penwidth=1.0000000000000002
     ];
     
-    "CHO*_H*" -> "Ni"[
-        color="#c1df22",
-        penwidth=1.0000000000000002
-    ];
-    
-    "Ad" -> "CHO*_H*_Ad"[
-        color="#c1df22",
-        penwidth=1.0000000000000002
-    ];
-    
-    "Ad" -> "Ni"[
-        color="#c1df22",
-        penwidth=1.0000000000000002
-    ];
-    
-    "CHO*_H*_Ad" -> "CHO*_H*"[
-        color="#c1df22",
+    "CH2OH*_H*" -> "CH3OH*"[
+        color="#58c764",
         penwidth=1.0
     ];
     
-    "CHO*_H*_Ad" -> "Ad"[
-        color="#c1df22",
+    "Ni" -> "CH3OH*"[
+        color="#61c95f",
+        penwidth=1.0000016429578569
+    ];
+    
+    "CH3OH(g)" -> "CH3OH*"[
+        color="#61c95f",
+        penwidth=1.0000016429578569
+    ];
+    
+    "CH3OH*" -> "Ni"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "Ni" -> "CHO*_H*"[
-        color="#c1df22",
+    "CH3OH*" -> "CH3OH(g)"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "Ni" -> "Ad"[
-        color="#c1df22",
+    "CHOH*" -> "COH*_H*"[
+        color="#93d740",
         penwidth=1.0
     ];
     
-    "CH*_O*_H*" -> "CHO*_H*"[
-        color="#eee41b",
+    "COH*_H*" -> "CHOH*"[
+        color="#93d740",
         penwidth=1.0
     ];
     
-    "CHO*_H*" -> "CH*_O*_H*"[
-        color="#eee41b",
+    "CH2*_OH*_H*" -> "CH2OH*_H*"[
+        color="#70ce56",
         penwidth=1.0
     ];
     
-    "CH*_O*_3H*" -> "H2(g)"[
-        color="#c1df22",
+    "CH2OH*_H*" -> "CH2*_OH*_H*"[
+        color="#70ce56",
         penwidth=1.0
     ];
     
-    "CH*_O*_3H*" -> "CH*_O*_H*"[
-        color="#c1df22",
+    "CH2*_H2O*" -> "CH2*_OH*_H*"[
+        color="#2f6b8d",
+        penwidth=1.0000002117085904
+    ];
+    
+    "CH2*_OH*_H*" -> "CH2*_H2O*"[
+        color="#2f6b8d",
+        penwidth=1.0000000000000004
+    ];
+    
+    "H2O(g)" -> "CH2*_H2O*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "H2(g)" -> "CH*_O*_3H*"[
-        color="#c1df22",
+    "CH2*" -> "CH2*_H2O*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CH*_O*_H*" -> "CH*_O*_3H*"[
-        color="#c1df22",
+    "CH2*_H2O*" -> "H2O(g)"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CH*_OH*_2H*" -> "CH*_O*_3H*"[
-        color="#23898d",
-        penwidth=1.0000000000000002
-    ];
-    
-    "CH*_O*_3H*" -> "CH*_OH*_2H*"[
-        color="#23898d",
+    "CH2*_H2O*" -> "CH2*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CH*_H2O*_H*" -> "CH*_OH*_2H*"[
-        color="#4cc26b",
+    "2H*" -> "CO*_2H*"[
+        color="#61c95f",
+        penwidth=1.0000000000001898
+    ];
+    
+    "CO(g)" -> "CO*_2H*"[
+        color="#61c95f",
+        penwidth=1.0000000000001898
+    ];
+    
+    "CO*_2H*" -> "2H*"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
-    "CH*_OH*_2H*" -> "CH*_H2O*_H*"[
-        color="#4cc26b",
-        penwidth=1.0
-    ];
-    
-    "CH*_H*" -> "CH*_H2O*_H*"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "H2O(g)" -> "CH*_H2O*_H*"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH*_H2O*_H*" -> "CH*_H*"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH*_H2O*_H*" -> "H2O(g)"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH*_H*_Ad" -> "CH*_H*"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH*_H*_Ad" -> "Ad"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "Ni" -> "CH*_H*"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "Ni" -> "Ad"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH*_H*" -> "CH*_H*_Ad"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH*_H*" -> "Ni"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "Ad" -> "CH*_H*_Ad"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "Ad" -> "Ni"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH2*_Ad" -> "CH*_H*_Ad"[
-        color="#1e9c88",
-        penwidth=1.000076412245879
-    ];
-    
-    "CH*_H*_Ad" -> "CH2*_Ad"[
-        color="#1e9c88",
-        penwidth=1.000000000001897
-    ];
-    
-    "CH2*_2H*_Ad" -> "H2(g)"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH2*_2H*_Ad" -> "CH2*_Ad"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "H2(g)" -> "CH2*_2H*_Ad"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH2*_Ad" -> "CH2*_2H*_Ad"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH3*_H*_Ad" -> "CH2*_2H*_Ad"[
-        color="#1f958b",
-        penwidth=1.0
-    ];
-    
-    "CH2*_2H*_Ad" -> "CH3*_H*_Ad"[
-        color="#1f958b",
-        penwidth=1.0000000000077778
-    ];
-    
-    "CH4*_Ad" -> "CH3*_H*_Ad"[
-        color="#2d708d",
-        penwidth=1.0000000000004383
-    ];
-    
-    "CH3*_H*_Ad" -> "CH4*_Ad"[
-        color="#2d708d",
-        penwidth=1.0000000000000009
-    ];
-    
-    "CH4(g)" -> "CH4*_Ad"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "Ad" -> "CH4*_Ad"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH4*_Ad" -> "CH4(g)"[
-        color="#c1df22",
-        penwidth=1.0
-    ];
-    
-    "CH4*_Ad" -> "Ad"[
-        color="#c1df22",
+    "CO*_2H*" -> "CO(g)"[
+        color="#61c95f",
         penwidth=1.0
     ];
     
